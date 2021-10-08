@@ -4,9 +4,8 @@ using System.Collections.Generic;
 
 namespace Lms.Core.Entities
 {
-    public class Module
+    public class Module :BaseEntity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime StartDate { get; set; }

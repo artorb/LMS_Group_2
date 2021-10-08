@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace Lms.Core.Entities
 {
-    public class ActivityType
+    public class ActivityType : BaseEntity
     {
-        public int Id { get; set; }
         public string TypeName { get; set; }
     }
 }
