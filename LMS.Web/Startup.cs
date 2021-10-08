@@ -13,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Lms.Core.Repositories;
+using Lms.Data.Repositories;
 
 namespace Lms.Web
 {
@@ -37,6 +39,8 @@ namespace Lms.Web
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<LmsDbContext>();
             services.AddControllersWithViews();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

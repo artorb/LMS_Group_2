@@ -36,12 +36,12 @@ namespace Lms.Data.Repositories
             return await table.FindAsync(id);
         }
 
-        public async Task<T> Get(int id)
+        public async Task<T> GetAsync(int id)
         {
-            return await table.FindAsync(id);
+            return await table.FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await table.ToListAsync();
         }
@@ -55,5 +55,26 @@ namespace Lms.Data.Repositories
         {
             table.Update(obj);
         }
+
+
+        //public async Task<IEnumerable<T>> GetAll(params Enum[] list)
+        //{
+        //    for (int i = 0; i < list.Length; i++)
+        //    {
+        //        if (i =1)
+        //        {
+        //            table.Include(a => a.activity);
+        //        }
+        //        if (i =2)
+        //        {
+        //            table.Include(a => a.course);
+        //        }
+
+        //    }
+        //    return await table.ToListAsync();
+        //}
     }
 }
+//unitOfWork.CourseRepository.GetAll("Activity", "Course", "Module");
+
+//_context.Course.Include(a => a.activity).Include(a => a.course).Include(a => a.module);

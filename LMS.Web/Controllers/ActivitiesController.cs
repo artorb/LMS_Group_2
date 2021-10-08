@@ -7,24 +7,35 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Lms.Core.Entities;
 using Lms.Data.Data;
+using Lms.Data.Repositories;
+using Lms.Core.Repositories;
 
 namespace Lms.Web.Controllers
 {
     public class ActivitiesController : Controller
     {
         private readonly LmsDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ActivitiesController(LmsDbContext context)
+        public ActivitiesController(LmsDbContext context, IUnitOfWork unitOfWork)
         {
             _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: Activities
         public async Task<IActionResult> Index()
         {
+            //var activities = await _unitOfWork.ActivityRepository.GetAllAsync();
+
             var lmsDbContext = _context.Activities.Include(a => a.ActivityType).Include(a => a.Module);
             return View(await lmsDbContext.ToListAsync());
         }
+        //public async Task<IEnumerable<Activity>> ActivitesWithTypeAndModule()
+        //{
+        //    return await _context.Activities.Include(a => a.ActivityType).Include(a => a.Module).ToListAsync();
+        //}
+
 
         // GET: Activities/Details/5
         public async Task<IActionResult> Details(int? id)

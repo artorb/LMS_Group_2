@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Lms.Core.Entities;
 using Lms.Data.Data;
+using Lms.Data.Repositories;
+using Lms.Core.Repositories;
 
 namespace Lms.Web.Controllers
 {
@@ -14,15 +16,19 @@ namespace Lms.Web.Controllers
     {
         private readonly LmsDbContext _context;
 
-        public CoursesController(LmsDbContext context)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public CoursesController(LmsDbContext context, IUnitOfWork unitOfWork)
         {
             _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: Courses
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Courses.ToListAsync());
+            //return View(await _context.Courses.ToListAsync());
+            return View(await _unitOfWork.CourseRepository.GetAllAsync());
         }
 
         // GET: Courses/Details/5
@@ -58,8 +64,11 @@ namespace Lms.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(course);
-                await _context.SaveChangesAsync();
+                IUnitOfWork unitOfWork = new UnitOfWork(_context);
+                unitOfWork.CourseRepository.Add(course);
+                //_context.Add(course);
+                await unitOfWork.CompleteAsync();
+                //await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(course);
