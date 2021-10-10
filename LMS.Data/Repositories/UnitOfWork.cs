@@ -14,12 +14,15 @@ namespace Lms.Data.Repositories
         private readonly LmsDbContext db;
         public IActivityRepository ActivityRepository { get; }
         public ICourseRepository CourseRepository { get; }
+        
+        public IModuleRepository ModuleRepository { get; }
 
         public UnitOfWork(LmsDbContext context)
         {
             db = context;
             ActivityRepository = new ActivityRepository(db);
             CourseRepository = new CourseRepository(db);
+            ModuleRepository = new ModuleRepository(db);
         }
 
         public async Task CompleteAsync()

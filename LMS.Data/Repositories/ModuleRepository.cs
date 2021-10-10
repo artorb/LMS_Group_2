@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Lms.Data.Repositories
 {
-    class ModuleRepository:GenericRepository<Module>, IModuleRepository
+    public class ModuleRepository:GenericRepository<Module>, IModuleRepository
     {
         public ModuleRepository(LmsDbContext context) : base(context)
         {

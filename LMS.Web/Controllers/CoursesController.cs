@@ -27,8 +27,18 @@ namespace Lms.Web.Controllers
         // GET: Courses
         public async Task<IActionResult> Index()
         {
+            /*GetAll with params example */
+            var allCourses =
+                _unitOfWork.CourseRepository.
+                GetAllParametrized(course => course.Modules,                    
+                course => course.Documents);
+
+            var moduleTest = _unitOfWork.ModuleRepository
+                .GetAllParametrized(module => module.Course);
+            
             //return View(await _context.Courses.ToListAsync());
-            return View(await _unitOfWork.CourseRepository.GetAllAsync());
+            // return View(await _unitOfWork.CourseRepository.GetAllAsync());
+            return View(await allCourses);
         }
 
         // GET: Courses/Details/5

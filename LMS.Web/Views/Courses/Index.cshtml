@@ -9,8 +9,13 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
+
+
+<section class="mb-5">
+<div class="table-responsive bg-blurry shadow-4-strong rounded">
+    @* <table class="table table-borderless bg-secondary rounded-6 shadow-lg-6"> *@
+    <table class="table table-borderless table-hover align-middle mb-0 text-white">
+        <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -24,30 +29,45 @@
             <th>
                 @Html.DisplayNameFor(model => model.EndDate)
             </th>
+            <th>
+                Active Information?
+            </th>
             <th></th>
         </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach (var item in Model) {
+            <tr class="text-light">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    @if (item.Name.StartsWith("C"))
+                    {
+                        <span class="badge badge-success rounded-pill">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-danger rounded-pill">Inactive</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+</section>

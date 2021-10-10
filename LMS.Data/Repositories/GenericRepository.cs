@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,6 +40,17 @@ namespace Lms.Data.Repositories
         public async Task<T> GetAsync(int id)
         {
             return await table.FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<IEnumerable<T>> GetAllParametrized(params Expression<Func<T, object>>[] includeProperties)
+        {
+            IQueryable<T> query = table;
+            foreach (var include in includeProperties)
+            {
+                query.Include(include);
+            }
+
+            return query.ToList();
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()
