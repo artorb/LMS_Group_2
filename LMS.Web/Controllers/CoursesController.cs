@@ -30,11 +30,11 @@ namespace Lms.Web.Controllers
             /*GetAll with params example */
             var allCourses =
                 _unitOfWork.CourseRepository.
-                GetAllParametrized(course => course.Modules,                    
+                GetAllParametrizedAsync(course => course.Modules,                    
                 course => course.Documents);
 
             var moduleTest = _unitOfWork.ModuleRepository
-                .GetAllParametrized(module => module.Course);
+                .GetAllParametrizedAsync(module => module.Course);
             
             //return View(await _context.Courses.ToListAsync());
             // return View(await _unitOfWork.CourseRepository.GetAllAsync());

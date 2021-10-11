@@ -10,7 +10,7 @@ namespace Lms.Core.Repositories
 {
     public interface IGenericRepository<T> where T : BaseEntity
     {
-        Task<IEnumerable<T>> GetAllParametrized(params Expression<Func<T, object>>[] includeProperties);
+        Task<IEnumerable<T>> GetAllParametrizedAsync(params Expression<Func<T, object>>[] includeProperties);
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> FindAsync(int? id);
         Task<bool> AnyAsync(int? id);

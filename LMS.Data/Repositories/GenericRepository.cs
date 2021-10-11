@@ -42,7 +42,7 @@ namespace Lms.Data.Repositories
             return await table.FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<IEnumerable<T>> GetAllParametrized(params Expression<Func<T, object>>[] includeProperties)
+        public async Task<T> GetParametrizedAsync(int id, params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> query = table;
             foreach (var include in includeProperties)
@@ -50,7 +50,18 @@ namespace Lms.Data.Repositories
                 query.Include(include);
             }
 
-            return query.ToList();
+            return await query.FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<IEnumerable<T>> GetAllParametrizedAsync(params Expression<Func<T, object>>[] includeProperties)
+        {
+            IQueryable<T> query = table;
+            foreach (var include in includeProperties)
+            {
+                query.Include(include);
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()
@@ -67,26 +78,5 @@ namespace Lms.Data.Repositories
         {
             table.Update(obj);
         }
-
-
-        //public async Task<IEnumerable<T>> GetAll(params Enum[] list)
-        //{
-        //    for (int i = 0; i < list.Length; i++)
-        //    {
-        //        if (i =1)
-        //        {
-        //            table.Include(a => a.activity);
-        //        }
-        //        if (i =2)
-        //        {
-        //            table.Include(a => a.course);
-        //        }
-
-        //    }
-        //    return await table.ToListAsync();
-        //}
     }
 }
-//unitOfWork.CourseRepository.GetAll("Activity", "Course", "Module");
-
-//_context.Course.Include(a => a.activity).Include(a => a.course).Include(a => a.module);
