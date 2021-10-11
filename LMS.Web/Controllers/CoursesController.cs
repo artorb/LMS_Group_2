@@ -30,13 +30,14 @@ namespace Lms.Web.Controllers
             /*GetAll with params example */
             var allCourses =
                 _unitOfWork.CourseRepository.
-                GetAllWithIncludesAsync(course => course.Modules,                    
-                course => course.Documents);
+                GetAllWithIncludesAsync(course => course.Modules);
+
 
 
             var moduleTest = _unitOfWork.ModuleRepository
-                .GetAllWithIncludesAsync(module => module.Course);
-            
+                .GetAllWithIncludesAsync(module => module.Course, m => m.Activities).Result;
+
+            var x = new Random();
             //return View(await _context.Courses.ToListAsync());
             // return View(await _unitOfWork.CourseRepository.GetAllAsync());
             return View(await allCourses);
