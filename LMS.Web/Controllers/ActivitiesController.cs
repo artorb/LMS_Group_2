@@ -13,6 +13,7 @@ using Lms.Core.Repositories;
 
 namespace Lms.Web.Controllers
 {
+    //Test
     public class ActivitiesController : Controller
     {
         private readonly LmsDbContext _context;
