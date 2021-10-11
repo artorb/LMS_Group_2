@@ -1,4 +1,5 @@
-﻿using Lms.Web.Models;
+﻿using Lms.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -7,8 +8,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
+
+
 namespace Lms.Web.Controllers
 {
+    //[Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -20,13 +24,30 @@ namespace Lms.Web.Controllers
 
         public IActionResult Index()
         {
-            return View();
+                return View();          
         }
+
+
+        private ActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+
 
         public IActionResult Privacy()
         {
             return View();
         }
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

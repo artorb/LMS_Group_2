@@ -9,10 +9,11 @@ using Lms.Core.Entities;
 using Lms.Data.Data;
 using Lms.Data.Repositories;
 using Lms.Core.Repositories;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace Lms.Web.Controllers
 {
+ 
     public class ActivitiesController : Controller
     {
         private readonly LmsDbContext _context;
