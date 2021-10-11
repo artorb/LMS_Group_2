@@ -42,7 +42,7 @@ namespace Lms.Data.Repositories
             return await table.FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<T> GetParametrizedAsync(int id, params Expression<Func<T, object>>[] includeProperties)
+        public async Task<T> GetWithIncludesAsync(int id, params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> query = table;
             foreach (var include in includeProperties)
@@ -53,7 +53,7 @@ namespace Lms.Data.Repositories
             return await query.FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<IEnumerable<T>> GetAllParametrizedAsync(params Expression<Func<T, object>>[] includeProperties)
+        public async Task<IEnumerable<T>> GetAllWithIncludesAsync(params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> query = table;
             foreach (var include in includeProperties)
