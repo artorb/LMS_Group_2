@@ -65,7 +65,7 @@ namespace Lms.Data.Repositories
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()
-        {
+        {        
             return await table.ToListAsync();
         }
 

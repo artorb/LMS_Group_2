@@ -1,6 +1,6 @@
 using System;
 
-namespace Lms.Web.Models
+namespace Lms.Core.Models
 {
     public class ErrorViewModel
     {

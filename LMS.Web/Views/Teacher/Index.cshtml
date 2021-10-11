@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Lms.Core.Models.ViewModels.TeacherLoginViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Welcome Teachers!</h1>
+
+<h3>Kurser</h3>
+
+<div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Course name..." aria-label="Recipient's username" aria-describedby="button-addon2">
+    <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+    </div>
+</div>
+<div class="btn-primary" asp-action="Create"> Add new course </div> 
+
+<section class="mb-5">
+<div class="table-responsive bg-blurry shadow-4-strong rounded">   
+    <table class="table table-borderless table-hover align-middle mb-0 text-white">
+        <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseName)
+            </th>
+            <th>                
+                @Html.DisplayNameFor(model => model.ActiveModuleName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NextModuleName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberOfParticipants)
+            </th>     
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model) {
+            <tr class="text-light">
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ActiveModuleName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NextModuleName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumberOfParticipants)
+                </td>    
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+</section>

@@ -1,5 +1,7 @@
 ﻿using Lms.Core.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,7 @@ namespace Lms.Data.Data
         private static readonly Random _random = new Random(10);
 
         private const int CourseCapacity = 10;
+        private const int ActivityCapacity = 20;
         private static readonly Dictionary<string ,string> CourseNamePool = new(CourseCapacity) /* Name - Description pair */
         {
             {"Android Course", "Expand your mobile app reach through this Android application development and programming training. Android's open source platform offers compatibility with a wide range of devices, which provide global access to the mobile market."},
@@ -28,52 +31,166 @@ namespace Lms.Data.Data
         };
 
         private const int ModuleCapacity = 20;
-        private static IEnumerable<string> ModuleNamePool = new List<string>(ModuleCapacity)
+        private static Dictionary<string, string> ModuleNamePool = new (ModuleCapacity)
         {
-            "Android Module 1",
-            "Android Module 2",
-            
-            "Big Data Module 1",
-            "Big Data Module 2",
-            
-            "C# Backend Module 1",
-            "C# Backend Module 2",
-            
-            "Cloud Security Module 1",
-            "Cloud Security Module 2",
-            
-            "Computer Security Analyst Module 1",
-            "Computer Security Analyst Module 2",
-            
-            "Cybersecurity Module 1",
-            "Cybersecurity Module 2",
-            
-            "Digitization of the Legal Sector Module 1",
-            "Digitization of the Legal Sector Module 2",
-            
-            "Embedded Dev Module 1",
-            "Embedded Dev Module 2",
-            
-            "Big Data Module 1",
-            "Big Data Module 2",
-            
-            "Self-Paced Programs Module 1",
-            "Self-Paced Programs Module 2",
-            
-            "Web Design Module 1",
-            "Web Design Module 2"
+            {  "Android Module 1", "ModuleDescription1" },
+             {"Android Module 2", "ModuleDescription2" },
+
+             {"Big Data Module 1", "ModuleDescription3" },
+             {"Big Data Module 2", "ModuleDescription4" },
+
+             {"C# Backend Module 1", "ModuleDescription5" },
+             {"C# Backend Module 2", "ModuleDescription6" },
+
+             {"Cloud Security Module 1", "ModuleDescription1" },
+             {"Cloud Security Module 2", "ModuleDescription1" },
+
+             {"Computer Security Analyst Module 1", "ModuleDescription1" },
+             {"Computer Security Analyst Module 2", "ModuleDescription1" },
+
+             {"Cybersecurity Module 1", "ModuleDescription1" },
+             {"Cybersecurity Module 2", "ModuleDescription1" },
+
+             {"Digitization of the Legal Sector Module 1", "ModuleDescription1" },
+             {"Digitization of the Legal Sector Module 2", "ModuleDescription1" },
+
+             {"Embedded Dev Module 1", "ModuleDescription1" },
+             {"Embedded Dev Module 2", "ModuleDescription1" },
+
+             {"New Big Data Module 1", "ModuleDescription1" },
+             {"New Big Data Module 2", "ModuleDescription1" },
+
+             {"Self-Paced Programs Module 1", "ModuleDescription1" },
+             {"Self-Paced Programs Module 2", "ModuleDescription1" },
+
+             {"Web Design Module 1", "ModuleDescription1" },
+             {"Web Design Module 2", "ModuleDescription1" }
         };
+
+
+
+     
+        private static Dictionary<string, string> ActivityNamePool = new(ActivityCapacity)
+        {
+            { "Android Activity 1", "ActivityDescription1" },
+            { "Android Activity 2", "ActivityDescription1" },
+
+            { "Big Data Activity 1", "ActivityDescription1" },
+            { "Big Data Activity 2", "ActivityDescription1" },
+
+            { "C# Backend Activity 1", "ActivityDescription1" },
+            { "C# Backend Activity 2", "ActivityDescription1" },
+
+            { "Cloud Security Activity 1", "ActivityDescription1" },
+            { "Cloud Security Activity 2", "ActivityDescription1" },
+
+            { "Computer Security Analyst Activity 1", "ActivityDescription1" },
+            { "Computer Security Analyst Activity 2", "ActivityDescription1" },
+
+            { "Cybersecurity Activity 1", "ActivityDescription1" },
+            { "Cybersecurity Activity 2", "ActivityDescription1" },
+
+            { "Digitization of the Legal Sector Activity 1", "ActivityDescription1" },
+            { "Digitization of the Legal Sector Activity 2", "ActivityDescription1" },
+
+            { "Embedded Dev Activity 1", "ActivityDescription1" },
+            { "Embedded Dev Activity 2", "ActivityDescription1" },
+
+            { "New Big Data Activity 1", "ActivityDescription1" },
+            { "New Big Data Activity 2", "ActivityDescription1" },
+
+            { "Self-Paced Programs Activity 1", "ActivityDescription1" },
+            { "Self-Paced Programs Activity 2", "ActivityDescription1" },
+
+            { "Web Design Activity 1", "ActivityDescription1" },
+            { "Web Design Activity 2", "ActivityDescription1" }
+        };
+
+
+
+
+
+
 
         public static async Task InitAsync(LmsDbContext context, IServiceProvider services)
         {
-            if (await context.Courses.AnyAsync()) return;
+           // if (await context.Courses.AnyAsync()) return;
 
+            var activityTypes = GetActivityType();
             var courses = GetCourses();
             var modules = GetModules(courses.Result);
+            var activities = GetActivities(modules.Result, activityTypes);
 
             await context.Courses.AddRangeAsync(courses.Result);
             await context.Modules.AddRangeAsync(modules.Result);
+            await context.Activities.AddRangeAsync(activities.Result);
+
+            //using (var db = services.GetRequiredService<LmsDbContext>())
+            //{
+                const string passWord = "AdminNet21!";
+                const string roleName = "Teacher";
+
+            const string passWordStudent = "StudentNet21!";
+            const string roleNameStudent = "Student";
+
+            var userManager = services.GetRequiredService<Microsoft.AspNetCore.Identity.UserManager<ApplicationUser>>();
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+                var role = new IdentityRole { Name = roleName };
+                var addRoleResult = await roleManager.CreateAsync(role);
+
+                var studentRole = new IdentityRole { Name = roleNameStudent };
+                var addStudentRoleResult = await roleManager.CreateAsync(studentRole);
+
+                var users = GetUsers();
+                await context.AddRangeAsync(users);
+
+                foreach (var item in users)
+                {
+                    var result = await userManager.CreateAsync(item, passWord);
+                    if (!result.Succeeded) throw new Exception(String.Join("\n", result.Errors));
+                    await userManager.AddToRoleAsync(item, "Teacher");              
+                }
+
+                var students = GetStudent();
+                await context.AddRangeAsync(students);
+
+                foreach (var item in students)
+                {
+                    var result = await userManager.CreateAsync(item, passWordStudent);
+                    if (!result.Succeeded) throw new Exception(String.Join("\n", result.Errors));
+                    await userManager.AddToRoleAsync(item, "Student");
+                }
             await context.SaveChangesAsync();
+        }
+
+
+        private static List<ApplicationUser> GetUsers()
+        {
+            var users = new List<ApplicationUser>();
+            var appUser = new ApplicationUser
+            {
+                Email = "admin@LearningSite.se",
+                UserName = "admin@LearningSite.se",               
+                Name = "AdminNname"             
+            };
+            users.Add(appUser);
+
+            return users;
+        }
+
+        private static List<ApplicationUser> GetStudent()
+        {
+            var users = new List<ApplicationUser>();
+            var appUser = new ApplicationUser
+            {
+                Email = "student@LearningSite.se",
+                UserName = "student@LearningSite.se",
+                Name = "StudentName"
+            };
+            users.Add(appUser);
+
+            return users;
         }
 
 
@@ -103,11 +220,12 @@ namespace Lms.Data.Data
 
             for (var i = 0; i < ModuleCapacity; i++)
             {
+                var (name, desciption) = ModuleNamePool.ElementAt(i);
                 var date = DateTime.Now.AddDays(_random.Next(10));
                 var module = new Module
                 {
-                    Name = "Name",
-                    Description = "Desc",
+                    Name = name,
+                    Description = desciption,
                     StartDate = date,
                     EndDate = date.AddMonths(6),
                     
@@ -124,20 +242,74 @@ namespace Lms.Data.Data
 
             return await Task.FromResult(modules);
         }
-        
-        // private static List<Course> GetCourses()
-        // {
-        //     return new List<Course>
-        //     {
-        //         new Course { Name = "C# Fundamentals", StartDate = new DateTime(2021, 06, 14), EndDate=new DateTime(2021, 06, 14).AddMonths(6)},
-        //         new Course { Name = "Frontend", StartDate = new DateTime(2021, 07, 15), EndDate= new DateTime(2021, 07, 15).AddMonths(6) },
-        //         new Course { Name = "MVC", StartDate = new DateTime(2021, 07, 15), EndDate= new DateTime(2021, 07, 15).AddMonths(6) },
-        //         new Course { Name = "Database", StartDate = new DateTime(2021, 08, 30), EndDate= new DateTime(2021, 08, 30).AddMonths(6) },
-        //         new Course { Name = "API", StartDate = new DateTime(2021, 09, 08), EndDate=new DateTime(2021, 09, 08).AddMonths(6) },
-        //         new Course { Name = "Backend", StartDate = new DateTime(2021, 09, 20), EndDate=new DateTime(2021, 09, 20).AddMonths(6) },
-        //     };
-        // }
-        //
+
+
+
+        private static async Task<IEnumerable<Activity>> GetActivities(IEnumerable<Module> modules, IEnumerable<ActivityType> activityTypes) // module
+        {
+            var activities = new List<Activity>();
+
+            for (var i = 0; i < ActivityCapacity; i++)
+            {
+                var (name, desciption) = ActivityNamePool.ElementAt(i);
+                var date = DateTime.Now.AddDays(_random.Next(10));
+                var activity = new Activity
+                {
+                    Name = name,
+                    Description = desciption,
+                    StartDate = date,
+                    EndDate = date.AddMonths(6), //för activity
+                    Deadline = date.AddMonths(6), //för uppgift för activity
+                    ActivityType = activityTypes.ElementAt(_random.Next(10)%3)
+                };
+                activities.Add(activity);
+            }
+
+            var index = 0;
+            foreach (var module in modules)
+            {
+                module.Activities = new List<Activity>() { activities.ElementAt(index)};
+                index += 1;
+            }
+
+            return await Task.FromResult(activities);
+        }
+
+
+        private static List<ActivityType> GetActivityType()
+        {
+            return new List<ActivityType>
+            {
+                new ActivityType { TypeName = "Laboratory" },
+                new ActivityType { TypeName = "Lecture" },
+                new ActivityType { TypeName = "Assignment" }
+            };
+        }
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // private static List<Module> GetModules()
         // {
         //     return new List<Module>
