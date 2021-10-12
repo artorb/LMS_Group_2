@@ -23,8 +23,7 @@ namespace Lms.Data.Repositories
             return await db.Courses.Include(m=>m.Modules).Include(u=>u.Users).Where(
                 string.IsNullOrWhiteSpace(courseName)? 
                 c=> true :
-                c => c.Name.ToUpper().Contains(courseName.ToUpper())).ToListAsync();
-                //p => p.Name.Contains(courseName, StringComparison.InvariantCultureIgnoreCase)).ToListAsync();
+                c => c.Name.ToUpper().Contains(courseName.ToUpper())).ToListAsync();                
         }
     }
 }

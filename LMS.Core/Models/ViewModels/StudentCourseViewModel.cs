@@ -12,11 +12,9 @@ namespace Lms.Core.Models.ViewModels
         public string CourseName { get; set; }
         public string CourseDescription { get; set; }
         public DateTime CourseStartDate { get; set; }
-        public DateTime CourseEndDate { get; set; }
+        public DateTime CourseEndDate { get; set; }   
 
-        //public ICollection<Document> Documents { get; set; }
-
-        public string DocumentId { get; set; }
+        public ICollection<Document> Documents  { get; set; }
 
     }
 }
