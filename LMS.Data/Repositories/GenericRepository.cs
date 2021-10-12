@@ -56,7 +56,8 @@ namespace Lms.Data.Repositories
         }
 
         public async Task<IEnumerable<T>> GetAllWithIncludesAsync(params Expression<Func<T, object>>[] includeProperties)
-        {
+        {        
+
             IQueryable<T> query = table;
 
             foreach (var include in includeProperties)

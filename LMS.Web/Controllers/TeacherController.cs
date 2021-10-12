@@ -21,6 +21,8 @@ namespace Lms.Web.Controllers
             _unitOfWork = unitOfWork;
         }
 
+
+
         public IActionResult Index()
         {
             var courses = _unitOfWork.CourseRepository.GetAllWithIncludesAsync(m => m.Modules, m=>m.Users).Result;
