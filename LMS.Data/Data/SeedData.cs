@@ -186,7 +186,8 @@ namespace Lms.Data.Data
             {
                 Email = "student@LearningSite.se",
                 UserName = "student@LearningSite.se",
-                Name = "StudentName"
+                Name = "StudentName",
+                CourseId = 2
             };
             users.Add(appUser);
 
