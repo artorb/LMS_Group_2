@@ -47,14 +47,15 @@ namespace Lms.Data.Repositories
             IQueryable<T> query = table;
             foreach (var include in includeProperties)
             {
-                query.Include(include);
+                await query.Include(include).LoadAsync();
             }
 
             return await query.FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<IEnumerable<T>> GetAllWithIncludesAsync(params Expression<Func<T, object>>[] includeProperties)
-        {
+        {        
+
             IQueryable<T> query = table;
             foreach (var include in includeProperties)
             {

@@ -9,6 +9,7 @@ using Lms.Core.Entities;
 using Lms.Data.Data;
 using Lms.Data.Repositories;
 using Lms.Core.Repositories;
+using Lms.Web.Extensions;
 
 namespace Lms.Web.Controllers
 {
@@ -42,6 +43,9 @@ namespace Lms.Web.Controllers
             return View(await allCourses);
         }
 
+
+
+
         // GET: Courses/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -57,8 +61,12 @@ namespace Lms.Web.Controllers
                 return NotFound();
             }
 
-            return View(course);
+            return Request.isAjax() ? PartialView("GetCourseDetailsPartial", course) : View(course);
+            //return View(course);
         }
+
+
+
 
         // GET: Courses/Create
         public IActionResult Create()

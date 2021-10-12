@@ -12,9 +12,9 @@
 
 
 <section class="mb-5">
-<div class="table-responsive bg-blurry shadow-4-strong rounded">
+<div class="table-responsive shadow-4-strong rounded">
     @* <table class="table table-borderless bg-secondary rounded-6 shadow-lg-6"> *@
-    <table class="table table-borderless table-hover align-middle mb-0 text-white">
+    <table class="table table-borderless table-hover align-middle mb-0">
         <thead>
         <tr>
             <th>
@@ -37,7 +37,7 @@
         </thead>
         <tbody>
         @foreach (var item in Model) {
-            <tr class="text-light">
+            <tr >
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
