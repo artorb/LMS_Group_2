@@ -22,9 +22,18 @@ namespace Lms.Web.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
-                return View();          
+            if (User.IsInRole("Teacher"))
+            {
+                return RedirectToAction("Index", "Teacher");
+            }
+            else if (User.IsInRole("Student"))
+            {
+                return View(); //Needs to change to "RedirectToAction("Index", "Student")" efter den kontrollen är skapad
+            }
+            return Error();
         }
 
 

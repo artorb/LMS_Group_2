@@ -2,6 +2,7 @@
 using Lms.Core.Repositories;
 using Lms.Data.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,19 +23,19 @@ namespace Lms.Web.Controllers
 
         public IActionResult Index()
         {
-            var courses = _unitOfWork.CourseRepository.GetAllWithIncludesAsync(m=>m.Modules);
-           
+            var courses = _unitOfWork.CourseRepository.GetAllWithIncludesAsync(m => m.Modules, m=>m.Users).Result;
+
             var viewModels = new List<TeacherLoginViewModel>();
 
-            foreach(var course in courses.Result)
+            foreach (var course in courses)
             {
                 var viewModel = new TeacherLoginViewModel()
                 {
                     CourseName = course.Name,
                     ActiveModuleName = course.Modules.ElementAt(0).Name,
                     NextModuleName = course.Modules.ElementAt(1).Name,
-                    //NumberOfParticipants = course.Users.Count()
-                    NumberOfParticipants = 1
+                    NumberOfParticipants = course.Users.Count
+                    //NumberOfParticipants = 1
                 };
                 viewModels.Add(viewModel);
             }

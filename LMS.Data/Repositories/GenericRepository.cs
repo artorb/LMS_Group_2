@@ -2,6 +2,7 @@
 using Lms.Core.Repositories;
 using Lms.Data.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,13 +42,14 @@ namespace Lms.Data.Repositories
         {
             return await table.FirstOrDefaultAsync(p => p.Id == id);
         }
-
+        
+        //May not work. Test to see if it actualy works
         public async Task<T> GetWithIncludesAsync(int id, params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> query = table;
             foreach (var include in includeProperties)
             {
-                query.Include(include);
+                await query.Include(include).LoadAsync();
             }
 
             return await query.FirstOrDefaultAsync(p => p.Id == id);
@@ -56,16 +58,17 @@ namespace Lms.Data.Repositories
         public async Task<IEnumerable<T>> GetAllWithIncludesAsync(params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> query = table;
+
             foreach (var include in includeProperties)
             {
-                query.Include(include);
+                await query.Include(include).LoadAsync();
             }
 
             return await query.ToListAsync();
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()
-        {        
+        {
             return await table.ToListAsync();
         }
 
