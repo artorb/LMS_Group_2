@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Lms.Web.Controllers
 {
-    public class StudentController : Controller
+    public class StudentsController : Controller
     {
         private readonly LmsDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
 
-        public StudentController(LmsDbContext context, IUnitOfWork unitOfWork)
+        public StudentsController(LmsDbContext context, IUnitOfWork unitOfWork)
         {
             _context = context;
             _unitOfWork = unitOfWork;

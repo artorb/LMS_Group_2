@@ -27,11 +27,11 @@ namespace Lms.Web.Controllers
         {
             if (User.IsInRole("Teacher"))
             {
-                return RedirectToAction("Index", "Teacher");
+                return RedirectToAction("Index", "Teachers");
             }
             else if (User.IsInRole("Student"))
             {
-                return View(); //Needs to change to "RedirectToAction("Index", "Student")" efter den kontrollen är skapad
+                return RedirectToAction("Index", "Students");
             }
             return Error();
         }
