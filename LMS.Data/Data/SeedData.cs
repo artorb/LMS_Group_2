@@ -237,7 +237,7 @@ namespace Lms.Data.Data
             var index = 0;
             foreach (var course in courses)
             {
-                course.Modules = new List<Module>() { modules.ElementAt(index), modules.ElementAt(index + 1) };
+                course.Modules = new List<Module>() { modules.ElementAt(index), modules.ElementAt(index + 1) }; //Cause some disorder in the order of the modules.
                 index += 2;
             }
 

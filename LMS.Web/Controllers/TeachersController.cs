@@ -26,7 +26,7 @@ namespace Lms.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var courses = await _unitOfWork.CourseRepository.GetAllWithIncludesAsync(m => m.Modules, m=>m.Users);
+            var courses = await _unitOfWork.CourseRepository.GetAllWithIncludesAsync(m => m.Modules, m => m.Users);
 
             var viewModels = new List<TeacherLoginViewModel>();
 
@@ -35,16 +35,17 @@ namespace Lms.Web.Controllers
                 var viewModel = new TeacherLoginViewModel()
                 {
                     CourseName = course.Name,
-                    ActiveModuleName = course.Modules.ElementAt(0).Name,
-                    NextModuleName = course.Modules.ElementAt(1).Name,
-                    NumberOfParticipants = course.Users.Count                 
+                    ActiveModuleName = course.Modules.ElementAt(0).Name,//Fix to use StartDate and EndDate, and add null-handler
+                    NextModuleName = course.Modules.ElementAt(1).Name,//Fix to use StartDate and EndDate, and add null-handler
+                    NumberOfParticipants = course.Users.Count
                 };
                 viewModels.Add(viewModel);
             }
             return View(viewModels);
         }
 
-        public async Task<IActionResult> Search(string courseName) {
+        public async Task<IActionResult> Search(string courseName)
+        {
 
             var foundCourses = await _unitOfWork.CourseRepository.FindByNameAsync(courseName);
 
@@ -61,10 +62,8 @@ namespace Lms.Web.Controllers
                 };
                 viewModels.Add(viewModel);
             }
+
             return View(nameof(Index), viewModels);
-
-
         }
-
     }
 }

@@ -20,20 +20,20 @@ namespace Lms.Web.Controllers
     {
         private readonly LmsDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
- 
+
 
         public StudentsController(LmsDbContext context, IUnitOfWork unitOfWork)
         {
             _context = context;
             _unitOfWork = unitOfWork;
-     
+
         }
 
         public IActionResult Index()
         {
-          
-          return View();
-                        
+
+            return View();
+
         }
 
         public IActionResult CourseDetail()
@@ -44,9 +44,9 @@ namespace Lms.Web.Controllers
             //{
             //    return NotFound();
             //}          
-            var UserLoggedIn = _context.Users.FirstOrDefault(u=>u.Id==userId);
-            var courseId = UserLoggedIn.CourseId;
-            var course = _unitOfWork.CourseRepository.GetWithIncludesAsync((int)courseId, d=>d.Documents).Result;
+            var UserLoggedIn = _context.Users.FirstOrDefault(u => u.Id == userId);//Uses _context, need to change
+            var courseId = UserLoggedIn.CourseId;//Can throw error if you are already logged in when the application starts
+            var course = _unitOfWork.CourseRepository.GetWithIncludesAsync((int)courseId, d => d.Documents).Result;
 
             var model = new StudentCourseViewModel()
             {
@@ -58,9 +58,5 @@ namespace Lms.Web.Controllers
             };
             return PartialView("GetCourseDetailsPartial", model);
         }
-
-
-
-
     }
 }
