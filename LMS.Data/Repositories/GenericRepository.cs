@@ -43,7 +43,7 @@ namespace Lms.Data.Repositories
             return await table.FirstOrDefaultAsync(p => p.Id == id);
         }
         
-        //May not work. Test to see if it actualy works
+        //May not work. Test to see if it actually works
         public async Task<T> GetWithIncludesAsync(int id, params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> query = table;
