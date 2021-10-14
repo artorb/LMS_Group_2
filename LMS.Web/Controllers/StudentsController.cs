@@ -64,8 +64,10 @@ namespace Lms.Web.Controllers
         public IActionResult ModuleList()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var UserLoggedIn = _context.Users.FirstOrDefault(u => u.Id == userId);//Uses _context, need to change
-            var courseId = UserLoggedIn.CourseId;//Can throw error if you are already logged in when the application starts
+            var UserLoggedIn = _context.Users.FirstOrDefault(u => u.Id == userId);//Uses _context, need to change  
+
+            var courseId = UserLoggedIn.CourseId;//Can throw error if you are already logged in when the application starts   
+
             var course = _unitOfWork.CourseRepository.GetWithIncludesAsync((int)courseId, m => m.Modules).Result;
             var modulesToCourse = course.Modules;
 

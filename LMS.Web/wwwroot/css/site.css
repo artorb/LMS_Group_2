@@ -201,10 +201,14 @@ label {
     max-width: fit-content;
 }
 
-#moduleListForStudent{
-    margin-right:5px;
-    margin-bottom:5px;
-    margin-top:5px;
+#StudentModuleViewTitle{
+    text-align:center
+}
+
+#moduleListForStudent {
+    margin-right: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
 }
 
 #moduleListForStudent:focus {
@@ -212,9 +216,12 @@ label {
 }
 
 #studentModuleActivityTable {
-    margin-left: 60px;
-    margin-right: 60px;
+    margin-right: 5px;
 }
+
+
+
+
 
 
 
