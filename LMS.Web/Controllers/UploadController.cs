@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lms.Web.Controllers
 {
-    public class UploadFilesController : Controller
+    public class UploadController : Controller
     {
        [HttpPost]  
        public async Task<ActionResult> UploadFiles(List<IFormFile> files)
@@ -19,7 +19,7 @@ namespace Lms.Web.Controllers
            {
                if (file == null) continue;
 
-               var filePath = Path.Combine(Directory.GetCurrentDirectory() + "/Uploads", file.FileName);
+               var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Uploads", file.FileName);
                // var filePath = Path.Combine("~/Uploads", file.FileName);
                paths.Add(filePath);
 
