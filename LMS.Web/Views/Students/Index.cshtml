@@ -31,6 +31,31 @@
 
 <div id="getCourseWithAjax"></div>
 
+<br/>
+@using (Html.BeginForm("UploadFiles", "UploadFiles", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            <div class="col-lg-2">Browse Files</div>
+            <div class="col-md-10">
+                <input type="file" multiple name="files" id="Files"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Upload" class="btn btn-primary"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10 text-success">
+                @ViewBag.UploadStatus
+            </div>
+        </div>
+
+    </div>
+}
+
 
 <br/>
 <br/>
