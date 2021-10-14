@@ -14,8 +14,8 @@ namespace Lms.Data.Repositories
         private readonly LmsDbContext db;
         public IActivityRepository ActivityRepository { get; }
         public ICourseRepository CourseRepository { get; }
-        
         public IModuleRepository ModuleRepository { get; }
+        public IUserRepository UserRepository { get;  }
 
         public UnitOfWork(LmsDbContext context)
         {
@@ -23,6 +23,7 @@ namespace Lms.Data.Repositories
             ActivityRepository = new ActivityRepository(db);
             CourseRepository = new CourseRepository(db);
             ModuleRepository = new ModuleRepository(db);
+            UserRepository = new UserRepository(db);
         }
 
         public async Task CompleteAsync()

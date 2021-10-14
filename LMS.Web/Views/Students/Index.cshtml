@@ -5,30 +5,41 @@
 <h1>Welcome Student!</h1>
 
 
+<a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="CourseDetails"
+   data-ajax="true"
+   data-ajax-method="GET"
+   data-ajax-update="#getCourseWithAjax"
+   data-ajax-mode="replace">
+    Course information
+</a>
 
-<a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="CourseDetail"
-           data-ajax="true"
-           data-ajax-method="GET"
-           data-ajax-update="#getCourseWithAjax"
-           data-ajax-mode="replace"   
-           >Course information</a>
+<a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="ModuleDetails"
+   data-ajax="true"
+   data-ajax-method="GET"
+   data-ajax-update="#getCourseWithAjax"
+   data-ajax-mode="replace">
+    Module information
+</a>
 
-<a class="btn btn-sm btn-primary" asp-action="Index">Module information</a>
-<a class="btn btn-sm btn-primary" asp-action="Index">Participants</a>
+<a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="CourseStudentsDetails"
+   data-ajax="true"
+   data-ajax-method="GET"
+   data-ajax-update="#getCourseWithAjax"
+   data-ajax-mode="replace">
+    Participants
+</a>
 
 <div id="getCourseWithAjax"></div>
 
 
-
-
-<br />
-<br />
+<br/>
+<br/>
 <div class="card-deck">
     <div class="card">
         <div class="card-body text-center">
             <h5 class="card-title">Monday</h5>
             <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity1</a>
-            <br />
+            <br/>
             <p class="card-text">Start time: </p>
         </div>
     </div>
@@ -36,7 +47,7 @@
         <div class="card-body text-center">
             <h5 class="card-title">Tuesday</h5>
             <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity2</a>
-            <br />
+            <br/>
             <p class="card-text">Start time: </p>
         </div>
     </div>
@@ -44,7 +55,7 @@
         <div class="card-body text-center">
             <h5 class="card-title">Wednesday</h5>
             <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity3</a>
-            <br />
+            <br/>
             <p class="card-text">Start time: </p>
         </div>
     </div>
@@ -52,7 +63,7 @@
         <div class="card-body text-center">
             <h5 class="card-title">Thursday</h5>
             <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity4</a>
-            <br />
+            <br/>
             <p class="card-text">Start time: </p>
         </div>
     </div>
@@ -60,9 +71,8 @@
         <div class="card-body text-center">
             <h5 class="card-title">Friday</h5>
             <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity5</a>
-            <br />
+            <br/>
             <p class="card-text">Start time: </p>
         </div>
     </div>
 </div>
-

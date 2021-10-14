@@ -31,17 +31,14 @@ namespace Lms.Web.Controllers
             /*GetAll with params example */
             var allCourses =
                 _unitOfWork.CourseRepository.
-                GetAllWithIncludesAsync(course => course.Modules);
+                GetAllWithIncludesAsync(course => course.Modules).Result;
 
+            var activityTest = _unitOfWork.ActivityRepository.GetAllWithIncludesAsync(x => x.ActivityType).Result;
 
+            var moduleTest = _unitOfWork.ModuleRepository.GetAllWithIncludesAsync(
+                x => x.Activities, x => x.Course).Result;
 
-            var moduleTest = _unitOfWork.ModuleRepository
-                .GetAllWithIncludesAsync(module => module.Course, m => m.Activities).Result;
-
-            var x = new Random();
-            //return View(await _context.Courses.ToListAsync());
-            // return View(await _unitOfWork.CourseRepository.GetAllAsync());
-            return View(await allCourses);
+            return View(allCourses);
         }
 
 
@@ -62,8 +59,8 @@ namespace Lms.Web.Controllers
                 return NotFound();
             }
 
-            return Request.isAjax() ? PartialView("GetCourseDetailsPartial", course) : View(course);
-            //return View(course);
+            // return Request.isAjax() ? PartialView("GetCourseDetailsPartial", course) : View(course);
+            return View(course);
         }
 
 

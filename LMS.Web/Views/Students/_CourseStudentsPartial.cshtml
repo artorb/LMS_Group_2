@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Lms.Core.Models.ViewModels.StudentCommonCourseViewModel>
+
+<div>
+    <br/>
+    <h4>Course</h4>
+    <hr/>
+
+    <div class="card-deck">
+        <div class="card">
+            <div>
+                <dl class="row">
+                    @foreach (var model in Model)
+                    {
+                        <dt class="col-sm-10"> @Html.DisplayNameFor(m => model.StudentName) </dt>
+                        <dd class="col-sm-10"> @Html.DisplayFor(m => model.StudentName) </dd>
+                        <dt class="col-sm-10"> @Html.DisplayNameFor(m => model.Email) </dt>
+                        <dd class="col-sm-10"> @Html.DisplayFor(m => model.Email) </dd>
+                    }
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
