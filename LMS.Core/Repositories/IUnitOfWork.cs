@@ -10,6 +10,7 @@ namespace Lms.Core.Repositories
     public interface IUnitOfWork
     {
         IActivityRepository ActivityRepository { get; }
+        IActivityTypeRepository ActivityTypeRepository { get; }
         ICourseRepository CourseRepository { get; }
         IModuleRepository ModuleRepository { get; }
         //IGenericRepository<Activity> ActivityRepository { get; }

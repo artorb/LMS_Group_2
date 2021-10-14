@@ -37,7 +37,8 @@ namespace Lms.Data.Data
             { "Android Module 2", "ModuleDescription2" },
 
             { "Big Data Module 1", "ModuleDescription3" },
-            { "Big Data Module 2", "ModuleDescription4" },
+            { "Big Data Module 2",
+                "ModuleDescription4 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics and prescriptive analytics, and apply these concepts to propose solutions in Big Data cases." },
 
             { "C# Backend Module 1", "ModuleDescription5" },
             { "C# Backend Module 2", "ModuleDescription6" },

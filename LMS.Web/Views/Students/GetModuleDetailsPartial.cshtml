@@ -1,0 +1,67 @@
+﻿@model Lms.Core.Models.ViewModels.StudentModuleViewModel
+
+<div> 
+    <h4> @Html.DisplayFor(model => model.ModuleName)  </h4>  
+
+    <div class="card-deck">
+
+
+        <div class="card border-0">
+            <div>
+                <dl class="row">                   
+                    <dt class="col-sm-10">  @Html.DisplayNameFor(model => model.ModuleDescription) : </dt>
+                    <dd class="col-sm-10"> @Html.DisplayFor(model => model.ModuleDescription)      </dd>
+                </dl>
+            </div>
+        </div>
+
+
+      <div class="card border-0" id="studentModuleActivityTable">
+            <div>                  
+                    <table class="table float-right">
+                        <thead>
+                            <tr>
+                                <th> @Html.DisplayNameFor(model => model.Activities) </th>
+                                <th>  Start date     </th>
+                                <th>  End date       </th>
+                                <th>  Status         </th>
+                                <th></th>                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Activities)
+                            {
+                                <tr>
+                                    <td>   @Html.DisplayFor(modelItem => item.ActivityType.TypeName) </td>
+                                    <td>   @Html.DisplayFor(modelItem => item.StartDate)             </td>
+                                    <td>   @Html.DisplayFor(modelItem => item.EndDate)               </td>
+                                    <td>   @Html.DisplayFor(modelItem => item.EndDate)               </td>                              
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+
+
+      <div class="card border-0">
+          <div>
+              <table class="table">
+                  <thead>
+                      <tr>
+                          <th> @Html.DisplayNameFor(model => model.Documents) </th>                    
+                      </tr>
+                  </thead>
+                  <tbody>
+                      @foreach (var item in Model.Documents)
+                      {
+                          <tr>
+                              <td>   @Html.DisplayFor(modelItem => item.Name)  </td>
+                          </tr>
+                      }
+                  </tbody>
+              </table>
+              </div>
+          </div>
+      </div>
+</div>
