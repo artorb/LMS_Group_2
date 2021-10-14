@@ -27,27 +27,22 @@ namespace Lms.Web.Controllers
         {
             _context = context;
             _unitOfWork = unitOfWork;
-
         }
 
         public IActionResult Index()
         {
-
             return View();
-
         }
 
-        public IActionResult CourseDetail()
+        public async Task<IActionResult> CourseDetails()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            //if (userId == null)
-            //{
-            //    return NotFound();
-            //}          
-            var UserLoggedIn = _context.Users.FirstOrDefault(u => u.Id == userId);//Uses _context, need to change
-            var courseId = UserLoggedIn.CourseId;//Can throw error if you are already logged in when the application starts
-            var course = _unitOfWork.CourseRepository.GetWithIncludesAsync((int)courseId, d => d.Documents).Result;
+            var UserLoggedIn =
+                await _context.Users.FirstOrDefaultAsync(u => u.Id == userId); //Uses _context, need to change
+            var courseId =
+                UserLoggedIn.CourseId; //Can throw error if you are already logged in when the application starts
+            var course = await _unitOfWork.CourseRepository.GetWithIncludesAsync((int)courseId, d => d.Documents);
 
             var model = new StudentCourseViewModel()
             {
@@ -57,7 +52,47 @@ namespace Lms.Web.Controllers
                 CourseEndDate = course.EndDate,
                 Documents = course.Documents
             };
-            return PartialView("GetCourseDetailsPartial", model);
+            return PartialView("_CourseDetailsPartial", model);
+        }
+
+        public async Task<IActionResult> ModuleDetails()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var UserLoggedIn =
+                await _context.Users.FirstOrDefaultAsync(u => u.Id == userId); //Uses _context, need to change
+            var courseId =
+                UserLoggedIn.CourseId; //Can throw error if you are already logged in when the application starts
+            var course = await _unitOfWork.CourseRepository.GetWithIncludesAsync((int)courseId, d => d.Documents);
+
+            // var model = new StudentModuleViewModel()
+            // {
+            //     Information = "",
+            //     StartDate = null,
+            //     EndDate = null,
+            //     Activity = null,
+            //     Documents = null,
+            // };
+            // return PartialView("_CourseModulePartial", model);
+            return null;
+        }
+
+
+        public async Task<IActionResult> CourseStudentsDetails()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var UserLoggedIn =
+                // await _context.Users.FirstOrDefaultAsync(u => u.Id == userId); //Uses _context, need to change
+                await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
+            var courseId =
+                UserLoggedIn.CourseId; //Can throw error if you are already logged in when the application starts
+            var course = await _unitOfWork.CourseRepository.GetWithIncludesAsync((int)courseId, d => d.Users);
+
+            var models = (from user in course.Users
+                where user.Id != userId
+                select new StudentCommonCourseViewModel { StudentName = user.Name, Email = user.Email }).ToList();
+            return PartialView("_CourseStudentsPartial", models);
         }
 
 

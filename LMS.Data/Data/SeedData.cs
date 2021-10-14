@@ -1,37 +1,49 @@
-﻿using Lms.Core.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Lms.Core.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Lms.Data.Data
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class SeedData
     {
         private static readonly Random _random = new Random(10);
 
-        private const int CourseCapacity = 10;
-        private const int ActivityCapacity = 20;
-        private static readonly Dictionary<string, string> CourseNamePool = new(CourseCapacity) /* Name - Description pair */
-        {
-            { "Android Course", "Expand your mobile app reach through this Android application development and programming training. Android's open source platform offers compatibility with a wide range of devices, which provide global access to the mobile market." },
-            { "Big Data", "The course gives an overview of the Big Data phenomenon, focusing then on extracting value from the Big Data using predictive analytics techniques." },
-            { "C# Backend", "This is an introductory programming course using the C# language. It does not assume any prior programming experience. This course will prepare students for intermediate C# and ASP.NET courses." },
-            { "Cloud Security", "FIXME" },
-            { "Computer Security Analyst", "The security analyst plays a vital role in keeping an organization’s proprietary and sensitive information secure. He/she works inter-departmentally to identify and correct flaws in the company’s security systems, solutions, and programs while recommending specific measures that can improve the company’s overall security posture." },
-            { "Cybersecurity", "FIXME" },
-            { "Digitization of the Legal Sector", "FIXME" },
-            { "Embedded Dev", "FIXME" },
-            { "Self-Paced Programs", "Self-paced learning enables employees to create their schedules. It is especially helpful for participants that have other tasks and can’t attend a live class or training. Even if there is a deadline to complete a course, for example, they can choose how and when they take it." },
-            { "Web Design", "FIXME" }
-        };
+        private static readonly Dictionary<string, string> CourseNamePool =
+            new() /* Name - Description pair */
+            {
+                {
+                    "Android Course",
+                    "Expand your mobile app reach through this Android application development and programming training. Android's open source platform offers compatibility with a wide range of devices, which provide global access to the mobile market."
+                },
+                {
+                    "Big Data",
+                    "The course gives an overview of the Big Data phenomenon, focusing then on extracting value from the Big Data using predictive analytics techniques."
+                },
+                {
+                    "C# Backend",
+                    "This is an introductory programming course using the C# language. It does not assume any prior programming experience. This course will prepare students for intermediate C# and ASP.NET courses."
+                },
+                { "Cloud Security", "FIXME" },
+                {
+                    "Computer Security Analyst",
+                    "The security analyst plays a vital role in keeping an organization’s proprietary and sensitive information secure. He/she works inter-departmentally to identify and correct flaws in the company’s security systems, solutions, and programs while recommending specific measures that can improve the company’s overall security posture."
+                },
+                { "Cybersecurity", "FIXME" },
+                { "Digitization of the Legal Sector", "FIXME" },
+                { "Embedded Dev", "FIXME" },
+                {
+                    "Self-Paced Programs",
+                    "Self-paced learning enables employees to create their schedules. It is especially helpful for participants that have other tasks and can’t attend a live class or training. Even if there is a deadline to complete a course, for example, they can choose how and when they take it."
+                },
+                { "Web Design", "FIXME" }
+            };
 
-        private const int ModuleCapacity = 20;
-        private static Dictionary<string, string> ModuleNamePool = new(ModuleCapacity)
+        private static readonly Dictionary<string, string> ModuleNamePool = new()
         {
             { "Android Module 1", "ModuleDescription1" },
             { "Android Module 2", "ModuleDescription2" },
@@ -58,9 +70,6 @@ namespace Lms.Data.Data
             { "Embedded Dev Module 1", "ModuleDescription1" },
             { "Embedded Dev Module 2", "ModuleDescription1" },
 
-            { "New Big Data Module 1", "ModuleDescription1" },
-            { "New Big Data Module 2", "ModuleDescription1" },
-
             { "Self-Paced Programs Module 1", "ModuleDescription1" },
             { "Self-Paced Programs Module 2", "ModuleDescription1" },
 
@@ -68,10 +77,7 @@ namespace Lms.Data.Data
             { "Web Design Module 2", "ModuleDescription1" }
         };
 
-
-
-
-        private static Dictionary<string, string> ActivityNamePool = new(ActivityCapacity)
+        private static readonly Dictionary<string, string> ActivityNamePool = new()
         {
             { "Android Activity 1", "ActivityDescription1" },
             { "Android Activity 2", "ActivityDescription1" },
@@ -97,9 +103,6 @@ namespace Lms.Data.Data
             { "Embedded Dev Activity 1", "ActivityDescription1" },
             { "Embedded Dev Activity 2", "ActivityDescription1" },
 
-            { "New Big Data Activity 1", "ActivityDescription1" },
-            { "New Big Data Activity 2", "ActivityDescription1" },
-
             { "Self-Paced Programs Activity 1", "ActivityDescription1" },
             { "Self-Paced Programs Activity 2", "ActivityDescription1" },
 
@@ -107,92 +110,140 @@ namespace Lms.Data.Data
             { "Web Design Activity 2", "ActivityDescription1" }
         };
 
+        private static readonly List<string> StudentNamePool = new()
+        {
+            { "Lucas" },
+            { "Liam" },
+            { "William" },
+            { "Elias" },
+            { "Noah" },
+            { "Hugo" },
+            { "Oliver" },
+            { "Oscar" },
+            { "Adam" },
+            { "Matt" },
+            { "Lars" },
+            { "Mikael" },
+            { "Anders" },
+            { "Erik" },
+            { "Per" },
+            { "Karl" },
+            { "Peter" },
+            { "Thomas" },
+            { "Jan" },
+            { "Ola" },
+            { "Gustaf" },
+            { "Sven" },
+            { "Nils" },
+            { "Alexander" },
+            { "Vincent" },
+            { "Theo" },
+            { "Isak" },
+            { "Arvid" },
+            { "August" },
+            { "Ludvig" }
+        };
 
+        private static UserManager<ApplicationUser> _userManager;
 
-
-
-
+        private static LmsDbContext _context;
 
         public static async Task InitAsync(LmsDbContext context, IServiceProvider services)
         {
             // if (await context.Courses.AnyAsync()) return;
+            _context = context;
+            _userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+            var activityTypes = GetActivityType().Result;
+            await context.ActivityTypes.AddRangeAsync(activityTypes);
 
-            var activityTypes = GetActivityType();
-            var courses = GetCourses();
-            var modules = GetModules(courses.Result);
-            var activities = GetActivities(modules.Result, activityTypes);
+            var courses = GetCourses().Result;
+            await context.Courses.AddRangeAsync(courses);
 
-            await context.Courses.AddRangeAsync(courses.Result);
-            await context.Modules.AddRangeAsync(modules.Result);
-            await context.Activities.AddRangeAsync(activities.Result);
+            var modules = GetModules(courses).Result;
+            await context.Modules.AddRangeAsync(modules);
 
-            //using (var db = services.GetRequiredService<LmsDbContext>())
-            //{
-            const string passWord = "AdminNet21!";
-            const string roleName = "Teacher";
+            var activities = GetActivities(modules, activityTypes).Result;
+            await context.Activities.AddRangeAsync(activities);
 
-            const string passWordStudent = "StudentNet21!";
-            const string roleNameStudent = "Student";
 
-            var userManager = services.GetRequiredService<Microsoft.AspNetCore.Identity.UserManager<ApplicationUser>>();
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-            var role = new IdentityRole { Name = roleName };
-            await roleManager.CreateAsync(role);
+            var teacherRole = new IdentityRole { Name = "Teacher" };
+            await roleManager.CreateAsync(teacherRole);
 
-            var studentRole = new IdentityRole { Name = roleNameStudent };
+            var studentRole = new IdentityRole { Name = "Student" };
             await roleManager.CreateAsync(studentRole);
 
-            var users = GetUsers();
-            await context.AddRangeAsync(users);
+            var teachers = await InitTeachers();
+            await AddToRolesAsync(teachers.ToList(), teacherRole);
 
-            foreach (var item in users)
-            {
-                var result = await userManager.CreateAsync(item, passWord);
-                if (!result.Succeeded) throw new Exception(String.Join("\n", result.Errors));
-                await userManager.AddToRoleAsync(item, "Teacher");
-            }
+            var students = await InitStudents(courses);
+            await AddToRolesAsync(students.ToList(), studentRole);
 
-            var students = GetStudent();
-            await context.AddRangeAsync(students);
-
-            foreach (var item in students)
-            {
-                var result = await userManager.CreateAsync(item, passWordStudent);
-                if (!result.Succeeded) throw new Exception(String.Join("\n", result.Errors));
-                await userManager.AddToRoleAsync(item, "Student");
-            }
             await context.SaveChangesAsync();
         }
 
-
-        private static List<ApplicationUser> GetUsers()
+        private static async Task AddToRolesAsync(IEnumerable<ApplicationUser> users, IdentityRole role)
         {
-            var users = new List<ApplicationUser>();
-            var appUser = new ApplicationUser
-            {
-                Email = "admin@LearningSite.se",
-                UserName = "admin@LearningSite.se",
-                Name = "AdminNname"
-            };
-            users.Add(appUser);
+            if (users == null) throw new NullReferenceException($"Users are null");
 
-            return users;
+            foreach (var user in users)
+            {
+                if (await _userManager.IsInRoleAsync(user, role.Name)) continue;
+                var result = await _userManager.AddToRoleAsync(user, role.Name);
+                if (!result.Succeeded)
+                {
+                    throw new Exception($"AddToRolesAsync error ${result.Errors}");
+                }
+            }
         }
 
-        private static List<ApplicationUser> GetStudent()
+        private static async Task<IEnumerable<ApplicationUser>> InitTeachers()
+        {
+            const string pass = "12";
+
+            var teachers = new List<ApplicationUser>();
+
+            var teacher_john = new ApplicationUser
+            {
+                Email = "john@LearningSite.se",
+                UserName = "John",
+                Name = "Teacher John"
+            };
+
+            var teacher_sanna = new ApplicationUser
+            {
+                Email = "sanna@LearningSite.se",
+                UserName = "Sanna",
+                Name = "Teacher Sanna"
+            };
+
+            teachers.Add(teacher_john);
+            teachers.Add(teacher_sanna);
+            await _userManager.CreateAsync(teacher_sanna, pass);
+            await _userManager.CreateAsync(teacher_john, pass);
+
+            return await Task.FromResult(teachers);
+        }
+
+        private static async Task<IEnumerable<ApplicationUser>> InitStudents(IEnumerable<Course> courses)
         {
             var users = new List<ApplicationUser>();
-            var appUser = new ApplicationUser
-            {
-                Email = "student@LearningSite.se",
-                UserName = "student@LearningSite.se",
-                Name = "StudentName",
-                CourseId = 2
-            };
-            users.Add(appUser);
+            const string pass = "12";
 
-            return users;
+            foreach (var student in StudentNamePool.Select(name => new ApplicationUser
+            {
+                Email = $"{name}@LearningSite.se",
+                UserName = $"{name}",
+                Name = $"{name}",
+                Course = courses.ElementAt(GetRangedIncludedRandom(to: 10)) // FIXME to a method
+            }))
+            {
+                users.Add(student);
+                await _userManager.CreateAsync(student, pass);
+            }
+
+            return await Task.FromResult(users);
         }
 
 
@@ -200,19 +251,19 @@ namespace Lms.Data.Data
         {
             var courses = new List<Course>();
 
-            for (var i = 0; i < CourseCapacity; i++)
+            foreach (var (name, description) in CourseNamePool)
             {
-                var (name, desciption) = CourseNamePool.ElementAt(i);
-                var date = DateTime.Now.AddDays(_random.Next(10));
+                var date = DateTime.Now.AddDays(GetRangedIncludedRandom(5, 10));
                 var course = new Course
                 {
                     Name = name,
-                    Description = desciption,
+                    Description = description,
                     StartDate = date,
                     EndDate = date.AddMonths(6)
                 };
                 courses.Add(course);
             }
+
             return await Task.FromResult(courses);
         }
 
@@ -220,49 +271,61 @@ namespace Lms.Data.Data
         {
             var modules = new List<Module>();
 
-            for (var i = 0; i < ModuleCapacity; i++)
+
+            foreach (var (name, description) in ModuleNamePool)
             {
-                var (name, desciption) = ModuleNamePool.ElementAt(i);
-                var date = DateTime.Now.AddDays(_random.Next(10));
+                var date = DateTime.Now.AddDays(GetRangedIncludedRandom(5, 10));
                 var module = new Module
                 {
                     Name = name,
-                    Description = desciption,
+                    Description = description,
                     StartDate = date,
                     EndDate = date.AddMonths(6),
-
                 };
                 modules.Add(module);
             }
 
-            var index = 0;
-            foreach (var course in courses)
+            var dict = new Dictionary<Module, Module>();
+            for (var i = 0; i < modules.Count; i += 2)
             {
-                course.Modules = new List<Module>() { modules.ElementAt(index), modules.ElementAt(index + 1) }; //Cause some disorder in the order of the modules.
-                index += 2;
+                dict.Add(modules.ElementAt(i), modules.ElementAt(i + 1));
             }
+
+            for (var i = 0; i < courses.Count(); i++)
+            {
+                courses.ElementAt(i).Modules = new List<Module>() { dict.Keys.ElementAt(i), dict.Values.ElementAt(i) };
+            }
+
+            // var index = 0;
+            // foreach (var course in courses)
+            // {
+            //     course.Modules = new List<Module>
+            //     {
+            //         modules.ElementAt(index), modules.ElementAt(index + 1)
+            //     }; //Cause some disorder in the order of the modules.
+            //     index += 2;
+            // }
 
             return await Task.FromResult(modules);
         }
 
 
-
-        private static async Task<IEnumerable<Activity>> GetActivities(IEnumerable<Module> modules, IEnumerable<ActivityType> activityTypes) // module
+        private static async Task<IEnumerable<Activity>> GetActivities(IEnumerable<Module> modules,
+            IEnumerable<ActivityType> activityTypes)
         {
             var activities = new List<Activity>();
 
-            for (var i = 0; i < ActivityCapacity; i++)
+            foreach (var (name, description) in ActivityNamePool)
             {
-                var (name, desciption) = ActivityNamePool.ElementAt(i);
-                var date = DateTime.Now.AddDays(_random.Next(10));
+                var date = DateTime.Now.AddDays(GetRangedIncludedRandom(to: 10));
                 var activity = new Activity
                 {
                     Name = name,
-                    Description = desciption,
+                    Description = description,
                     StartDate = date,
                     EndDate = date.AddMonths(6), //för activity
                     Deadline = date.AddMonths(6), //för uppgift för activity
-                    ActivityType = activityTypes.ElementAt(_random.Next(10) % 3)
+                    ActivityType = activityTypes.ElementAt(GetRangedIncludedRandom(to: 10) % 3)
                 };
                 activities.Add(activity);
             }
@@ -270,70 +333,28 @@ namespace Lms.Data.Data
             var index = 0;
             foreach (var module in modules)
             {
-                module.Activities = new List<Activity>() { activities.ElementAt(index) };
+                module.Activities = new List<Activity> { activities.ElementAt(index) };
                 index += 1;
-            }
+            } // Same disorder error
 
             return await Task.FromResult(activities);
         }
 
-
-        private static List<ActivityType> GetActivityType()
+        private static async Task<IEnumerable<ActivityType>> GetActivityType()
         {
-            return new List<ActivityType>
+            var types = new List<ActivityType>
             {
-                new ActivityType { TypeName = "Laboratory" },
-                new ActivityType { TypeName = "Lecture" },
-                new ActivityType { TypeName = "Assignment" }
+                new() { TypeName = "Laboratory" },
+                new() { TypeName = "Lecture" },
+                new() { TypeName = "Assignment" }
             };
+            return await Task.FromResult(types);
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // private static List<Module> GetModules()
-        // {
-        //     return new List<Module>
-        //     {
-        //         new Module { CourseId = 1, Name = "C# Intro", StartDate = new DateTime(2021, 06, 14) },
-        //         new Module { CourseId = 1, Name = "OOP", StartDate = new DateTime(2021, 06, 22) },
-        //         new Module { CourseId = 1, Name = "Generics", StartDate = new DateTime(2021, 06, 29) },
-        //         new Module { CourseId = 1, Name = "Delegates", StartDate = new DateTime(2021, 07, 02) },
-        //         new Module { CourseId = 2, Name = "HTML", StartDate = new DateTime(2021, 07, 15) },
-        //         new Module { CourseId = 2, Name = "CSS", StartDate = new DateTime(2021, 07, 16) },
-        //         new Module { CourseId = 2, Name = "Bootstrap", StartDate = new DateTime(2021, 08, 03) },
-        //         new Module { CourseId = 2, Name = "JavaScript", StartDate = new DateTime(2021, 08, 06) },
-        //         new Module { CourseId = 3, Name = "MVC Intro", StartDate = new DateTime(2021, 08, 12) },
-        //         new Module { CourseId = 3, Name = "PartialView/ViewModel", StartDate = new DateTime(2021, 08, 19) },
-        //         new Module { CourseId = 3, Name = "Git", StartDate = new DateTime(2021, 08, 20) },
-        //         new Module { CourseId = 4, Name = "SQL Bolt", StartDate = new DateTime(2021, 08, 30) },
-        //         new Module { CourseId = 4, Name = "EntityFramework", StartDate = new DateTime(2021, 08, 31) },
-        //         new Module { CourseId = 5, Name = "API Intro", StartDate = new DateTime(2021, 09, 08) },
-        //         new Module { CourseId = 5, Name = "RESTful APIs", StartDate = new DateTime(2021, 09, 10) },
-        //     };
-        // }
-
-
+        private static int GetRangedIncludedRandom(int from = 0, int to = 0)
+        {
+            var result = new Random();
+            return result.Next(from, to);
+        }
     }
 }

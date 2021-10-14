@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace Lms.Core.Models.ViewModels
 {
-   public class StudentModuleViewModel
-    {   
+    public class StudentModuleViewModel
+    {
         [Display(Name = "Module name")]
         public string ModuleName { get; set; }
 

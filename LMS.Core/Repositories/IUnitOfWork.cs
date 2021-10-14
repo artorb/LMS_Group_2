@@ -13,6 +13,7 @@ namespace Lms.Core.Repositories
         IActivityTypeRepository ActivityTypeRepository { get; }
         ICourseRepository CourseRepository { get; }
         IModuleRepository ModuleRepository { get; }
+        IUserRepository UserRepository { get; }
         //IGenericRepository<Activity> ActivityRepository { get; }
         //IGenericRepository<Activity> ActivityRepository { get; }
 

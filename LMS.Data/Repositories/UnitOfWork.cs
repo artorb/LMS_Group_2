@@ -15,8 +15,8 @@ namespace Lms.Data.Repositories
         public IActivityRepository ActivityRepository { get; }
         public IActivityTypeRepository ActivityTypeRepository { get; }
         public ICourseRepository CourseRepository { get; }
-        
         public IModuleRepository ModuleRepository { get; }
+        public IUserRepository UserRepository { get;  }
 
         public UnitOfWork(LmsDbContext context)
         {
@@ -25,6 +25,7 @@ namespace Lms.Data.Repositories
             ActivityTypeRepository = new ActivityTypeRepository(db);
             CourseRepository = new CourseRepository(db);
             ModuleRepository = new ModuleRepository(db);
+            UserRepository = new UserRepository(db);
         }
 
         public async Task CompleteAsync()
