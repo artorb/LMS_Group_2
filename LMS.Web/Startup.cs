@@ -35,9 +35,20 @@ namespace Lms.Web
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            services.AddDefaultIdentity<ApplicationUser>(options =>
+                    {
+                        options.SignIn.RequireConfirmedAccount = false;
+                        options.Password.RequireDigit = false;
+                        options.Password.RequiredLength = 1;
+                        options.Password.RequireLowercase = false;
+                        options.Password.RequireUppercase = false;
+                        options.Password.RequireNonAlphanumeric = false;
+                        options.User.RequireUniqueEmail = false;
+                    }
+                )
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<LmsDbContext>();
+                .AddEntityFrameworkStores<LmsDbContext>()
+                .AddDefaultTokenProviders();
             services.AddControllersWithViews();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
