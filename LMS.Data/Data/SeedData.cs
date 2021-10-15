@@ -181,7 +181,7 @@ namespace Lms.Data.Data
             var students = await InitStudents(courses);
             await AddToRolesAsync(students.ToList(), studentRole);
 
-            var documents = await GetDocuments(modules, activities);
+            var documents = await GetDocuments(courses, modules, activities);
             await context.Documents.AddRangeAsync(documents);
 
             await context.SaveChangesAsync();
@@ -362,35 +362,60 @@ namespace Lms.Data.Data
         }
 
 
-        private static async Task<IEnumerable<Document>> GetDocuments(IEnumerable<Module> modules, IEnumerable<Activity> activities)
+        private static async Task<IEnumerable<Document>> GetDocuments(IEnumerable<Course> courses, IEnumerable<Module> modules, IEnumerable<Activity> activities)
         {
-            foreach (var activity in activities)
-            {
-                Directory.CreateDirectory($"wwwroot/Uploads/{activity.Module.Name}/{activity.Name}");
+            foreach (var module in modules)
+            {               
+                    Directory.CreateDirectory($"wwwroot/Uploads/{module.Course.Name}/{module.Name}");                
             }
-            
-            /* Module documents seed */
-            var documents = modules.Select(module => new Document
+
+            foreach (var module in modules)
+            {
+                foreach (var activity in activities)
                 {
-                    Name = $"{module.Name} document",
-                    Description = $"{module.Description}",
-                    UploadDate = module.StartDate,
-                    HashName = $"{module.Name}/{module.Name}.pdf",
-                    Uploader = "john@LearningSite.se",
-                    Module = module
-                })
-                .ToList();
-            
+                    if (Directory.Exists($"wwwroot/Uploads/{module.Course.Name}/{module.Name}"))
+                    {
+                        if (module.Name == activity.Module.Name) {
+                        Directory.CreateDirectory($"wwwroot/Uploads/{module.Course.Name}/{activity.Module.Name}/{activity.Name}");
+                        break;
+                        }
+                    }
+                }
+            }
+
+
+            var documents = courses.Select(course => new Document
+            {
+                Name = $"{course.Name} document",
+                Description = $"{course.Description}",
+                UploadDate = course.StartDate,
+                HashName = $"{course.Name}/{course.Name}.pdf",
+                Uploader = "john@LearningSite.se",
+                Course = course
+            }).ToList();
+
+
+            documents.AddRange(modules.Select(module => new Document
+            {
+                Name = $"{module.Name} document",
+                Description = $"{module.Description}",
+                UploadDate = module.StartDate,
+                HashName = $"{module.Course.Name}/{module.Name}/{module.Name}.pdf",
+                Uploader = "john@LearningSite.se",
+                Module = module
+            }));
+
+
             /* Activity documents seed */
             documents.AddRange(activities.Select(activity => new Document
             {
                 Name = $"{activity.Name} document",
                 Description = $"{activity.Description}",
                 UploadDate = activity.StartDate,
-                HashName = $"{activity.Module.Name}/{activity.Name}/{activity.Name}.pdf",
+                HashName = $"{activity.Module.Course.Name}/{activity.Module.Name}/{activity.Name}/{activity.Name}.pdf",
                 Uploader = "john@LearningSite.se",
                 Activity = activity
-            }));
+            })); 
 
             return await Task.FromResult(documents);
         }

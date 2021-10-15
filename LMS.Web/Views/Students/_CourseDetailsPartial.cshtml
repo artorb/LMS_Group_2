@@ -1,57 +1,37 @@
 ﻿@model Lms.Core.Models.ViewModels.StudentCourseViewModel
 
-<div>
+
     <br />
-    <h4>Course</h4>
+    <h4>@Html.DisplayFor(model => model.CourseName)</h4>
     <hr />
 
     <div class="card-deck">
-        <div class="card">
-            <div>
-                <dl class="row">
-                    <dt class="col-sm-10">  @Html.DisplayNameFor(model => model.CourseName)       </dt>
-                    <dd class="col-sm-10"> @Html.DisplayFor(model => model.CourseName)            </dd>
-                    <dt class="col-sm-10">  @Html.DisplayNameFor(model => model.CourseStartDate)    </dt>
-                    <dd class="col-sm-10"> @Html.DisplayFor(model => model.CourseStartDate)        </dd>
-                    <dt class="col-sm-10">  @Html.DisplayNameFor(model => model.CourseEndDate)      </dt>
-                    <dd class="col-sm-10"> @Html.DisplayFor(model => model.CourseEndDate)          </dd>
-                </dl>
+        <div class="card border-0">
 
-
-            </div>
+            <div> <strong>  @Html.DisplayNameFor(model => model.CourseStartDate)  </strong> </div>
+            <div>           @Convert.ToDateTime(Model.CourseStartDate).ToString("yyyy/MM/dd HH:mm")               </div>
+            <div><strong>   @Html.DisplayNameFor(model => model.CourseEndDate)   </strong>  </div>
+            <div>           @Convert.ToDateTime(Model.CourseEndDate).ToString("yyyy/MM/dd HH:mm")                 </div>
         </div>
-        <div class="card ">
-            <div>
-                <dl class="row">
-                    <dt class="col-sm-10">  @Html.DisplayNameFor(model => model.CourseDescription)  </dt>
-                    <dd class="col-sm-10"> @Html.DisplayFor(model => model.CourseDescription)      </dd>
-                </dl>
-            </div>
+
+        <div class="card border-0">
+            <div> <strong>  @Html.DisplayNameFor(model => model.CourseDescription) </strong> </div>
+            <div>           @Html.DisplayFor(model => model.CourseDescription)               </div>
         </div>
-        <div class="card">
-            <div class="card-body text-center">
-                <h5 class="card-title">@Html.DisplayNameFor(model => model.Documents)</h5>
 
 
-
-                <section class="mb-5">
-                    <div class="table-responsive bg-blurry shadow-4-strong rounded">
-                        <table class="table table-borderless table-hover align-middle mb-0 ">                           
-                            <tbody>
-                                @foreach (var item in Model.Documents)
-                                {
-                                    <tr>
-                                        <td>   @Html.DisplayFor(modelItem => item.Name)  </td>                                      
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-
-
-            </div>
+        <div class="card border-0">
+            <div> <strong>  @Html.DisplayNameFor(model => model.Documents)  </strong> </div>
+            <table class="table">      
+                <tbody>
+                    @foreach (var item in Model.Documents)
+                    {
+                        <tr>
+                            @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
-</div>
 
