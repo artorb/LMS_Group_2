@@ -14,7 +14,7 @@ namespace Lms.Core.Models.ViewModels
         public string ActivityName { get; set; }
 
 
-        [Display(Name = "Information")]
+        [Display(Name = "Description")]
         public string ActivityDescription { get; set; }
 
 

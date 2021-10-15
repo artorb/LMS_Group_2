@@ -201,6 +201,14 @@ label {
     max-width: fit-content;
 }
 
+.buttonsOnIndexPageForStudent:focus {
+    color: lightsalmon;
+}
+
+.participantListForStudent {
+    margin-left: 15px;
+}
+
 #StudentModuleViewTitle{
     text-align:center
 }
@@ -215,19 +223,27 @@ label {
     color: lightsalmon;
 }
 
+.moduleDetailsForStudent{
+   float:left;
+    margin-bottom:10px;
+}
+
 #studentModuleActivityTable {
     margin-right: 5px;
 }
 
-.buttonsOnIndexPageForStudent:focus {
-    color: lightsalmon;
+#StudentActivityViewTitle {
+    text-align: center
 }
 
-.participantListForStudent{
-    margin-left:15px;
+.activityDetailsForStudent {
+    margin-right: 20px;
+    margin-bottom:10px;
 }
 
-
+#activityDetailsTypeAndStatusForStudent{
+    margin-left:25px
+}
 
 
 

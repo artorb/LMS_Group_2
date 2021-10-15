@@ -2,56 +2,65 @@
 
 <h4 id="StudentModuleViewTitle"> @Html.DisplayFor(model => model.ModuleName)  </h4>
 
+<hr />
+
 <section class="container">
     <section class="row">
 
-        <div>
-            <div> <strong>  @Html.DisplayNameFor(model => model.ModuleDescription) </strong> </div>
-            <div>           @Html.DisplayFor(model => model.ModuleDescription)               </div>
+        <div class="moduleDetailsForStudent">           
             <div> <strong>  @Html.DisplayNameFor(model => model.ModuleStartDate)  </strong> </div>
             <div>           @Html.DisplayFor(model => model.ModuleStartDate)                </div>
             <div><strong>   @Html.DisplayNameFor(model => model.ModuleEndDate)   </strong>  </div>
             <div>           @Html.DisplayFor(model => model.ModuleEndDate)                  </div>
         </div>
 
-        <br />
 
-        <div>
+
+        <div class="moduleDetailsForStudent">
+            <div> <strong>  @Html.DisplayNameFor(model => model.ModuleDescription) </strong> </div>
+            <div>           @Html.DisplayFor(model => model.ModuleDescription)               </div>
+
+        </div>
+
+
+
+        <div class="moduleDetailsForStudent">
             <table class="table">
                 <thead>
                     <tr>
                         <th> @Html.DisplayNameFor(model => model.Activities)         </th>
                         <th> @Html.DisplayNameFor(model => model.ModuleStartDate)    </th>
                         <th> @Html.DisplayNameFor(model => model.ModuleEndDate)      </th>
-                        <th> Status       </th>
+                        <th style="color:red"> Status       </th>
                         <th> </th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model.Activities)
                     {
-                    <tr>
-                        <td>
-                            <a asp-controller="Students" asp-action="ActivityDetail" asp-route-id="@item.ModuleId"
-                               data-ajax="true"
-                               data-ajax-method="GET"
-                               data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
-                               data-ajax-mode="replace">
-                                @Html.DisplayFor(modelItem => item.ActivityType.TypeName)
-                            </a>
-                        </td>
-                        <td> @Convert.ToDateTime(item.StartDate).ToString("yyyy/MM/dd HH:mm")            </td>
-                        <td>  @Convert.ToDateTime(item.EndDate).ToString("yyyy/MM/dd HH:mm")             </td>
-                        <td> @Html.DisplayFor(modelItem => item.EndDate)               </td>
-                        <td></td>
-                    </tr>
+                        <tr>
+                            <td>
+                                <a asp-controller="Students" asp-action="ActivityDetail" asp-route-id="@item.ModuleId"
+                                   data-ajax="true"
+                                   data-ajax-method="GET"
+                                   data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
+                                   data-ajax-mode="replace">
+                                    @Html.DisplayFor(modelItem => item.ActivityType.TypeName)
+                                </a>
+                            </td>
+                            <td> @Convert.ToDateTime(item.StartDate).ToString("yyyy/MM/dd HH:mm")            </td>
+                            <td>  @Convert.ToDateTime(item.EndDate).ToString("yyyy/MM/dd HH:mm")             </td>
+                            <td> @Html.DisplayFor(modelItem => item.EndDate)               </td>
+                            <td></td>
+                        </tr>
                     }
                 </tbody>
             </table>
         </div>
 
+  
 
-        <div>
+        <div class="moduleDetailsForStudent">
             <table class="table">
                 <thead>
                     <tr>
@@ -62,8 +71,8 @@
                     @foreach (var item in Model.Documents)
                     {
                         <tr>
-                            <td>                              
-                                @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)                             
+                            <td>
+                                @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
                             </td>
                         </tr>
                     }
@@ -71,7 +80,7 @@
             </table>
         </div>
 
-        <br />
+    
 
     </section>
 </section>
