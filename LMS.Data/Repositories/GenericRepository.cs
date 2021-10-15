@@ -22,6 +22,19 @@ namespace Lms.Data.Repositories
             db = context ?? throw new ArgumentNullException(nameof(db));
             table = db.Set<T>();
         }
+        
+        public async Task<IEnumerable<T>> GetIncludeTest(Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null) 
+        {
+            IQueryable<T> queryable = db.Set<T>();
+
+            if (includes != null)
+            {
+                queryable = includes(queryable);
+            }
+
+            return await queryable.ToListAsync();
+        }
+        
 
         public void Add(T obj)
         {

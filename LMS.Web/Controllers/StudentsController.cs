@@ -29,8 +29,19 @@ namespace Lms.Web.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            // // var course = await _unitOfWork.CourseRepository.GetIncludeTest(includes: courses =>
+            // //     courses.Include(course => course.Modules).ThenInclude(module => module.Activities));
+            // var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            // var courses = await _unitOfWork.CourseRepository.GetIncludeTest(includes: courses =>
+            //     courses.Include(course => course.Modules).ThenInclude(module => module.Activities));
+            //
+            // // var users = await _unitOfWork.UserRepository.GetIncludeTest(userId,c =>
+            // //     c.Include(c => c.Course).ThenInclude(c => c.Modules).ThenInclude(c => c.Activities));
+            //
+            // var users = _unitOfWork.UserRepository.GetIncludeTest(userId,c =>
+            //     c.Include(c => c.Course).ThenInclude(c => c.Modules).ThenInclude(c => c.Activities)).Result;
             return View();
         }
 
@@ -102,7 +113,8 @@ namespace Lms.Web.Controllers
             var UserLoggedIn =
                 //_context.Users.FirstOrDefault(u => u.Id == userId);//Uses _context, need to change  
                 await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
-            var courseId = UserLoggedIn.CourseId;//Can throw error if you are already logged in when the application starts   
+            var courseId =
+                UserLoggedIn.CourseId; //Can throw error if you are already logged in when the application starts   
 
             var course = _unitOfWork.CourseRepository.GetWithIncludesAsync((int)courseId, m => m.Modules).Result;
             var modulesToCourse = course.Modules;
@@ -110,11 +122,12 @@ namespace Lms.Web.Controllers
             return PartialView("GetModuleListPartial", modulesToCourse);
         }
 
-       
+
         // kolla generic repo för att undvika fler anrop - inte nödvändigt
         public IActionResult ModuleDetail(int Id)
         {
-            var module = _unitOfWork.ModuleRepository.GetWithIncludesAsync((int)Id, d => d.Documents, a => a.Activities).Result;
+            var module = _unitOfWork.ModuleRepository.GetWithIncludesAsync((int)Id, d => d.Documents, a => a.Activities)
+                .Result;
             if (module == null) return NotFound();
 
             if (module.Activities != null)
@@ -132,15 +145,16 @@ namespace Lms.Web.Controllers
                 ModuleStartDate = module.StartDate,
                 ModuleEndDate = module.EndDate,
                 Documents = module.Documents,
-                Activities = module.Activities    
+                Activities = module.Activities
             };
 
-            return PartialView("GetModuleDetailsPartial", model);         
+            return PartialView("GetModuleDetailsPartial", model);
         }
 
         public IActionResult ActivityDetail(int Id)
         {
-            var activity = _unitOfWork.ActivityRepository.GetWithIncludesAsync((int)Id, d => d.Documents, a => a.ActivityType).Result;
+            var activity = _unitOfWork.ActivityRepository
+                .GetWithIncludesAsync((int)Id, d => d.Documents, a => a.ActivityType).Result;
             if (activity == null) return NotFound();
 
             var model = new StudentActivityViewModel()
@@ -151,15 +165,10 @@ namespace Lms.Web.Controllers
                 ActivityStartDate = activity.StartDate,
                 ActivityEndDate = activity.EndDate,
                 Documents = activity.Documents,
-                Status = null           
+                Status = null
             };
 
             return PartialView("GetActivityDetailsPartial", model);
         }
-
-
-
-
     }
 }
-

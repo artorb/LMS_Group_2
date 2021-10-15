@@ -5,12 +5,19 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Lms.Core.Repositories
 {
     public interface IGenericRepository<T> where T : BaseEntity
     {
-        Task<IEnumerable<T>> GetAllWithIncludesAsync(params Expression<Func<T, object>>[] includeProperties);
+        Task<IEnumerable<T>> GetIncludeTest(Func<IQueryable<T>, IIncludableQueryable<T, object>> includes);
+           
+        // Task<IEnumerable<T>> GetIncludeTest<T>(Func<IQueryable<T>, IIncludableQueryable<T, object>> includes);
+
+        Task<IEnumerable<T>> GetAllWithIncludesAsync(
+            params Expression<Func<T, object>>[] includeProperties);
+
         Task<T> GetWithIncludesAsync(int id, params Expression<Func<T, object>>[] includeProperties);
 
         Task<IEnumerable<T>> GetAllAsync();
