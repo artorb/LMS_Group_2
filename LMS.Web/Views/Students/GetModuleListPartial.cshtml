@@ -11,7 +11,7 @@
             <a class ="btn btn-primary" id="moduleListForStudent"  asp-controller="Students" asp-action="ModuleDetail" asp-route-id="@item.Id"
                data-ajax="true"
                data-ajax-method="GET"
-               data-ajax-update="#getModuleDetailWithAjax"
+               data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
                data-ajax-mode="replace">
                 @Html.DisplayFor(modelItem => item.Name)
             </a>
@@ -19,7 +19,7 @@
     </div>
 
     <div class="card border-0">
-        <div id="getModuleDetailWithAjax"></div>       
+        <div id="getModuleDetailOrActivityDetailsWithAjax"></div>       
     </div>
 </div>
 

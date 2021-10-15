@@ -96,11 +96,12 @@ namespace Lms.Web.Controllers
         }
 
 
-        public IActionResult ModuleList()
+        public async Task<IActionResult> ModuleList()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var UserLoggedIn = _context.Users.FirstOrDefault(u => u.Id == userId);//Uses _context, need to change  
-
+            var UserLoggedIn =
+                //_context.Users.FirstOrDefault(u => u.Id == userId);//Uses _context, need to change  
+                await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
             var courseId = UserLoggedIn.CourseId;//Can throw error if you are already logged in when the application starts   
 
             var course = _unitOfWork.CourseRepository.GetWithIncludesAsync((int)courseId, m => m.Modules).Result;
@@ -134,8 +135,31 @@ namespace Lms.Web.Controllers
                 Activities = module.Activities    
             };
 
-            return PartialView("GetModuleDetailsPartial", model);
+            return PartialView("GetModuleDetailsPartial", model);         
         }
+
+        public IActionResult ActivityDetail(int Id)
+        {
+            var activity = _unitOfWork.ActivityRepository.GetWithIncludesAsync((int)Id, d => d.Documents, a => a.ActivityType).Result;
+            if (activity == null) return NotFound();
+
+            var model = new StudentActivityViewModel()
+            {
+                ActivityName = activity.Name,
+                ActivityTypes = activity.ActivityType,
+                ActivityDescription = activity.Description,
+                ActivityStartDate = activity.StartDate,
+                ActivityEndDate = activity.EndDate,
+                Documents = activity.Documents,
+                Status = null           
+            };
+
+            return PartialView("GetActivityDetailsPartial", model);
+        }
+
+
+
+
     }
 }
 

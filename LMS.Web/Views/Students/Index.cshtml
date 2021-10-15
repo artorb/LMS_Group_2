@@ -5,110 +5,102 @@
 <h1>Welcome Student!</h1>
 
 
-<a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="CourseDetails"
-   data-ajax="true"
-   data-ajax-method="GET"
-   data-ajax-update="#getCourseWithAjax"
-   data-ajax-mode="replace">
-    Course information
-</a>
-
-<a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="ModuleDetails"
-   data-ajax="true"
-   data-ajax-method="GET"
-   data-ajax-update="#getCourseWithAjax"
-   data-ajax-mode="replace">
-    Module information
-</a>
-
-<a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="CourseStudentsDetails"
-   data-ajax="true"
-   data-ajax-method="GET"
-   data-ajax-update="#getCourseWithAjax"
-   data-ajax-mode="replace">
-    Participants
-</a>
-<a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="ModuleList"
-           data-ajax="true"
-           data-ajax-method="GET"
-           data-ajax-update="#getCourseWithAjax"
-           data-ajax-mode="replace"   
-           >Module information</a>
+    <a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="CourseDetails"
+       data-ajax="true"
+       data-ajax-method="GET"
+       data-ajax-update="#getCourseWithAjax"
+       data-ajax-mode="replace">
+        Course information
+    </a>
 
 
-<a class="btn btn-sm btn-primary" asp-action="Index">Participants</a>
+    <a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="CourseStudentsDetails"
+       data-ajax="true"
+       data-ajax-method="GET"
+       data-ajax-update="#getCourseWithAjax"
+       data-ajax-mode="replace">
+        Participants
+    </a>
+    <a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="ModuleList"
+       data-ajax="true"
+       data-ajax-method="GET"
+       data-ajax-update="#getCourseWithAjax"
+       data-ajax-mode="replace">Module information</a>
 
-<div id="getCourseWithAjax"></div>
 
-<br/>
-@using (Html.BeginForm("UploadFiles", "Upload", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    <div class="form-horizontal">
+    <a class="btn btn-sm btn-primary" asp-action="Index">Participants</a>
 
-        <div class="form-group">
-            <div class="col-lg-2">Browse Files</div>
-            <div class="col-md-10">
-                <input type="file" multiple name="files" id="Files"/>
+    <div id="getCourseWithAjax"></div>
+
+    <br />
+    @using (Html.BeginForm("UploadFiles", "Upload", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="form-horizontal">
+
+            <div class="form-group">
+                <div class="col-lg-2">Browse Files</div>
+                <div class="col-md-10">
+                    <input type="file" multiple name="files" id="Files" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Upload" class="btn btn-primary" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10 text-success">
+                    @ViewBag.UploadStatus
+                </div>
+            </div>
+
+        </div>
+    }
+
+    <a class="btn btn-sm btn-primary" asp-controller="Download" asp-action="DownloadFile">Download File</a>
+
+
+    <br />
+    <br />
+    <div class="card-deck">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Monday</h5>
+                <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity1</a>
+                <br />
+                <p class="card-text">Start time: </p>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Upload" class="btn btn-primary"/>
+        <div class="card ">
+            <div class="card-body text-center">
+                <h5 class="card-title">Tuesday</h5>
+                <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity2</a>
+                <br />
+                <p class="card-text">Start time: </p>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10 text-success">
-                @ViewBag.UploadStatus
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Wednesday</h5>
+                <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity3</a>
+                <br />
+                <p class="card-text">Start time: </p>
             </div>
         </div>
-
-    </div>
-}
-
-<a class="btn btn-sm btn-primary" asp-controller="Download" asp-action="DownloadFile">Download File</a>
-
-
-<br/>
-<br/>
-<div class="card-deck">
-    <div class="card">
-        <div class="card-body text-center">
-            <h5 class="card-title">Monday</h5>
-            <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity1</a>
-            <br/>
-            <p class="card-text">Start time: </p>
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Thursday</h5>
+                <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity4</a>
+                <br />
+                <p class="card-text">Start time: </p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Friday</h5>
+                <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity5</a>
+                <br />
+                <p class="card-text">Start time: </p>
+            </div>
         </div>
     </div>
-    <div class="card ">
-        <div class="card-body text-center">
-            <h5 class="card-title">Tuesday</h5>
-            <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity2</a>
-            <br/>
-            <p class="card-text">Start time: </p>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-body text-center">
-            <h5 class="card-title">Wednesday</h5>
-            <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity3</a>
-            <br/>
-            <p class="card-text">Start time: </p>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-body text-center">
-            <h5 class="card-title">Thursday</h5>
-            <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity4</a>
-            <br/>
-            <p class="card-text">Start time: </p>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-body text-center">
-            <h5 class="card-title">Friday</h5>
-            <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity5</a>
-            <br/>
-            <p class="card-text">Start time: </p>
-        </div>
-    </div>
-</div>

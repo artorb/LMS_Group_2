@@ -1,0 +1,43 @@
+﻿@model Lms.Core.Models.ViewModels.StudentActivityViewModel
+
+<h4 id="StudentActivityViewTitle"> @Html.DisplayFor(model => model.ActivityName)  </h4>
+
+<section class="container">
+    <section class="row">
+
+        <div>
+            <div> <strong>  @Html.DisplayNameFor(model => model.ActivityTypeId) </strong> </div>
+            <div>           @Html.DisplayFor(model => model.ActivityTypeId)               </div>
+            <div> <strong>  @Html.DisplayNameFor(model => model.ActivityStartDate)  </strong> </div>
+            <div>           @Html.DisplayFor(model => model.ActivityStartDate)                </div>
+            <div><strong>   @Html.DisplayNameFor(model => model.ActivityEndDate)   </strong>  </div>
+            <div>           @Html.DisplayFor(model => model.ActivityEndDate)                  </div>
+            <div><strong>   @Html.DisplayNameFor(model => model.Status)   </strong>  </div>
+            <div>           @Html.DisplayFor(model => model.Status)                  </div>
+        </div>
+
+        <div>
+            <div> <strong>  @Html.DisplayNameFor(model => model.ActivityDescription) </strong> </div>
+            <div>           @Html.DisplayFor(model => model.ActivityDescription)               </div>
+
+        </div>
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Documents)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Documents)
+                    {
+                    <tr>
+                        @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                        @*<td>@Html.DisplayFor(model => model.Documents) </td>*@
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+</section>

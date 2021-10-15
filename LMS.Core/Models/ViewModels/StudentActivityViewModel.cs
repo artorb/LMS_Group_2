@@ -8,32 +8,33 @@ using System.Threading.Tasks;
 
 namespace Lms.Core.Models.ViewModels
 {
-    public class StudentModuleViewModel
+   public class StudentActivityViewModel
     {
-        [Display(Name = "Module name")]
-        public string ModuleName { get; set; }
+        [Display(Name = "Activity name")]
+        public string ActivityName { get; set; }
 
 
         [Display(Name = "Information")]
-        public string ModuleDescription { get; set; }
+        public string ActivityDescription { get; set; }
 
 
         [Display(Name = "Start date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd HH:mm}")]
-
-
-        public DateTime ModuleStartDate { get; set; }
+        public DateTime ActivityStartDate { get; set; }
 
 
         [Display(Name = "End date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd HH:mm}")]
-        public DateTime ModuleEndDate { get; set; }
+        public DateTime ActivityEndDate { get; set; }
 
 
-        public IEnumerable<Activity> Activities { get; set; }
+        public string Status { get; set; }
+    
 
-
-        [Display(Name = "Module documents")]
+        [Display(Name = "Activity documents")]
         public IEnumerable<Document> Documents { get; set; }
+
+        public int ActivityTypeId { get; set; }
+        public ActivityType ActivityTypes { get; set; }
     }
 }

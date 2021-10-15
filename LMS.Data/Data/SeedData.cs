@@ -45,36 +45,36 @@ namespace Lms.Data.Data
 
         private static readonly Dictionary<string, string> ModuleNamePool = new()
         {
-            { "Android Module 1", "ModuleDescription1" },
-            { "Android Module 2", "ModuleDescription2" },
+            { "Android Module 1", "ModuleDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Android Module 2", "ModuleDescription2 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
 
-            { "Big Data Module 1", "ModuleDescription3" },
+            { "Big Data Module 1", "ModuleDescription3 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
             { "Big Data Module 2",
                 "ModuleDescription4 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics and prescriptive analytics, and apply these concepts to propose solutions in Big Data cases." },
 
-            { "C# Backend Module 1", "ModuleDescription5" },
-            { "C# Backend Module 2", "ModuleDescription6" },
+            { "C# Backend Module 1", "ModuleDescription5 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "C# Backend Module 2", "ModuleDescription6 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
 
-            { "Cloud Security Module 1", "ModuleDescription1" },
-            { "Cloud Security Module 2", "ModuleDescription1" },
+            { "Cloud Security Module 1", "ModuleDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Cloud Security Module 2", "ModuleDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
 
-            { "Computer Security Analyst Module 1", "ModuleDescription1" },
-            { "Computer Security Analyst Module 2", "ModuleDescription1" },
+            { "Computer Security Analyst Module 1", "ModuleDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Computer Security Analyst Module 2", "ModuleDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
 
-            { "Cybersecurity Module 1", "ModuleDescription1" },
-            { "Cybersecurity Module 2", "ModuleDescription1" },
+            { "Cybersecurity Module 1", "ModuleDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Cybersecurity Module 2", "ModuleDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
 
             { "Digitization of the Legal Sector Module 1", "ModuleDescription1" },
             { "Digitization of the Legal Sector Module 2", "ModuleDescription1" },
 
-            { "Embedded Dev Module 1", "ModuleDescription1" },
-            { "Embedded Dev Module 2", "ModuleDescription1" },
+            { "Embedded Dev Module 1", "ModuleDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Embedded Dev Module 2", "ModuleDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
 
-            { "Self-Paced Programs Module 1", "ModuleDescription1" },
-            { "Self-Paced Programs Module 2", "ModuleDescription1" },
+            { "Self-Paced Programs Module 1", "ModuleDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Self-Paced Programs Module 2", "ModuleDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
 
-            { "Web Design Module 1", "ModuleDescription1" },
-            { "Web Design Module 2", "ModuleDescription1" }
+            { "Web Design Module 1", "ModuleDescription111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111" },
+            { "Web Design Module 2", "ModuleDescription1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111" }
         };
 
         private static readonly Dictionary<string, string> ActivityNamePool = new()
@@ -179,6 +179,9 @@ namespace Lms.Data.Data
 
             var students = await InitStudents(courses);
             await AddToRolesAsync(students.ToList(), studentRole);
+
+            var documents = await GetDocuments();
+            await context.Documents.AddRangeAsync(documents);
 
             await context.SaveChangesAsync();
         }
@@ -356,5 +359,68 @@ namespace Lms.Data.Data
             var result = new Random();
             return result.Next(from, to);
         }
+
+
+        private static async Task<IEnumerable<Document>> GetDocuments()
+        {
+            var types = new List<Document>
+            {
+                new() { Name = "Des1", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/modul1/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 1},
+                new() { Name = "Des2", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/modul1/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 2 },
+                new() { Name = "Des3", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 3},
+                new() { Name = "Des4", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 4},
+                new() { Name = "Des5", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 5},
+                new() { Name = "Des6", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 6},
+                new() { Name = "Des7", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 7},
+                new() { Name = "Des8", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 8},
+                new() { Name = "Des9", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 9},
+                new() { Name = "Des10", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 10},
+                new() { Name = "Des11", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 11},
+                new() { Name = "Des12", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 12},
+                new() { Name = "Des13", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 13},
+                new() { Name = "Des14", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 14},
+                new() { Name = "Des15", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 15},
+                new() { Name = "Des16", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 16},
+                new() { Name = "Des17", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 17},
+                new() { Name = "Des18", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 18},
+                new() { Name = "Des19", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 19},
+                new() { Name = "Des20", Description="ModuleDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ModuleId= 20},
+
+                new() { Name = "DesAct1", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 1},
+                new() { Name = "DesAct2", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 2 },
+                new() { Name = "DesAct3", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 3},
+                new() { Name = "DesAct4", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 4},
+                new() { Name = "DesAct5", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 5},
+                new() { Name = "DesAct6", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 6},
+                new() { Name = "DesAct7", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 7},
+                new() { Name = "DesAct8", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 8},
+                new() { Name = "DesAct9", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 9},
+                new() { Name = "DesAct10", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 10},
+                new() { Name = "DesAct11", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 11},
+                new() { Name = "DesAct12", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 12},
+                new() { Name = "DesAct13", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 13},
+                new() { Name = "DesAct14", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 14},
+                new() { Name = "DesAct15", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 15},
+                new() { Name = "DesAct16", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 16},
+                new() { Name = "DesAct17", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 17},
+                new() { Name = "DesAct18", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 18},
+                new() { Name = "DesAct19", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 19},
+                new() { Name = "DesAct20", Description="ActivityDescription", UploadDate=DateTime.Now, HashName="teacher/Group2.pdf", Uploader="teacher@gmail.com", ActivityId= 20},
+
+
+            };
+            return await Task.FromResult(types);
+        }
+
+
+
+
+
+
+
+
+
+
+
     }
 }
