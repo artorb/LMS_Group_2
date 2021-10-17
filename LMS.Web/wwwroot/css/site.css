@@ -175,7 +175,11 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
+/*    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url('/img/gray-abstract-wireframe-technology-background.jpg');*/
 }
+
 
 .footer {
     position: absolute;
@@ -205,6 +209,10 @@ label {
     color: lightsalmon;
 }
 
+.buttonsOnIndexPageForStudent:hover {
+    background: #1861ac;
+}
+
 .participantListForStudent {
     margin-left: 15px;
 }
@@ -221,12 +229,16 @@ label {
 
 #moduleListForStudent:focus {
     color: lightsalmon;
-}
+    }
 
-.moduleDetailsForStudent{
-   float:left;
-    margin-bottom:10px;
-}
+#moduleListForStudent:hover {
+        background: #1861ac;
+    }
+
+    .moduleDetailsForStudent {
+        float: left;
+        margin-bottom: 10px;
+    }
 
 #studentModuleActivityTable {
     margin-right: 5px;
@@ -246,9 +258,51 @@ label {
 }
 
 
+/*Submit button on the module page for the student*/
+.form-horizontal {
+    margin-left: 200px;
+    margin-top:20px;
+    position:absolute;
+    right:0px
 
+}
 
+.uploadButtonContainer {
+    transform: translate(-50%, -50%);
+}
 
+.upload-box {
+    font-size: 14px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 3px 3px lightgrey;
+    width: 200px;
+    outline: none;
+
+}
+
+::-webkit-file-upload-button {
+    color: white;
+    /* background: #206a5d;*/
+    background: #1b6ec2;
+    padding: 7px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 1px 0 1px 1px #6b4559;
+    outline: none;
+}
+
+::-webkit-file-upload-button:hover {
+    background:#1861ac;
+}
+
+.submitButton{
+    margin-top:-30px;
+}
+
+.submitButton:hover {
+        background: #1861ac;
+    }
 
 
 

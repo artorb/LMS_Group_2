@@ -379,26 +379,32 @@ namespace Lms.Data.Data
 
         private static async Task<IEnumerable<Document>> GetDocuments(IEnumerable<Course> courses, IEnumerable<Module> modules, IEnumerable<Activity> activities)
         {
-            foreach (var module in modules)
-            {               
-                    Directory.CreateDirectory($"wwwroot/Uploads/{module.Course.Name}/{module.Name}");                
-            }
 
+            //creates directories in computer: course/module/activity
+            //foreach (var module in modules)
+            //{               
+            //        Directory.CreateDirectory($"wwwroot/Uploads/{module.Course.Name}/{module.Name}");                
+            //}
+
+            
+            //creating folders for teachers (course/module/activity)
             foreach (var module in modules)
             {
                 foreach (var activity in activities)
                 {
-                    if (Directory.Exists($"wwwroot/Uploads/{module.Course.Name}/{module.Name}"))
-                    {
+                    string fileName = $"{activity.Name}"+".txt";
+
+                    if (!Directory.Exists($"wwwroot/Uploads/{module.Course.Name}/{module.Name}"))
+                    {                       
                         if (module.Name == activity.Module.Name) {
-                        Directory.CreateDirectory($"wwwroot/Uploads/{module.Course.Name}/{activity.Module.Name}/{activity.Name}");
-                        break;
+                        Directory.CreateDirectory($"wwwroot/Uploads/{module.Course.Name}/{activity.Module.Name}/{activity.Name}");                           
+                            break;
                         }
                     }
                 }
             }
 
-
+            //creates seed in database but not in the computer *************************************
             var documents = courses.Select(course => new Document
             {
                 Name = $"{course.Name} document",
@@ -430,9 +436,12 @@ namespace Lms.Data.Data
                 HashName = $"{activity.Module.Course.Name}/{activity.Module.Name}/{activity.Name}/{activity.Name}.pdf",
                 Uploader = "john@LearningSite.se",
                 Activity = activity
-            })); 
+            }));
+
+  
 
             return await Task.FromResult(documents);
+            
         }
 
 

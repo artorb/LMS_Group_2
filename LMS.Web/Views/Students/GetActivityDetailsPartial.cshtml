@@ -26,14 +26,15 @@
         </div>
 
 
-        <div>
+        <!--<div>
             @using (Html.BeginForm("UploadFiles", "Upload", FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
+            @*@using (Html.BeginForm("UploadFiles", "Upload", FormMethod.Post, new { enctype = "multipart/form-data", clickedActivityName = Model.ActivityName }))*@
+            <!--{
                 <div class="form-horizontal">
 
-                    <div class="form-group">
+                    <div class="form-group">-->
                         @*<div class="col-lg-2">Browse Files</div>*@
-                        <div class="col-md-10">
+                        <!--<div class="col-md-10">
                             <input type="file" multiple name="files" id="Files" />
                         </div>
                     </div>
@@ -50,7 +51,35 @@
 
                 </div>
             }
+        </div>-->
+
+
+        <div>
+            @using (Html.BeginForm("UploadFiles", "Upload", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            @*@using (Html.BeginForm("UploadFiles", "Upload", FormMethod.Post, new { enctype = "multipart/form-data", clickedActivityName = Model.ActivityName }))*@
+            {
+                <div class="form-horizontal">
+
+                    <div class="form-group uploadButtonGroup">                 
+                        <div class="uploadButtonContainer">
+                            <input type="file" class = "upload-box" multiple name="files" id="Files" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Upload" class="btn btn-sm btn-primary submitButton" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10 text-success">
+                            @ViewBag.UploadStatus
+                        </div>
+                    </div>
+
+                </div>
+            }
         </div>
+
 
 
         <div class="activityDetailsForStudent">
@@ -76,3 +105,6 @@
 
     </section>
 </section>
+
+
+
