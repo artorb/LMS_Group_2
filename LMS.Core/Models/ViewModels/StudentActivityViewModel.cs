@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 namespace Lms.Core.Models.ViewModels
 {
    public class StudentActivityViewModel
-    {    
+    {
+        public int Id { get; set; }
 
         [Display(Name = "Activity name")]
         public string ActivityName { get; set; }

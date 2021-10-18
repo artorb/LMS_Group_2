@@ -14,8 +14,8 @@ namespace Lms.Core.Repositories
         ICourseRepository CourseRepository { get; }
         IModuleRepository ModuleRepository { get; }
         IUserRepository UserRepository { get; }
-        //IGenericRepository<Activity> ActivityRepository { get; }
-        //IGenericRepository<Activity> ActivityRepository { get; }
+        IDocumentRepository DocumentRepository { get; }
+
 
         Task CompleteAsync();
     }

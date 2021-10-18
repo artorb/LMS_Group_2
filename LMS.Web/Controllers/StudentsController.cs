@@ -145,7 +145,8 @@ namespace Lms.Web.Controllers
                 ModuleStartDate = module.StartDate,
                 ModuleEndDate = module.EndDate,
                 Documents = module.Documents,
-                Activities = module.Activities
+                Activities = module.Activities,
+                Status = GetStatusForStudentModule(module).Result
             };
 
             return PartialView("GetModuleDetailsPartial", model);
@@ -159,16 +160,59 @@ namespace Lms.Web.Controllers
 
             var model = new StudentActivityViewModel()
             {
+                Id = activity.Id,
                 ActivityName = activity.Name,
                 ActivityTypes = activity.ActivityType,
                 ActivityDescription = activity.Description,
                 ActivityStartDate = activity.StartDate,
                 ActivityEndDate = activity.EndDate,
                 Documents = activity.Documents,
-                Status = null
+                Status = GetStatusForStudentActivity(activity).Result
             };
 
             return PartialView("GetActivityDetailsPartial", model);
         }
+
+        private async Task<string> GetStatusForStudentActivity(Activity clickedActivity)
+        {
+          
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
+            var documents = await _unitOfWork.DocumentRepository.GetIncludeTest(a => a.Include(x=>x.Activity));     
+         
+            var documentForActivity = documents.FirstOrDefault(a => a.Uploader == UserLoggedIn.Email);
+            if (documentForActivity == null)
+                return "Not uploaded";
+            if (documentForActivity.Activity.Name== clickedActivity.Name) {           
+                if (documentForActivity.UploadDate > clickedActivity.Deadline)
+                    return "Delayed";
+                if (documentForActivity.UploadDate < clickedActivity.Deadline)
+                    return "Uploaded";
+            }
+            return "Not uploaded";
+        }
+
+
+        private async Task<string> GetStatusForStudentModule(Module clickedModule)
+        {
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
+            var documents = await _unitOfWork.DocumentRepository.GetIncludeTest(a => a.Include(x => x.Activity).ThenInclude(y=>y.Module));
+
+            var documentForActivity = documents.FirstOrDefault(a => a.Uploader == UserLoggedIn.Email);
+            if (documentForActivity == null)
+                return "Not uploaded";
+            if (documentForActivity.Module.Name == clickedModule.Name)
+            {
+                if (documentForActivity.UploadDate > clickedModule.EndDate)
+                    return "Delayed";
+                if (documentForActivity.UploadDate < clickedModule.EndDate)
+                    return "Uploaded";
+            }
+            return "Not uploaded";
+        }
+
+
     }
 }

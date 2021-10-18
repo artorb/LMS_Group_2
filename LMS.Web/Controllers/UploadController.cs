@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Lms.Core.Entities;
+using Lms.Core.Models.ViewModels;
 using Lms.Core.Repositories;
 using Lms.Data.Data;
 using Microsoft.AspNetCore.Http;
@@ -24,9 +25,10 @@ namespace Lms.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> UploadFiles(List<IFormFile> files, string clickedActivityName)    
+        public async Task<ActionResult> UploadFiles(List<IFormFile> files, int activityId)    
         {
             var size = files.Sum(f => f.Length);
+     
 
             // update Documents for User
             if (User.IsInRole("Student"))
@@ -58,21 +60,27 @@ namespace Lms.Web.Controllers
                 var paths = new List<string>();
                 foreach (var file in files)
                 {
-                    if (file == null) continue;
+                        if (file == null) continue;
                     foreach (var module in userLoggedIn.Course.Modules)
                     {
-                        foreach (var activity in module.Activities)
+                            foreach (var activity in module.Activities)
                         {
-                            //creating folders for student (course/module/activity)
-                            Directory.CreateDirectory($"wwwroot/Uploads/{userLoggedIn.Id.ToString()}/" +
+                          
+                                if (activity.Id == activityId)
+                                {
+
+                                if (!Directory.Exists($"wwwroot/Uploads/{userLoggedIn.Id.ToString()}/" +
+                                                      $"{userLoggedIn.Course.Name}/" +
+                                                      $"{module.Name}/" +
+                                                      $"{activity.Name}")) { 
+                                    //creating folders for student (course/module/activity)
+                                    Directory.CreateDirectory($"wwwroot/Uploads/{userLoggedIn.Id.ToString()}/" +
                                                       $"{userLoggedIn.Course.Name}/" +
                                                       $"{module.Name}/" +
                                                       $"{activity.Name}");
+                                }
 
-                            //if (activity.Name == clickedActivityName) //.... this should be from the GetActivityDetailsPartial View) **************
-                            //{
-
-                            var filePath = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/Uploads/{userLoggedIn.Id.ToString()}/" +
+                                var filePath = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/Uploads/{userLoggedIn.Id.ToString()}/" +
                                                       $"{userLoggedIn.Course.Name}/" +
                                                       $"{module.Name}/" +
                                                       $"{activity.Name}", file.FileName);                               
@@ -91,13 +99,16 @@ namespace Lms.Web.Controllers
                                 UploadDate = System.DateTime.Now,
                                 HashName = $"{activity.Module.Course.Name}/{activity.Module.Name}/{activity.Name}/{file.FileName}",
                                 Uploader = $"{userLoggedIn.Email}",
+                                ApplicationUser= userLoggedIn,
+                                Course = userLoggedIn.Course,
+                                Module = activity.Module,
                                 Activity = activity
                             };
                             _context.Documents.Add(document);
                             await _context.SaveChangesAsync();
 
                             }
-                        //}
+                        }
                     }
                 }
 

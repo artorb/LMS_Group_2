@@ -50,7 +50,7 @@
                             </td>
                             <td> @Convert.ToDateTime(item.StartDate).ToString("yyyy/MM/dd HH:mm")            </td>
                             <td>  @Convert.ToDateTime(item.EndDate).ToString("yyyy/MM/dd HH:mm")             </td>
-                            <td> @Html.DisplayFor(modelItem => item.EndDate)               </td>
+                            <td> @Html.DisplayFor(modelItem => Model.Status)               </td>
                             <td></td>
                         </tr>
                     }

@@ -97,33 +97,53 @@ namespace Lms.Data.Data
         {
             { "Android Activity 1", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
             { "Android Activity 2", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Android Activity 3", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Android Activity 4", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
 
             { "Big Data Activity 1", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
             { "Big Data Activity 2", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Big Data Activity 3", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Big Data Activity 4", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
 
             { "C# Backend Activity 1", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
             { "C# Backend Activity 2", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "C# Backend Activity 3", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "C# Backend Activity 4", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
 
             { "Cloud Security Activity 1", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
             { "Cloud Security Activity 2", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Cloud Security Activity 3", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Cloud Security Activity 4", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
 
             { "Computer Security Analyst Activity 1", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
             { "Computer Security Analyst Activity 2", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },           
+            { "Computer Security Analyst Activity 3", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },           
+            { "Computer Security Analyst Activity 4", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },           
 
             { "Cybersecurity Activity 1", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
             { "Cybersecurity Activity 2", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Cybersecurity Activity 3", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Cybersecurity Activity 4", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
 
             { "Digitization of the Legal Sector Activity 1", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
             { "Digitization of the Legal Sector Activity 2", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Digitization of the Legal Sector Activity 3", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Digitization of the Legal Sector Activity 4", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
 
             { "Embedded Dev Activity 1", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
             { "Embedded Dev Activity 2", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Embedded Dev Activity 3", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Embedded Dev Activity 4", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
 
             { "Self-Paced Programs Activity 1", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
             { "Self-Paced Programs Activity 2", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Self-Paced Programs Activity 3", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Self-Paced Programs Activity 4", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
 
             { "Web Design Activity 1", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
             { "Web Design Activity 2", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Web Design Activity 3", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
+            { "Web Design Activity 4", "ActivityDescription1 After completing this course, students can understand the concepts of descriptive analytics, predictive analytics " },
         };
 
         private static readonly List<string> StudentNamePool = new()
@@ -347,13 +367,15 @@ namespace Lms.Data.Data
                     ActivityType = activityTypes.ElementAt(GetRangedIncludedRandom(to: 10) % 3)
                 };
                 activities.Add(activity);
+
+
             }
 
             var index = 0;
             foreach (var module in modules)
             {
-                module.Activities = new List<Activity> { activities.ElementAt(index) };
-                index += 1;
+                module.Activities = new List<Activity> { activities.ElementAt(index), activities.ElementAt(index+1) };
+                index += 2;
             } // Same disorder error
 
             return await Task.FromResult(activities);
