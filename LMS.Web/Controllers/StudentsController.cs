@@ -40,11 +40,15 @@ namespace Lms.Web.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            //if (userId == null)
-            //{
-            //    return NotFound();
-            //}          
+         
             var UserLoggedIn = _context.Users.FirstOrDefault(u => u.Id == userId);//Uses _context, need to change
+            if (UserLoggedIn == null)
+            {
+                //_context.Users.SignOut();
+                //await _signInManager.SignOutAsync();
+                
+                return NotFound();
+            }
             var courseId = UserLoggedIn.CourseId;//Can throw error if you are already logged in when the application starts
             var course = _unitOfWork.CourseRepository.GetWithIncludesAsync((int)courseId, d => d.Documents).Result;
 

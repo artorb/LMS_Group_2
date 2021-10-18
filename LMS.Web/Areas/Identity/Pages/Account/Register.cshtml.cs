@@ -69,6 +69,7 @@ namespace Lms.Web.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
+            //Used to assign the role upon creation of the user
             [Required]
             public string Role { get; set; }
         }
@@ -87,7 +88,7 @@ namespace Lms.Web.Areas.Identity.Pages.Account
             {
                 var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, Name = Input.Name };
                 var result1 = await _userManager.CreateAsync(user, Input.Password);
-                var result2 = await _userManager.AddToRoleAsync(user, Input.Role);
+                var result2 = await _userManager.AddToRoleAsync(user, Input.Role);//Tries to assign the role in "Input.Role" to "user"
 
                 if (result1.Succeeded && result2.Succeeded)
                 {

@@ -19,15 +19,19 @@ namespace Lms.Core.Entities
 
     public static class UserRoles
     {
+        //The diffferent roles as string constants
         public const string Student = "Student";
         public const string Teacher = "Teacher";
-        public static List<string> RolesList { get; }
 
-        static UserRoles()
+        //The list of all the role constants
+        public static List<string> RolesList
         {
-            RolesList = typeof(UserRoles).GetFields(BindingFlags.Static | BindingFlags.Public)
-                .Where(x => x.IsLiteral && !x.IsInitOnly)
-                .Select(x => x.GetValue(null)).Cast<string>().ToList();
+            get
+            {
+                return typeof(UserRoles).GetFields(BindingFlags.Static | BindingFlags.Public)
+                    .Where(x => x.IsLiteral && !x.IsInitOnly)
+                    .Select(x => x.GetValue(null)).Cast<string>().ToList();
+            }
         }
     }
 }

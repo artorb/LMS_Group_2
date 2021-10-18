@@ -42,12 +42,6 @@ namespace Lms.Web
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            //services.AddRazorPages();
-            //services.AddRazorPages(options =>
-            //{
-            //    options.Conventions.AuthorizePage("/Register");
-            //});
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
