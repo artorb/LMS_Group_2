@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Microsoft.AspNetCore.Identity;
 
 namespace Lms.Core.Entities
@@ -17,13 +19,15 @@ namespace Lms.Core.Entities
 
     public static class UserRoles
     {
-        public const string Teacher = "Teacher";
         public const string Student = "Student";
-    }
+        public const string Teacher = "Teacher";
+        public static List<string> RolesList { get; }
 
-    public enum InputRoles
-    {
-        Teacher,
-        Student
+        static UserRoles()
+        {
+            RolesList = typeof(UserRoles).GetFields(BindingFlags.Static | BindingFlags.Public)
+                .Where(x => x.IsLiteral && !x.IsInitOnly)
+                .Select(x => x.GetValue(null)).Cast<string>().ToList();
+        }
     }
 }

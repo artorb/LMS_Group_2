@@ -35,17 +35,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Input.Role"></label>
-                <select asp-for="Input.Role" asp-items="@Html.GetEnumSelectList<InputRoles>()" class="form-control"></select>
-            </div>
-            <div class="form-group">
-
-                @*@Html.DropDownListFor(m => m.Input.Role,
-                    new SelectList(Enum.GetValues(typeof(Lms.Core.Entities.InputRoles))),
-                    "Select Role")*@
-
-                @*<label asp-for="Input.Role" ></label>
-                    <input asp-for="Input.Role" class="form-control" />
-                    <span asp-validation-for="Input.Role" class="text-danger"></span>*@
+                <select asp-for="Input.Role"  class="form-control">
+                    @foreach (var item in UserRoles.RolesList)
+                    {
+                        <option>@item</option>
+                    }
+                </select>
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
         </form>

@@ -75,10 +75,6 @@ namespace Lms.Web.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            UserValues = typeof(UserRoles).GetFields(BindingFlags.Static | BindingFlags.Public)
-                .Where(x => x.IsLiteral && !x.IsInitOnly)
-                .Select(x => x.GetValue(null)).Cast<string>();
-
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -90,11 +86,10 @@ namespace Lms.Web.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, Name = Input.Name };
-                var result = await _userManager.CreateAsync(user, Input.Password);
-                var test = Enum.GetName(typeof(InputRoles), int.Parse(Input.Role));
+                var result1 = await _userManager.CreateAsync(user, Input.Password);
+                var result2 = await _userManager.AddToRoleAsync(user, Input.Role);
 
-                await _userManager.AddToRoleAsync(user, test);
-                if (result.Succeeded)
+                if (result1.Succeeded && result2.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
@@ -119,7 +114,11 @@ namespace Lms.Web.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
                 }
-                foreach (var error in result.Errors)
+                foreach (var error in result1.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                foreach (var error in result1.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
