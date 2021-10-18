@@ -41,6 +41,13 @@ namespace Lms.Web
             services.AddControllersWithViews();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            //services.AddRazorPages();
+            //services.AddRazorPages(options =>
+            //{
+            //    options.Conventions.AuthorizePage("/Register");
+            //});
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,21 +71,21 @@ namespace Lms.Web
 
             app.UseAuthentication();
             app.UseAuthorization();
-      
-                app.UseEndpoints(endpoints =>
-            {
+
+            app.UseEndpoints(endpoints =>
+        {
 
 
 
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
+            endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+            endpoints.MapRazorPages();
 
-                
-            });
 
-           
+        });
+
+
         }
     }
 }

@@ -14,10 +14,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
 
 namespace Lms.Web.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
+    [Authorize(Roles = Core.Entities.UserRoles.Teacher)]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -44,9 +45,12 @@ namespace Lms.Web.Areas.Identity.Pages.Account
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
+        public IEnumerable<string> UserValues { get; set; }
+
         public class InputModel
         {
-
+            [Required]
+            [Display(Name = "Full Name")]
             public string Name { get; set; }
 
             [Required]
@@ -64,10 +68,17 @@ namespace Lms.Web.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            public string Role { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            UserValues = typeof(UserRoles).GetFields(BindingFlags.Static | BindingFlags.Public)
+                .Where(x => x.IsLiteral && !x.IsInitOnly)
+                .Select(x => x.GetValue(null)).Cast<string>();
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -80,6 +91,9 @@ namespace Lms.Web.Areas.Identity.Pages.Account
             {
                 var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, Name = Input.Name };
                 var result = await _userManager.CreateAsync(user, Input.Password);
+                var test = Enum.GetName(typeof(InputRoles), int.Parse(Input.Role));
+
+                await _userManager.AddToRoleAsync(user, test);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
@@ -101,7 +115,7 @@ namespace Lms.Web.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        //await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
                 }
@@ -114,5 +128,7 @@ namespace Lms.Web.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
+
     }
 }
