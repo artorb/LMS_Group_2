@@ -31,7 +31,7 @@ namespace Lms.Web.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
-            if (UserLoggedIn==null)
+            if (UserLoggedIn==null)//Checks that the user is logged in as someone from the database.
             {
                 return Redirect("~/Identity/Account/Login");
             }

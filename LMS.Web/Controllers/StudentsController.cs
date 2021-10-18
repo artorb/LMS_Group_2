@@ -18,15 +18,12 @@ namespace Lms.Web.Controllers
 {
     public class StudentsController : Controller
     {
-        private readonly LmsDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
 
 
-        public StudentsController(LmsDbContext context, IUnitOfWork unitOfWork)
+        public StudentsController(IUnitOfWork unitOfWork)
         {
-            _context = context;
             _unitOfWork = unitOfWork;
-
         }
 
         public IActionResult Index()
@@ -39,8 +36,6 @@ namespace Lms.Web.Controllers
         public async Task<IActionResult> CourseDetail()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-
             var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
             var courseId = UserLoggedIn.CourseId;
             var course = _unitOfWork.CourseRepository.GetWithIncludesAsync((int)courseId, d => d.Documents).Result;
