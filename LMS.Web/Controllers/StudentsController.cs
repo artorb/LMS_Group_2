@@ -36,20 +36,13 @@ namespace Lms.Web.Controllers
 
         }
 
-        public IActionResult CourseDetail()
+        public async Task<IActionResult> CourseDetail()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-         
-            var UserLoggedIn = _context.Users.FirstOrDefault(u => u.Id == userId);//Uses _context, need to change
-            if (UserLoggedIn == null)
-            {
-                //_context.Users.SignOut();
-                //await _signInManager.SignOutAsync();
-                
-                return NotFound();
-            }
-            var courseId = UserLoggedIn.CourseId;//Can throw error if you are already logged in when the application starts
+
+            var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
+            var courseId = UserLoggedIn.CourseId;
             var course = _unitOfWork.CourseRepository.GetWithIncludesAsync((int)courseId, d => d.Documents).Result;
 
             var model = new StudentCourseViewModel()
