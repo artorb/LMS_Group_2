@@ -25,7 +25,7 @@
             <div>
                 <strong> @Html.DisplayNameFor(model => model.ModuleDescription) </strong>
             </div>
-            <div> @Html.DisplayFor(model => model.ModuleDescription) </div>
+            <div>   @Html.DisplayFor(model => model.ModuleDescription) </div>
 
         </div>
 
@@ -37,7 +37,7 @@
                     <th> @Html.DisplayNameFor(model => model.Activities) </th>
                     <th> @Html.DisplayNameFor(model => model.ModuleStartDate) </th>
                     <th> @Html.DisplayNameFor(model => model.ModuleEndDate) </th>
-                    <th style="color:red"> Status </th>
+                    <th > Status </th>
                     <th> </th>
                 </tr>
                 </thead>
@@ -56,8 +56,15 @@
                         </td>
                         <td> @Convert.ToDateTime(item.StartDate).ToString("yyyy/MM/dd HH:mm") </td>
                         <td> @Convert.ToDateTime(item.EndDate).ToString("yyyy/MM/dd HH:mm") </td>
-                        @* <td> @Html.DisplayFor(modelItem => service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result) </td> *@
-                        <td> @Html.DisplayFor(modelItem => service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result) </td>
+                        @if (service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result == "Uploaded")
+                        {
+                            <td style="color:green"> <strong>@Html.DisplayFor(modelItem => service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result)</strong> </td>
+                        }
+                        @if (service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result == "Not uploaded")
+                        {
+                            <td style="color:red"><strong> @Html.DisplayFor(modelItem => service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result)</strong> </td>
+                        }
+
                         <td></td>
                     </tr>
                 }

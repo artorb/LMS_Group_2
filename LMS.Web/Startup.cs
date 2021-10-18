@@ -54,6 +54,7 @@ namespace Lms.Web
 
             services.AddTransient<IActivityService, ActivityService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IPdfSeedToUploadRepository, PdfSeedToUploadRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

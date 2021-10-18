@@ -25,40 +25,14 @@
                 <strong> @Html.DisplayNameFor(model => model.ActivityTypes.TypeName) </strong>
             </div>
             <div> @Html.DisplayFor(model => model.ActivityTypes.TypeName) </div>
-            <div style="color:red">
+            <div>
                 <strong> @Html.DisplayNameFor(model => model.Status) </strong>
             </div>
             <div> @Html.DisplayFor(model => model.Status) </div>
-
         </div>
 
 
-        <!--<div>
-        @* @using (Html.BeginForm("UploadFiles", "Upload", FormMethod.Post, new { enctype = "multipart/form-data" })) *@
-        @*@using (Html.BeginForm("UploadFiles", "Upload", FormMethod.Post, new { enctype = "multipart/form-data", activityViewModel = Model.ActivityName }))*@
-        {
-        <div class="form-horizontal">
 
-        <div class="form-group">-->
-        @*<div class="col-lg-2">Browse Files</div>*@
-        <!--<div class="col-md-10">
-            <input type="file" multiple name="files" id="Files" />
-        </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Upload" class="btn btn-primary" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10 text-success">
-                @* @ViewBag.UploadStatus *@
-            </div>
-        </div>
-
-        </div>
-        }
-        </div>-->
 
 
         <div>
@@ -101,12 +75,26 @@
             </div>
             <table class="table">
                 <tbody>
-                @foreach (var item in Model.Documents)
-                {
-                    <tr>
-                        @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
-                    </tr>
-                }
+                    @foreach (var item in Model.Documents)
+                    {
+                        <tr>
+                            @if (item.ApplicationUserId == null)
+                                @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                        </tr>
+
+                        <tr>
+                            <br />
+                            @if (item.ApplicationUserId != null)
+                            {
+                        <p>
+                            <strong>Your uploaded assignment</strong>
+                            <br />
+                            @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                        </p>
+                            }
+                        </tr>
+
+                    }
                 </tbody>
             </table>
         </div>

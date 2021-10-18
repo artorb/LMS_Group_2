@@ -2,10 +2,21 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Lms.Core.Entities;
+
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+
+
 
 namespace Lms.Data.Data
 {
@@ -363,6 +374,8 @@ namespace Lms.Data.Data
 
         private static LmsDbContext _context;
 
+
+      
         public static async Task InitAsync(LmsDbContext context, IServiceProvider services)
         {
             // if (await context.Courses.AnyAsync()) return;
@@ -592,7 +605,7 @@ namespace Lms.Data.Data
         }
 
 
-        private static async Task<IEnumerable<Document>> GetDocuments(IEnumerable<Course> courses,
+        private static async Task<IEnumerable<Core.Entities.Document>> GetDocuments(IEnumerable<Course> courses,
             IEnumerable<Module> modules, IEnumerable<Activity> activities)
         {
             //creates directories in computer: course/module/activity
@@ -601,59 +614,76 @@ namespace Lms.Data.Data
             //        Directory.CreateDirectory($"wwwroot/Uploads/{module.Course.Name}/{module.Name}");                
             //}
 
-
+            var paths = new List<string>();
             //creating folders for teachers (course/module/activity)
             foreach (var module in modules)
             {
                 foreach (var activity in activities)
                 {
-                    string fileName = $"{activity.Name}" + ".txt";
+                    string fileName1 = $"{module.Course.Name}" + ".doc";
+                    string fileName2 = $"{activity.Module.Name}" + ".doc";
+                    string fileName3 = $"{activity.Name}" + ".doc"; 
 
                     if (!Directory.Exists($"wwwroot/Uploads/{module.Course.Name}/{module.Name}"))
                     {
                         if (module.Name == activity.Module.Name)
                         {
-                            Directory.CreateDirectory(
-                                $"wwwroot/Uploads/{module.Course.Name}/{activity.Module.Name}/{activity.Name}");
-                            break;
+                            Directory.CreateDirectory($"wwwroot/Uploads/{module.Course.Name}/{activity.Module.Name}/{activity.Name}");
+
+                            var filePath1 = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/Uploads/{module.Course.Name}", fileName1);
+                            var filePath2 = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/Uploads/{module.Course.Name}/{activity.Module.Name}", fileName2);
+                            var filePath3 = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/Uploads/{module.Course.Name}/{activity.Module.Name}/{activity.Name}", fileName3);
+                            
+                            paths.Add(filePath1);
+                            paths.Add(filePath2);
+                            paths.Add(filePath3);
+
+                            using (FileStream fs = new FileStream(filePath1, FileMode.Create)) fs.Flush();
+                            using (FileStream fs = new FileStream(filePath2, FileMode.Create)) fs.Flush();
+                            using (FileStream fs = new FileStream(filePath3, FileMode.Create)) fs.Flush();
+
+                            string text = "Starting!";
+                            File.WriteAllText(filePath1, text);
+                            File.WriteAllText(filePath2, text);
+                            File.WriteAllText(filePath3, text);
                         }
                     }
                 }
             }
             //creates seed in database but not in the computer *************************************
-            var documents = courses.Select(course => new Document
+            var documents = courses.Select(course => new Core.Entities.Document
             {
                 Name = $"{course.Name} document",
                 Description = $"{course.Description}",
                 UploadDate = course.StartDate,
-                HashName = $"{course.Name}/{course.Name}.pdf",
+                HashName = $"{course.Name}/{course.Name}.doc",
                 Uploader = "john@LearningSite.se",
                 Course = course
             }).ToList();
 
 
-            documents.AddRange(modules.Select(module => new Document
+            documents.AddRange(modules.Select(module => new Core.Entities.Document
             {
                 Name = $"{module.Name} document",
                 Description = $"{module.Description}",
                 UploadDate = module.StartDate,
-                HashName = $"{module.Course.Name}/{module.Name}/{module.Name}.pdf",
+                HashName = $"{module.Course.Name}/{module.Name}/{module.Name}.doc",
                 Uploader = "john@LearningSite.se",
                 Module = module
             }));
 
 
             /* Activity documents seed */
-            documents.AddRange(activities.Select(activity => new Document
+            documents.AddRange(activities.Select(activity => new Core.Entities.Document
             {
                 Name = $"{activity.Name} document",
                 Description = $"{activity.Description}",
                 UploadDate = activity.StartDate,
-                HashName = $"{activity.Module.Course.Name}/{activity.Module.Name}/{activity.Name}/{activity.Name}.pdf",
+                HashName = $"{activity.Module.Course.Name}/{activity.Module.Name}/{activity.Name}/{activity.Name}.doc",
                 Uploader = "john@LearningSite.se",
                 Activity = activity
-            }));
-            
+            }));        
+
             return await Task.FromResult(documents);
         }
     }

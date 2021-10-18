@@ -53,7 +53,8 @@ namespace Lms.Web.Controllers
                 await _context.Users.FirstOrDefaultAsync(u => u.Id == userId); //Uses _context, need to change
             var courseId =
                 UserLoggedIn.CourseId; //Can throw error if you are already logged in when the application starts
-            var course = await _unitOfWork.CourseRepository.GetWithIncludesAsync((int)courseId, d => d.Documents);
+            var course = await _unitOfWork.CourseRepository.GetWithIncludesAsync((int)courseId, d => d.Documents.Where(x=>x.ApplicationUserId == null));
+                
 
             var model = new StudentCourseViewModel()
             {
@@ -61,11 +62,13 @@ namespace Lms.Web.Controllers
                 CourseDescription = course.Description,
                 CourseStartDate = course.StartDate,
                 CourseEndDate = course.EndDate,
-                Documents = course.Documents
+                Documents = course.Documents //where ApplicationUserId == null
             };
             return PartialView("_CourseDetailsPartial", model);
         }
 
+
+        // IS IT USED SOMEWHERE?
         public async Task<IActionResult> ModuleDetails()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -126,7 +129,8 @@ namespace Lms.Web.Controllers
         // kolla generic repo för att undvika fler anrop - inte nödvändigt
         public IActionResult ModuleDetail(int Id)
         {
-            var module = _unitOfWork.ModuleRepository.GetWithIncludesAsync((int)Id, d => d.Documents, a => a.Activities)
+            //PROBLEM HERE:
+            var module = _unitOfWork.ModuleRepository.GetWithIncludesAsync((int)Id, d => d.Documents.Where(x => x.ApplicationUserId == null), a => a.Activities)
                 .Result;
             if (module == null) return NotFound();
 
@@ -173,7 +177,7 @@ namespace Lms.Web.Controllers
             return PartialView("GetActivityDetailsPartial", model);
         }
 
-        public async Task<string> GetStatusForStudentActivity(Activity clickedActivity)
+        private async Task<string> GetStatusForStudentActivity(Activity clickedActivity)
         {
           
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
