@@ -1,113 +1,91 @@
-﻿@model Lms.Core.Models.ViewModels.StudentModuleViewModel
+﻿@using System.Security.Claims
+@model Lms.Core.Models.ViewModels.StudentModuleViewModel
+@inject Lms.Web.Service.IActivityService service
 
-<h4 id="StudentModuleViewTitle"> @Html.DisplayFor(model => model.ModuleName)  </h4>
+<h4 id="StudentModuleViewTitle"> @Html.DisplayFor(model => model.ModuleName) </h4>
 
-<hr />
+<hr/>
 
 <section class="container">
     <section class="row">
 
-        <div class="moduleDetailsForStudent">           
-            <div> <strong>  @Html.DisplayNameFor(model => model.ModuleStartDate)  </strong> </div>
-            <div>           @Html.DisplayFor(model => model.ModuleStartDate)                </div>
-            <div><strong>   @Html.DisplayNameFor(model => model.ModuleEndDate)   </strong>  </div>
-            <div>           @Html.DisplayFor(model => model.ModuleEndDate)                  </div>
+        <div class="moduleDetailsForStudent">
+            <div>
+                <strong> @Html.DisplayNameFor(model => model.ModuleStartDate) </strong>
+            </div>
+            <div> @Html.DisplayFor(model => model.ModuleStartDate) </div>
+            <div>
+                <strong> @Html.DisplayNameFor(model => model.ModuleEndDate) </strong>
+            </div>
+            <div> @Html.DisplayFor(model => model.ModuleEndDate) </div>
         </div>
-
 
 
         <div class="moduleDetailsForStudent">
-            <div> <strong>  @Html.DisplayNameFor(model => model.ModuleDescription) </strong> </div>
-            <div>           @Html.DisplayFor(model => model.ModuleDescription)               </div>
+            <div>
+                <strong> @Html.DisplayNameFor(model => model.ModuleDescription) </strong>
+            </div>
+            <div> @Html.DisplayFor(model => model.ModuleDescription) </div>
 
         </div>
 
+
+        <div class="moduleDetailsForStudent">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th> @Html.DisplayNameFor(model => model.Activities) </th>
+                    <th> @Html.DisplayNameFor(model => model.ModuleStartDate) </th>
+                    <th> @Html.DisplayNameFor(model => model.ModuleEndDate) </th>
+                    <th style="color:red"> Status </th>
+                    <th> </th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.Activities)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Students" asp-action="ActivityDetail" asp-route-id="@item.Id"
+                               data-ajax="true"
+                               data-ajax-method="GET"
+                               data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
+                               data-ajax-mode="replace">
+                                @Html.DisplayFor(modelItem => item.ActivityType.TypeName)
+                            </a>
+                        </td>
+                        <td> @Convert.ToDateTime(item.StartDate).ToString("yyyy/MM/dd HH:mm") </td>
+                        <td> @Convert.ToDateTime(item.EndDate).ToString("yyyy/MM/dd HH:mm") </td>
+                        @* <td> @Html.DisplayFor(modelItem => service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result) </td> *@
+                        <td> @Html.DisplayFor(modelItem => service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result) </td>
+                        <td></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
 
 
         <div class="moduleDetailsForStudent">
             <table class="table">
                 <thead>
-                    <tr>
-                        <th> @Html.DisplayNameFor(model => model.Activities)         </th>
-                        <th> @Html.DisplayNameFor(model => model.ModuleStartDate)    </th>
-                        <th> @Html.DisplayNameFor(model => model.ModuleEndDate)      </th>
-                        <th style="color:red"> Status       </th>
-                        <th> </th>
-                    </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Documents)</th>
+                </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.Activities)
-                    {
-                        <tr>
-                            <td>
-                                <a asp-controller="Students" asp-action="ActivityDetail" asp-route-id="@item.ModuleId"
-                                   data-ajax="true"
-                                   data-ajax-method="GET"
-                                   data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
-                                   data-ajax-mode="replace">
-                                    @Html.DisplayFor(modelItem => item.ActivityType.TypeName)
-                                </a>
-                            </td>
-                            <td> @Convert.ToDateTime(item.StartDate).ToString("yyyy/MM/dd HH:mm")            </td>
-                            <td>  @Convert.ToDateTime(item.EndDate).ToString("yyyy/MM/dd HH:mm")             </td>
-                            <td> @Html.DisplayFor(modelItem => Model.Status)               </td>
-                            <td></td>
-                        </tr>
-                    }
+                @foreach (var item in Model.Documents)
+                {
+                    <tr>
+                        <td>
+                            @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                        </td>
+                    </tr>
+                }
                 </tbody>
             </table>
         </div>
 
-  
-
-        <div class="moduleDetailsForStudent">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>@Html.DisplayNameFor(model => model.Documents)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Documents)
-                    {
-                        <tr>
-                            <td>
-                                @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-
-    
 
     </section>
 </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

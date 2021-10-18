@@ -22,4 +22,18 @@
     <ProjectReference Include="..\Lms.Data\Lms.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\Uploads\Projektdokument_ Lexicon LMS.pdf" />
+    <Content Remove="wwwroot\Uploads\Group2.xd" />
+    <Content Remove="wwwroot\Uploads\Picture.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\3ff5b3b6-9f2c-484f-81a9-53ed098c95fc\Android Course\Android Module 1\Android Activity 1\Web Design Activity 1.pdf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Uploads" />
+  </ItemGroup>
+
 </Project>

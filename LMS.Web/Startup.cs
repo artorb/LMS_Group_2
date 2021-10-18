@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Lms.Core.Repositories;
 using Lms.Data.Repositories;
+using Lms.Web.Service;
 
 namespace Lms.Web
 {
@@ -51,6 +52,7 @@ namespace Lms.Web
                 .AddDefaultTokenProviders();
             services.AddControllersWithViews();
 
+            services.AddTransient<IActivityService, ActivityService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 

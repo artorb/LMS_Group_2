@@ -173,7 +173,7 @@ namespace Lms.Web.Controllers
             return PartialView("GetActivityDetailsPartial", model);
         }
 
-        private async Task<string> GetStatusForStudentActivity(Activity clickedActivity)
+        public async Task<string> GetStatusForStudentActivity(Activity clickedActivity)
         {
           
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
