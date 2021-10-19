@@ -24,6 +24,9 @@ namespace Lms.Web
                 var services = scope.ServiceProvider;
                 var context = services.GetRequiredService<LmsDbContext>();
 
+
+
+
                 context.Database.EnsureDeleted();
                 context.Database.Migrate();
                 SeedData.InitAsync(context, services).Wait();            

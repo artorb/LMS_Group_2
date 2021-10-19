@@ -14,10 +14,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
 
 namespace Lms.Web.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
+    [Authorize(Roles = Core.Entities.UserRoles.Teacher)]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -44,9 +45,12 @@ namespace Lms.Web.Areas.Identity.Pages.Account
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
+        public IEnumerable<string> UserValues { get; set; }
+
         public class InputModel
         {
-
+            [Required]
+            [Display(Name = "Full Name")]
             public string Name { get; set; }
 
             [Required]
@@ -64,6 +68,10 @@ namespace Lms.Web.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            //Used to assign the role upon creation of the user
+            [Required]
+            public string Role { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -79,8 +87,10 @@ namespace Lms.Web.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, Name = Input.Name };
-                var result = await _userManager.CreateAsync(user, Input.Password);
-                if (result.Succeeded)
+                var result1 = await _userManager.CreateAsync(user, Input.Password);
+                var result2 = await _userManager.AddToRoleAsync(user, Input.Role);//Tries to assign the role in "Input.Role" to "user"
+
+                if (result1.Succeeded && result2.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
@@ -101,11 +111,15 @@ namespace Lms.Web.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        //await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
                 }
-                foreach (var error in result.Errors)
+                foreach (var error in result1.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                foreach (var error in result1.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
@@ -114,5 +128,7 @@ namespace Lms.Web.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
+
     }
 }
