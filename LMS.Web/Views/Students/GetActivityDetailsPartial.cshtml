@@ -79,7 +79,9 @@
                     {
                         <tr>
                             @if (item.ApplicationUserId == null)
+                            {
                                 @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                            }
                         </tr>
 
                         <tr>
