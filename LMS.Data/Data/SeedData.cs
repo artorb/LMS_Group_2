@@ -579,48 +579,45 @@ namespace Lms.Data.Data
             var paths = new List<string>();
             foreach (var module in modules)
             {
-                foreach (var activity in activities)
+                foreach (var activity in module.Activities)
                 {
                     var fileName1 = $"{activity.Name}" + ".doc";
                     var fileName2 = $"{module.Name}" + ".doc";
                     var fileName3 = $"{module.Course.Name}" + ".doc";
 
-                    if (!Directory.Exists($"wwwroot/Uploads/{module.Course.Name}/{module.Name}"))
+                    if (module.Name == activity.Module.Name)
                     {
-                        if (module.Name == activity.Module.Name)
+                        Directory.CreateDirectory($"wwwroot/Uploads/{module.Course.Name}/{activity.Module.Name}/{activity.Name}");
+
+                        var filePath1 = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/Uploads/{module.Course.Name}/{module.Name}/{activity.Name}", fileName1);
+                        var filePath2 = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/Uploads/{module.Course.Name}/{module.Name}", fileName2);
+                        var filePath3 = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/Uploads/{module.Course.Name}", fileName3);
+
+                        paths.Add(filePath1);
+                        paths.Add(filePath2);
+                        paths.Add(filePath3);
+
+                        using (var fs = new FileStream(filePath1, FileMode.Create))
                         {
-                            Directory.CreateDirectory($"wwwroot/Uploads/{module.Course.Name}/{activity.Module.Name}/{activity.Name}");
-
-                            var filePath1 = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/Uploads/{module.Course.Name}/{module.Name}/{activity.Name}", fileName1);
-                            var filePath2 = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/Uploads/{module.Course.Name}/{module.Name}", fileName2);
-                            var filePath3 = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/Uploads/{module.Course.Name}", fileName3);
-
-                            paths.Add(filePath1);
-                            paths.Add(filePath2);
-                            paths.Add(filePath3);
-
-                            using (var fs = new FileStream(filePath1, FileMode.Create))
-                            {
-                                //do some stuff
-                            }
-
-                            using (var fs = new FileStream(filePath2, FileMode.Create))
-                            {
-                                //do some stuff
-                            }
-
-                            using (var fs = new FileStream(filePath3, FileMode.Create))
-                            {
-                                //do some stuff
-                            }
-
-
-
-
-
-
-
+                            //do some stuff
                         }
+
+                        using (var fs = new FileStream(filePath2, FileMode.Create))
+                        {
+                            //do some stuff
+                        }
+
+                        using (var fs = new FileStream(filePath3, FileMode.Create))
+                        {
+                            //do some stuff
+                        }
+
+
+
+
+
+
+
                     }
                 }
             }
