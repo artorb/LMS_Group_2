@@ -599,17 +599,20 @@ namespace Lms.Data.Data
 
                         using (var fs = new FileStream(filePath1, FileMode.Create))
                         {
-                            //do some stuff
+                            using (var sw = new StreamWriter(fs))
+                                sw.WriteLine($"{activity.Name} \n\nThis activity contains ...");
                         }
 
                         using (var fs = new FileStream(filePath2, FileMode.Create))
                         {
-                            //do some stuff
+                            using (var sw = new StreamWriter(fs))
+                                sw.WriteLine($"{module.Name} \n\nThis module contains ...");
                         }
 
                         using (var fs = new FileStream(filePath3, FileMode.Create))
                         {
-                            //do some stuff
+                            using (var sw = new StreamWriter(fs))
+                                sw.WriteLine($"Welcome in the {module.Course.Name} course!");
                         }
 
 
