@@ -625,7 +625,6 @@ namespace Lms.Data.Data
                 }
             }
 
-            //creates seed in database but not in the computer *************************************
             var documents = courses.Select(course => new Document
             {
                 Name = $"{course.Name} document",

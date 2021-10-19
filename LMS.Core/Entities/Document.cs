@@ -9,7 +9,7 @@ namespace Lms.Core.Entities
         public DateTime UploadDate { get; set; } 
         public string HashName { get; set; } //Path, file directory for ex.
 
-        public string Uploader { get; set; } // History log for uploader //who uploaded the file
+        public string Uploader { get; set; } // Who uploaded the file
 
         public string ApplicationUserId { get; set; } // A file attached to a user account 
         public ApplicationUser ApplicationUser { get; set; } //I upload for me or for the teacher

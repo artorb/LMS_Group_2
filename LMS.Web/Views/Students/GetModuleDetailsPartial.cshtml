@@ -59,7 +59,7 @@
 
                    
                         @{                           
-                                var status = service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result;
+                            var status = service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result;
                         }
                         @if (status == "Uploaded" && item.ActivityType.TypeName == "Assignment")
                         {
