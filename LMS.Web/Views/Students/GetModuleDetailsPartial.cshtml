@@ -56,14 +56,30 @@
                         </td>
                         <td> @Convert.ToDateTime(item.StartDate).ToString("yyyy/MM/dd HH:mm") </td>
                         <td> @Convert.ToDateTime(item.EndDate).ToString("yyyy/MM/dd HH:mm") </td>
-                        @if (service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result == "Uploaded")
-                        {
-                            <td style="color:green"> <strong>@Html.DisplayFor(modelItem => service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result)</strong> </td>
+                        @{
+                            var status = service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result;
                         }
-                        @if (service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result == "Not uploaded")
+                        @if (status == "Uploaded")
                         {
-                            <td style="color:red"><strong> @Html.DisplayFor(modelItem => service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result)</strong> </td>
+                            <td>
+                                <span class="badge badge-success">Uploaded</span>
+                            </td>
                         }
+                        else if (status == "Delayed")
+                        {
+                            <td>
+                                <span class="badge badge-warning">Past due date</span>
+                            </td>
+                        }
+
+
+                       else if (status == "Not uploaded")
+                            {
+                                <td>
+                                    <span class="badge badge-danger">Not Uploaded</span>
+                                </td>
+                            }
+                        
 
                         <td></td>
                     </tr>
@@ -85,7 +101,8 @@
                 {
                     <tr>
                         <td>
-                            @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                            @if (item.ApplicationUserId == null)
+                                @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
                         </td>
                     </tr>
                 }

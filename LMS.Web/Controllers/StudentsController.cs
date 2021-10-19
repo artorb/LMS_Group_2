@@ -31,17 +31,6 @@ namespace Lms.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // // var course = await _unitOfWork.CourseRepository.GetIncludeTest(includes: courses =>
-            // //     courses.Include(course => course.Modules).ThenInclude(module => module.Activities));
-            // var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            // var courses = await _unitOfWork.CourseRepository.GetIncludeTest(includes: courses =>
-            //     courses.Include(course => course.Modules).ThenInclude(module => module.Activities));
-            //
-            // // var users = await _unitOfWork.UserRepository.GetIncludeTest(userId,c =>
-            // //     c.Include(c => c.Course).ThenInclude(c => c.Modules).ThenInclude(c => c.Activities));
-            //
-            // var users = _unitOfWork.UserRepository.GetIncludeTest(userId,c =>
-            //     c.Include(c => c.Course).ThenInclude(c => c.Modules).ThenInclude(c => c.Activities)).Result;
             return View();
         }
 
@@ -128,8 +117,7 @@ namespace Lms.Web.Controllers
 
         // kolla generic repo för att undvika fler anrop - inte nödvändigt
         public IActionResult ModuleDetail(int Id)
-        {
-            //PROBLEM HERE:
+        {    
             var module = _unitOfWork.ModuleRepository.GetWithIncludesAsync((int)Id, d => d.Documents.Where(x => x.ApplicationUserId == null), a => a.Activities)
                 .Result;
             if (module == null) return NotFound();
