@@ -1,28 +1,36 @@
 ﻿@model IEnumerable<Lms.Core.Entities.Module>
 
+
 <br/>
-<div class="card-deck">
-    <div class="card border-0">
+<strong> @Html.DisplayNameFor(model => model.Name) </strong>
 
-        <strong>  @Html.DisplayNameFor(model => model.Name) </strong>
-
-        @foreach (var item in Model)
-        {
-            <a class ="btn btn-primary" id="moduleListForStudent"  asp-controller="Students" asp-action="ModuleDetail" asp-route-id="@item.Id"
-               data-ajax="true"
-               data-ajax-method="GET"
-               data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
-               data-ajax-mode="replace">
-                @Html.DisplayFor(modelItem => item.Name)
-            </a>
-        }
+<div class="row">
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    @foreach (var item in Model)
+                    {
+                        <a class="list-group-item list-group-item-dark rounded" role="tab" id="moduleListForStudent-@item.Name"
+                           asp-controller="Students" asp-action="ModuleDetail" asp-route-id="@item.Id"
+                           data-ajax="true"
+                           data-ajax-method="GET"
+                           data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
+                           data-ajax-mode="replace">
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </a>
+                        <br>
+                    }
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="card border-0">
-        <div id="getModuleDetailOrActivityDetailsWithAjax"></div>       
+    <div class="col-sm-8">
+        <div class="card">
+            <div class="card-body">
+                <div id="getModuleDetailOrActivityDetailsWithAjax"></div>
+            </div>
+        </div>
     </div>
 </div>
-
-
-   
-

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Lms.Core.Repositories
 {
-   public interface IDocumentRepository : IGenericRepository<Document>
+    public interface IDocumentRepository : IGenericRepository<Document>
     {
     }
 }

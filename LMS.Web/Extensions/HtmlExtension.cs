@@ -9,17 +9,18 @@ namespace Lms.Web.Extensions
     public static class HtmlExtension
     {
         public static MvcForm BeginFormActivity(
-    this IHtmlHelper htmlHelper,
-    string actionName,
-    string controllerName,
-    object routeValues,
-    FormMethod method,
-    object htmlAttributes)
+            this IHtmlHelper htmlHelper,
+            string actionName,
+            string controllerName,
+            object routeValues,
+            FormMethod method,
+            object htmlAttributes)
         {
             if (htmlHelper == null)
             {
                 throw new ArgumentNullException(nameof(htmlHelper));
             }
+
             return htmlHelper.BeginForm(
                 actionName,
                 controllerName,
@@ -28,6 +29,5 @@ namespace Lms.Web.Extensions
                 antiforgery: null,
                 htmlAttributes: htmlAttributes);
         }
-
     }
 }

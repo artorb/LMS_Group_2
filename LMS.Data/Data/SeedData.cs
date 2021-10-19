@@ -514,16 +514,6 @@ namespace Lms.Data.Data
                 courses.ElementAt(i).Modules = new List<Module>() { dict.Keys.ElementAt(i), dict.Values.ElementAt(i) };
             }
 
-            // var index = 0;
-            // foreach (var course in courses)
-            // {
-            //     course.Modules = new List<Module>
-            //     {
-            //         modules.ElementAt(index), modules.ElementAt(index + 1)
-            //     }; //Cause some disorder in the order of the modules.
-            //     index += 2;
-            // }
-
             return await Task.FromResult(modules);
         }
 
@@ -547,22 +537,6 @@ namespace Lms.Data.Data
                 };
                 activities.Add(activity);
             }
-
-            // foreach (var module in modules)
-            // {
-            //     foreach (var activity in activities)
-            //     {
-            //         module.Activities ??= new List<Activity>();
-            //         if (module.Activities.Count < 2)
-            //         {
-            //            module.Activities.Add(activity);
-            //         }
-            //         else
-            //         {
-            //             break;
-            //         }
-            //     }
-            // }
 
             var index = 0;
             foreach (var module in modules)
@@ -600,14 +574,12 @@ namespace Lms.Data.Data
             //{               
             //        Directory.CreateDirectory($"wwwroot/Uploads/{module.Course.Name}/{module.Name}");                
             //}
-
-
             //creating folders for teachers (course/module/activity)
             foreach (var module in modules)
             {
                 foreach (var activity in activities)
                 {
-                    string fileName = $"{activity.Name}" + ".txt";
+                    var fileName = $"{activity.Name}" + ".txt";
 
                     if (!Directory.Exists($"wwwroot/Uploads/{module.Course.Name}/{module.Name}"))
                     {
@@ -620,6 +592,7 @@ namespace Lms.Data.Data
                     }
                 }
             }
+
             //creates seed in database but not in the computer *************************************
             var documents = courses.Select(course => new Document
             {
@@ -653,7 +626,7 @@ namespace Lms.Data.Data
                 Uploader = "john@LearningSite.se",
                 Activity = activity
             }));
-            
+
             return await Task.FromResult(documents);
         }
     }

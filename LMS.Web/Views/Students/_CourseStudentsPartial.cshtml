@@ -1,42 +1,32 @@
 ﻿@model IEnumerable<Lms.Core.Models.ViewModels.StudentCommonCourseViewModel>
 
 
-    <br />
-    <h4>Participants</h4>
- 
+<br/>
+<h4>Participants</h4>
 
 
-    <div>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th> @Html.DisplayNameFor(model => model.StudentName)         </th>
-                    <th> @Html.DisplayNameFor(model => model.Email)    </th>     
-                </tr>
-            </thead>
-            <tbody>
-                @{int i = 1;}
-                @foreach (var item in Model)
-                {
-                <tr>                
-                    <td><span>@i. </span>  @Html.DisplayFor(modelItem => item.StudentName)               </td>
-                    <td> @Html.DisplayFor(modelItem => item.Email)               </td>                 
-                </tr>
-                    {
-                        i++;
-                    }
-                }
-            </tbody>
-        </table>
-    </div>
-
-
-
-
-
-
-
-
-
-
-
+<div>
+    <table class="table table-secondary table-borderless table-striped">
+        <thead class="table-bordered table-dark">
+        <tr>
+            <th> @Html.DisplayNameFor(model => model.StudentName) </th>
+            <th> @Html.DisplayNameFor(model => model.Email) </th>
+        </tr>
+        </thead>
+        <tbody>
+        @{ var i = 1; }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <span>@i. </span> @Html.DisplayFor(modelItem => item.StudentName)
+                </td>
+                <td> @Html.DisplayFor(modelItem => item.Email) </td>
+            </tr>
+            {
+                i++;
+            }
+        }
+        </tbody>
+    </table>
+</div>

@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Lms.Core.Entities;
-using Lms.Core.Models.ViewModels;
 using Lms.Core.Repositories;
 using Lms.Data.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lms.Web.Controllers
@@ -76,7 +75,7 @@ namespace Lms.Web.Controllers
                                 {
                                     Name = $"{file.FileName}",
                                     Description = $"{activity.Description}", //what is the document description?
-                                    UploadDate = System.DateTime.Now,
+                                    UploadDate = DateTime.Now,
                                     HashName =
                                         $"{activity.Module.Course.Name}/{activity.Module.Name}/{activity.Name}/{file.FileName}",
                                     Uploader = $"{userLoggedIn.Email}",
@@ -93,9 +92,7 @@ namespace Lms.Web.Controllers
                 }
             }
 
-            return RedirectToAction("ActivityDetail", "Students", new { id = activityId });
-            // return PartialView("ActivityDetail", "Students", new { id = activityId });
-            //return Ok(new { Count = files.Count, size, paths });        
+            return RedirectToAction("Index", "Students");
         }
     }
 }

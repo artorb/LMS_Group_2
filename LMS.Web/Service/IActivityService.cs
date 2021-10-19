@@ -6,5 +6,6 @@ namespace Lms.Web.Service
     public interface IActivityService
     {
         Task<string> GetStatusForStudentActivity(Activity clickedActivity, string userId);
+        Task<string> GetStatusForStudentModule(Module clickedModule, string userId);
     }
 }

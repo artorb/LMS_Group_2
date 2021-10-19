@@ -6,6 +6,7 @@
 
 <hr/>
 
+
 <section class="container">
     <section class="row">
 
@@ -31,14 +32,14 @@
 
 
         <div class="moduleDetailsForStudent">
-            <table class="table">
+            <table class="table table-striped table-bordered">
                 <thead>
                 <tr>
                     <th> @Html.DisplayNameFor(model => model.Activities) </th>
                     <th> @Html.DisplayNameFor(model => model.ModuleStartDate) </th>
                     <th> @Html.DisplayNameFor(model => model.ModuleEndDate) </th>
-                    <th style="color:red"> Status </th>
-                    <th> </th>
+                    <th> Status </th>
+                    <th>@Html.DisplayNameFor(model => model.Documents)</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -46,7 +47,7 @@
                 {
                     <tr>
                         <td>
-                            <a asp-controller="Students" asp-action="ActivityDetail" asp-route-id="@item.Id"
+                            <a class="nav-link" asp-controller="Students" asp-action="ActivityDetail" asp-route-id="@item.Id"
                                data-ajax="true"
                                data-ajax-method="GET"
                                data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
@@ -56,36 +57,39 @@
                         </td>
                         <td> @Convert.ToDateTime(item.StartDate).ToString("yyyy/MM/dd HH:mm") </td>
                         <td> @Convert.ToDateTime(item.EndDate).ToString("yyyy/MM/dd HH:mm") </td>
-                        @* <td> @Html.DisplayFor(modelItem => service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result) </td> *@
-                        <td> @Html.DisplayFor(modelItem => service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result) </td>
-                        <td></td>
+                        @{
+                            var status = service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result;
+                        }
+                        @if (status == "Uploaded")
+                        {
+                            <td>
+                                <span class="badge badge-success">Uploaded</span>
+                            </td>
+                        }
+                        else if (status == "Delayed")
+                        {
+                            <td>
+                                <span class="badge badge-warning">Past due date</span>
+                            </td>
+                        }
+                        else if(status == "Not uploaded")
+                        {
+                            <td>
+                                <span class="badge badge-danger">Not Uploaded</span>
+                            </td>
+                        }
+
+                        @foreach (var document in Model.Documents)
+                        {
+                            <td>
+                                @Html.ActionLink(document.Name, "DownloadFile", "Download", new { filePath = document.HashName }, null)
+                            </td>
+                        }
+
                     </tr>
                 }
                 </tbody>
             </table>
         </div>
-
-
-        <div class="moduleDetailsForStudent">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.Documents)</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach (var item in Model.Documents)
-                {
-                    <tr>
-                        <td>
-                            @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
-                        </td>
-                    </tr>
-                }
-                </tbody>
-            </table>
-        </div>
-
-
     </section>
 </section>

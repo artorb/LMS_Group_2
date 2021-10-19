@@ -10,16 +10,16 @@ namespace Lms.Core.Models.ViewModels
 {
    public class StudentCourseViewModel
     {
-        [Display(Name = "Course:")]
+        [Display(Name = "Course")]
         public string CourseName { get; set; }
 
-        [Display(Name = "Description:")]
+        [Display(Name = "Description")]
         public string CourseDescription { get; set; }
         
-        [Display(Name = "Start date:")]
+        [Display(Name = "Start date")]
         public DateTime CourseStartDate { get; set; }
 
-        [Display(Name = "End date:")]
+        [Display(Name = "End date")]
         public DateTime CourseEndDate { get; set; }   
 
         [Display(Name = "Documents")]
