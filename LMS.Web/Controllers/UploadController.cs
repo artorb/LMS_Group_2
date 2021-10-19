@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Lms.Core.Entities;
-using Lms.Core.Models.ViewModels;
 using Lms.Core.Repositories;
 using Lms.Data.Data;
 using Microsoft.AspNetCore.Http;
@@ -25,11 +25,9 @@ namespace Lms.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> UploadFiles(List<IFormFile> files, int activityId)    
+        public async Task<ActionResult> UploadFiles(List<IFormFile> files, int activityId)
         {
             var size = files.Sum(f => f.Length);
-     
-
             // update Documents for User
             if (User.IsInRole("Student"))
             {
@@ -38,52 +36,33 @@ namespace Lms.Web.Controllers
                 var userLoggedIn = _unitOfWork.UserRepository.GetIncludeTest(userId, c =>
                     c.Include(c => c.Course).ThenInclude(c => c.Modules).ThenInclude(c => c.Activities)).Result;
 
-                // if (!Directory.Exists($"{userLoggedIn.Id}/{userLoggedIn.Course.Name}/{userLoggedIn.}"))
-                // {
-                //     // Directory.CreateDirectory($"wwwroot/Uploads/{userLoggedIn.Id}/{userLoggedIn.Course}");
-
-
-                /*
-                foreach (var module in userLoggedIn.Course.Modules)
-                {
-                    foreach (var activity in module.Activities)
-                    {
-                        Directory.CreateDirectory($"wwwroot/Uploads/{userLoggedIn.Id.ToString()}/" +
-                                                  $"{userLoggedIn.Course.Name}/" +
-                                                  $"{module.Name}/" +
-                                                  $"{activity.Name}");
-                    }
-                }
-                // }
-                */
-
                 var paths = new List<string>();
                 foreach (var file in files)
                 {
-                        if (file == null) continue;
+                    if (file == null) continue;
                     foreach (var module in userLoggedIn.Course.Modules)
                     {
-                            foreach (var activity in module.Activities)
+                        foreach (var activity in module.Activities)
                         {
-                          
-                                if (activity.Id == activityId)
-                                {
-
+                            if (activity.Id == activityId)
+                            {
                                 if (!Directory.Exists($"wwwroot/Uploads/{userLoggedIn.Id.ToString()}/" +
                                                       $"{userLoggedIn.Course.Name}/" +
                                                       $"{module.Name}/" +
-                                                      $"{activity.Name}")) { 
+                                                      $"{activity.Name}"))
+                                {
                                     //creating folders for student (course/module/activity)
                                     Directory.CreateDirectory($"wwwroot/Uploads/{userLoggedIn.Id.ToString()}/" +
-                                                      $"{userLoggedIn.Course.Name}/" +
-                                                      $"{module.Name}/" +
-                                                      $"{activity.Name}");
+                                                              $"{userLoggedIn.Course.Name}/" +
+                                                              $"{module.Name}/" +
+                                                              $"{activity.Name}");
                                 }
 
-                                var filePath = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/Uploads/{userLoggedIn.Id.ToString()}/" +
-                                                      $"{userLoggedIn.Course.Name}/" +
-                                                      $"{module.Name}/" +
-                                                      $"{activity.Name}", file.FileName);                               
+                                var filePath = Path.Combine(Directory.GetCurrentDirectory(),
+                                    $"wwwroot/Uploads/{userLoggedIn.Id.ToString()}/" +
+                                    $"{userLoggedIn.Course.Name}/" +
+                                    $"{module.Name}/" +
+                                    $"{activity.Name}", file.FileName);
                                 paths.Add(filePath);
 
                                 await using (var stream = new FileStream(filePath, FileMode.Create))
@@ -92,62 +71,28 @@ namespace Lms.Web.Controllers
                                 }
 
 
-                            var document =  new Document
-                            {
-                                Name = $"{file.FileName}",
-                                Description = $"{activity.Description}", 
-                                UploadDate = System.DateTime.Now,
-                                HashName = $"{userId}/{activity.Module.Course.Name}/{activity.Module.Name}/{activity.Name}/{file.FileName}",
-                                Uploader = $"{userLoggedIn.Email}",
-                                ApplicationUser= userLoggedIn,
-                                Course = userLoggedIn.Course,
-                                Module = activity.Module,
-                                Activity = activity
-                            };
-                            _context.Documents.Add(document);
-                            await _context.SaveChangesAsync();
-
+                                var document = new Document
+                                {
+                                    Name = $"{file.FileName}",
+                                    Description = $"{activity.Description}", //what is the document description?
+                                    UploadDate = DateTime.Now,
+                                    HashName =
+                                        $"{activity.Module.Course.Name}/{activity.Module.Name}/{activity.Name}/{file.FileName}",
+                                    Uploader = $"{userLoggedIn.Email}",
+                                    ApplicationUser = userLoggedIn,
+                                    Course = userLoggedIn.Course,
+                                    Module = activity.Module,
+                                    Activity = activity
+                                };
+                                _context.Documents.Add(document);
+                                await _context.SaveChangesAsync();
                             }
                         }
                     }
                 }
-
-
-
-
-
-
-
-
-                return RedirectToAction("Index", "Students");
-
             }
-
-
-
-            /*
-            var paths = new List<string>();
-            foreach (var file in files)
-            {
-                if (file == null) continue;
-
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Uploads", file.FileName);
-                // var filePath = Path.Combine("~/Uploads", file.FileName);
-                paths.Add(filePath);
-
-                await using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
-              ViewBag.UploadStatus = files.Count + " files uploaded successfully.";                
-            }
-            */
-
-
-
 
             return RedirectToAction("Index", "Students");
-            //return Ok(new { Count = files.Count, size, paths });        
-       }
+        }
     }
 }

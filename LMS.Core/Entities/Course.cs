@@ -11,7 +11,6 @@ namespace Lms.Core.Entities
         public DateTime EndDate { get; set; }
 
 
-        //Navigation
         public ICollection<Document> Documents { get; set; }
         public ICollection<ApplicationUser> Users { get; set; }
         public ICollection<Module> Modules { get; set; }

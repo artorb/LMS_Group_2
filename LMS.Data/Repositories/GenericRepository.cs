@@ -22,8 +22,9 @@ namespace Lms.Data.Repositories
             db = context ?? throw new ArgumentNullException(nameof(db));
             table = db.Set<T>();
         }
-        
-        public async Task<IEnumerable<T>> GetIncludeTest(Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null) 
+
+        public async Task<IEnumerable<T>> GetWithIncludesAsync(
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
         {
             IQueryable<T> queryable = db.Set<T>();
 
@@ -34,7 +35,6 @@ namespace Lms.Data.Repositories
 
             return await queryable.ToListAsync();
         }
-        
 
         public void Add(T obj)
         {
@@ -55,9 +55,8 @@ namespace Lms.Data.Repositories
         {
             return await table.FirstOrDefaultAsync(p => p.Id == id);
         }
-        
-        //May not work. Test to see if it actually works
-        public async Task<T> GetWithIncludesAsync(int id, params Expression<Func<T, object>>[] includeProperties)
+
+        public async Task<T> GetWithIncludesIdAsync(int id, params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> query = table;
             foreach (var include in includeProperties)
@@ -68,9 +67,9 @@ namespace Lms.Data.Repositories
             return await query.FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<IEnumerable<T>> GetAllWithIncludesAsync(params Expression<Func<T, object>>[] includeProperties)
-        {        
-
+        public async Task<IEnumerable<T>> GetAllWithIncludesAsync(
+            params Expression<Func<T, object>>[] includeProperties)
+        {
             IQueryable<T> query = table;
 
             foreach (var include in includeProperties)

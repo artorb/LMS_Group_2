@@ -6,6 +6,7 @@
 
 <hr/>
 
+
 <section class="container">
     <section class="row">
 
@@ -25,20 +26,20 @@
             <div>
                 <strong> @Html.DisplayNameFor(model => model.ModuleDescription) </strong>
             </div>
-            <div>   @Html.DisplayFor(model => model.ModuleDescription) </div>
+            <div> @Html.DisplayFor(model => model.ModuleDescription) </div>
 
         </div>
 
 
         <div class="moduleDetailsForStudent">
-            <table class="table">
+            <table class="table table-striped table-bordered">
                 <thead>
                 <tr>
                     <th> @Html.DisplayNameFor(model => model.Activities) </th>
                     <th> @Html.DisplayNameFor(model => model.ModuleStartDate) </th>
                     <th> @Html.DisplayNameFor(model => model.ModuleEndDate) </th>
-                    <th > Status </th>
-                    <th> </th>
+                    <th> Status </th>
+                    <th>@Html.DisplayNameFor(model => model.Documents)</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -46,7 +47,7 @@
                 {
                     <tr>
                         <td>
-                            <a asp-controller="Students" asp-action="ActivityDetail" asp-route-id="@item.Id"
+                            <a class="nav-link" asp-controller="Students" asp-action="ActivityDetail" asp-route-id="@item.Id"
                                data-ajax="true"
                                data-ajax-method="GET"
                                data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
@@ -109,7 +110,5 @@
                 </tbody>
             </table>
         </div>
-
-
     </section>
 </section>

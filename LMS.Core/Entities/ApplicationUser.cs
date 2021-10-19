@@ -8,9 +8,6 @@ namespace Lms.Core.Entities
     {
         public string Name { get; set; }
 
-
-
-        //Navigations:
         public int? CourseId { get; set; }
         public Course Course { get; set; }        
         public ICollection<Document> Documents { get; set; }
