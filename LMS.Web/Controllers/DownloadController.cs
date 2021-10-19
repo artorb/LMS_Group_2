@@ -18,11 +18,8 @@ namespace Lms.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> DownloadFile(string filePath)
         {
-            //filePath = "Picture.jpg"; // FIXME (static file)
              var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Uploads", filePath);
          
-       
-
             var mem = new MemoryStream();
 
             await using (var stream = new FileStream(path, FileMode.Open))
@@ -35,7 +32,6 @@ namespace Lms.Web.Controllers
             var fileName = Path.GetFileName(path);
             return File(mem, contentType, fileName);
         }
-
 
 
         public ActionResult PdfSeedToDownload() {
