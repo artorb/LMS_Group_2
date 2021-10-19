@@ -1,71 +1,69 @@
 ﻿@model Lms.Core.Models.ViewModels.StudentCourseViewModel
 
 
-<br/>
+<br />
 <h4>@Html.DisplayFor(model => model.CourseName)</h4>
-@* <hr/> *@
+<hr />
 
-<div class="courseDetailsForStudent">
-    <table class="table table-striped table-secondary table-borderless">
-        <thead class="table-bordered table-dark">
-        <tr>
-            <th> @Html.DisplayNameFor(model => model.CourseStartDate) </th>
-            <th> @Html.DisplayNameFor(model => model.CourseEndDate) </th>
-            <th> @Html.DisplayNameFor(model => model.CourseDescription) </th>
-            <th>@Html.DisplayNameFor(model => model.Documents)</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in Model.Documents)
-        {
-            <tr>
-                <td> @Convert.ToDateTime(Model.CourseStartDate).ToString("yyyy/MM/dd HH:mm") </td>
-                <td> @Convert.ToDateTime(Model.CourseEndDate).ToString("yyyy/MM/dd HH:mm") </td>
-                <td> @Html.DisplayFor(m => Model.CourseDescription) </td>
-                <td>
-                    @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+<div class="card-deck">
+    <div class="card border-0">
+
+        <div> <strong>  @Html.DisplayNameFor(model => model.CourseStartDate)  </strong> </div>
+        <div>           @Convert.ToDateTime(Model.CourseStartDate).ToString("yyyy/MM/dd HH:mm")               </div>
+        <div><strong>   @Html.DisplayNameFor(model => model.CourseEndDate)   </strong>  </div>
+        <div>           @Convert.ToDateTime(Model.CourseEndDate).ToString("yyyy/MM/dd HH:mm")                 </div>
+    </div>
+
+    <div class="card border-0">
+        <div> <strong>  @Html.DisplayNameFor(model => model.CourseDescription) </strong> </div>
+        <div>           @Html.DisplayFor(model => model.CourseDescription)               </div>
+    </div>
+
+
+    <div class="card border-0">
+        <div> <strong>  @Html.DisplayNameFor(model => model.Documents)  </strong> </div>
+        <table class="table">
+            <tbody>
+                @foreach (var item in Model.Documents)
+                {
+                    <tr>
+                        @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
-@* *@
-@* *@
-@* <div class="card-deck"> *@
-@*     <div class="card border-0"> *@
-@* *@
-@*         <div> *@
-@*             <strong> @Html.DisplayNameFor(model => model.CourseStartDate) </strong> *@
-@*         </div> *@
-@*         <div> @Convert.ToDateTime(Model.CourseStartDate).ToString("yyyy/MM/dd HH:mm") </div> *@
-@*         <div> *@
-@*             <strong> @Html.DisplayNameFor(model => model.CourseEndDate) </strong> *@
-@*         </div> *@
-@*         <div> @Convert.ToDateTime(Model.CourseEndDate).ToString("yyyy/MM/dd HH:mm") </div> *@
-@*     </div> *@
-@* *@
-@*     <div class="card border-0"> *@
-@*         <div> *@
-@*             <strong> @Html.DisplayNameFor(model => model.CourseDescription) </strong> *@
-@*         </div> *@
-@*         <div> @Html.DisplayFor(model => model.CourseDescription) </div> *@
-@*     </div> *@
-@* *@
-@* *@
-@*     <div class="card border-0"> *@
-@*         <div> *@
-@*             <strong> @Html.DisplayNameFor(model => model.Documents) </strong> *@
-@*         </div> *@
-@*         <table class="table"> *@
-@*             <tbody> *@
-@*             @foreach (var item in Model.Documents) *@
-@*             { *@
-@*                 <tr> *@
-@*                     @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null) *@
-@*                 </tr> *@
-@*             } *@
-@*             </tbody> *@
-@*         </table> *@
-@*     </div> *@
-@* </div> *@
+
+@*<button id="btnPrint" class="btn btn-primary ignoreForPdf">Print</button>
+
+
+<script src="~/js/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+
+
+
+    $(document).ready(function () {
+
+            /*  Controller/GetPdfSeedToDownload, (In the PdfSeedToUploadRepository in the GetpdfSeedToUpload there is dataToShow) */
+        $.getJSON("../dataToShow/GetPdfSeedToDownload", function (dataToShow) {
+
+                /*   pdf is just to get a name */
+            $.map(dataToShow, function (pdf) {
+
+                    /*  this is the table id */
+                    $("#pdfToDownload tbody").append("<tr><td>" + pdf.Text + "</td></tr>")
+                });
+        });
+            /* print out the table */
+            $("#btnPrint").click(function () {
+                $(".ignoreForPdf").hide();
+                window.print();
+                $(".ignoreForPdf").show();
+            });
+        });
+
+    
+
+</script>*@
+

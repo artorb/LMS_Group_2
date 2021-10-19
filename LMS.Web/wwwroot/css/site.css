@@ -205,17 +205,16 @@ label {
 }
 
 .buttonsOnIndexPageForStudent:focus {
-    color: #1b6ec2;
+    color: lightsalmon;
 }
 
 .buttonsOnIndexPageForStudent:hover {
-    background: #b8daff;
-    color: #1b6ec2;
+    background: #1861ac;
 }
 
-.buttonsOnIndexPageForStudent {
+/*.buttonsOnIndexPageForStudent {
     color: #7abaff;
-}
+}*/
 
 
 .participantListForStudent {
@@ -236,14 +235,6 @@ label {
     color: lightsalmon;
 }
 
-.list-group-item:focus {
-    color: #1b1e21;
-    background: #5baaf8;
-}
-
-.list-group-item:hover {
-    background: #b8daff;
-}
 
 #moduleListForStudent:hover {
     background: #1861ac;

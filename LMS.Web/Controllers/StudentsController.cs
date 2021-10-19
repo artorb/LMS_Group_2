@@ -34,7 +34,7 @@ namespace Lms.Web.Controllers
             var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
             var courseId =
                 UserLoggedIn.CourseId; 
-            var course = await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, d => d.Documents);
+            var course = await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, d => d.Documents.Where(m=>m.ApplicationUser==null));
 
             var model = new StudentCourseViewModel()
             {
@@ -63,10 +63,8 @@ namespace Lms.Web.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var UserLoggedIn =
-                await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
-            var courseId =
-                UserLoggedIn.CourseId; 
+            var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
+            var courseId = UserLoggedIn.CourseId; 
             var course = await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, d => d.Users);
 
             var models = (from user in course.Users

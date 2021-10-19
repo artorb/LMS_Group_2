@@ -575,19 +575,51 @@ namespace Lms.Data.Data
             //        Directory.CreateDirectory($"wwwroot/Uploads/{module.Course.Name}/{module.Name}");                
             //}
             //creating folders for teachers (course/module/activity)
+
+            var paths = new List<string>();
             foreach (var module in modules)
             {
                 foreach (var activity in activities)
                 {
-                    var fileName = $"{activity.Name}" + ".txt";
+                    var fileName1 = $"{activity.Name}" + ".doc";
+                    var fileName2 = $"{module.Name}" + ".doc";
+                    var fileName3 = $"{module.Course.Name}" + ".doc";
 
                     if (!Directory.Exists($"wwwroot/Uploads/{module.Course.Name}/{module.Name}"))
                     {
                         if (module.Name == activity.Module.Name)
                         {
-                            Directory.CreateDirectory(
-                                $"wwwroot/Uploads/{module.Course.Name}/{activity.Module.Name}/{activity.Name}");
-                            break;
+                            Directory.CreateDirectory($"wwwroot/Uploads/{module.Course.Name}/{activity.Module.Name}/{activity.Name}");
+
+                            var filePath1 = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/Uploads/{module.Course.Name}/{module.Name}/{activity.Name}", fileName1);
+                            var filePath2 = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/Uploads/{module.Course.Name}/{module.Name}", fileName2);
+                            var filePath3 = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/Uploads/{module.Course.Name}", fileName3);
+
+                            paths.Add(filePath1);
+                            paths.Add(filePath2);
+                            paths.Add(filePath3);
+
+                            using (var fs = new FileStream(filePath1, FileMode.Create))
+                            {
+                                //do some stuff
+                            }
+
+                            using (var fs = new FileStream(filePath2, FileMode.Create))
+                            {
+                                //do some stuff
+                            }
+
+                            using (var fs = new FileStream(filePath3, FileMode.Create))
+                            {
+                                //do some stuff
+                            }
+
+
+
+
+
+
+
                         }
                     }
                 }
@@ -599,7 +631,7 @@ namespace Lms.Data.Data
                 Name = $"{course.Name} document",
                 Description = $"{course.Description}",
                 UploadDate = course.StartDate,
-                HashName = $"{course.Name}/{course.Name}.pdf",
+                HashName = $"{course.Name}/{course.Name}.doc",
                 Uploader = "john@LearningSite.se",
                 Course = course
             }).ToList();
@@ -610,7 +642,7 @@ namespace Lms.Data.Data
                 Name = $"{module.Name} document",
                 Description = $"{module.Description}",
                 UploadDate = module.StartDate,
-                HashName = $"{module.Course.Name}/{module.Name}/{module.Name}.pdf",
+                HashName = $"{module.Course.Name}/{module.Name}/{module.Name}.doc",
                 Uploader = "john@LearningSite.se",
                 Module = module
             }));
@@ -622,7 +654,7 @@ namespace Lms.Data.Data
                 Name = $"{activity.Name} document",
                 Description = $"{activity.Description}",
                 UploadDate = activity.StartDate,
-                HashName = $"{activity.Module.Course.Name}/{activity.Module.Name}/{activity.Name}/{activity.Name}.pdf",
+                HashName = $"{activity.Module.Course.Name}/{activity.Module.Name}/{activity.Name}/{activity.Name}.doc",
                 Uploader = "john@LearningSite.se",
                 Activity = activity
             }));

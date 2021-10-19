@@ -37,4 +37,15 @@
     <Folder Include="wwwroot\Uploads" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Views\Students\GetActivityDetailsPartial.cshtml" />
+    <None Include="Views\Students\GetModuleDetailsPartial.cshtml" />
+    <None Include="Views\Students\GetModuleListPartial.cshtml" />
+    <None Include="Views\Students\Index.cshtml" />
+    <None Include="Views\Students\PdfToDownloadPartial.cshtml" />
+    <None Include="Views\Students\_CourseDetailsPartial.cshtml" />
+    <None Include="Views\Students\_CourseModulePartial.cshtml" />
+    <None Include="Views\Students\_CourseStudentsPartial.cshtml" />
+  </ItemGroup>
+
 </Project>

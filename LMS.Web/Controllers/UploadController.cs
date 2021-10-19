@@ -76,8 +76,7 @@ namespace Lms.Web.Controllers
                                     Name = $"{file.FileName}",
                                     Description = $"{activity.Description}", //what is the document description?
                                     UploadDate = DateTime.Now,
-                                    HashName =
-                                        $"{activity.Module.Course.Name}/{activity.Module.Name}/{activity.Name}/{file.FileName}",
+                                    HashName = $"{userLoggedIn.Id.ToString()}/{activity.Module.Course.Name}/{activity.Module.Name}/{activity.Name}/{file.FileName}",
                                     Uploader = $"{userLoggedIn.Email}",
                                     ApplicationUser = userLoggedIn,
                                     Course = userLoggedIn.Course,
