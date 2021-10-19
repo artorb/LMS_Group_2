@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Lms.Core.Repositories;
 using Lms.Data.Repositories;
+using System.Net.Http.Headers;
 
 namespace Lms.Web
 {
@@ -41,6 +42,14 @@ namespace Lms.Web
             services.AddControllersWithViews();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // API > IHttpClientFactory using named client
+            services.AddHttpClient("LiteratureClient", client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:5001/api/");
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
