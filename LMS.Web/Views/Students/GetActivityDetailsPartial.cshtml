@@ -70,31 +70,48 @@
 
 
         <div class="activityDetailsForStudent">
-            <div>
+            @*<div>
                 <strong> @Html.DisplayNameFor(model => model.Documents) </strong>
-            </div>
+            </div>*@
             <table class="table">
                 <tbody>
                     @foreach (var item in Model.Documents)
                     {
-                        <tr>
-                            @if (item.ApplicationUserId == null)
-                            {
-                                @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
-                            }
-                        </tr>
 
-                        <tr>
-                            <br />
-                            @if (item.ApplicationUserId != null)
-                            {
-                        <p>
-                            <strong>Your uploaded assignment</strong>
-                            <br />
-                            @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
-                        </p>
-                            }
-                        </tr>
+                        @if (item.ApplicationUserId == null && item.Activity.ActivityTypeId != 3)
+                        {                        
+                            <strong> @Html.DisplayNameFor(model => model.Documents) </strong>
+                            <tr>
+                                @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                         
+                            </tr>
+                        }
+
+
+
+                        @if (item.ApplicationUserId == null && item.Activity.ActivityTypeId == 3)
+                        {
+                            <tr>
+                                <p>                                
+                                    <strong> Assignment fo the activity: </strong>
+                                    @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                                 
+                                </p>
+                            </tr>
+                        }
+
+
+
+                        @if (item.ApplicationUserId != null)
+                        {
+                            <tr>
+                                <p>
+                                    <strong>Your uploaded assignment</strong>
+                                    @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                                </p>
+                            </tr>
+                        }
+
 
                     }
                 </tbody>
