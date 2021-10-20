@@ -3,8 +3,15 @@
 }
 
 <h1>Welcome Student!</h1>
-
-
+<br />
+<br />
+<div>
+    @{
+        await Html.RenderPartialAsync("VeckoSchema");
+    }
+</div>
+<br />
+<br />
 
 <a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="CourseDetail"
    data-ajax="true"
@@ -19,50 +26,6 @@
 
 
 
-<br />
-<br />
-<partial name="VeckoSchema" />
 
-@*<div class="card-deck">
-        <div class="card">
-            <div class="card-body text-center">
-                <h5 class="card-title">Monday</h5>
-                <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity1</a>
-                <br />
-                <p class="card-text">Start time: </p>
-            </div>
-        </div>
-        <div class="card ">
-            <div class="card-body text-center">
-                <h5 class="card-title">Tuesday</h5>
-                <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity2</a>
-                <br />
-                <p class="card-text">Start time: </p>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body text-center">
-                <h5 class="card-title">Wednesday</h5>
-                <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity3</a>
-                <br />
-                <p class="card-text">Start time: </p>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body text-center">
-                <h5 class="card-title">Thursday</h5>
-                <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity4</a>
-                <br />
-                <p class="card-text">Start time: </p>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body text-center">
-                <h5 class="card-title">Friday</h5>
-                <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Details">Activity5</a>
-                <br />
-                <p class="card-text">Start time: </p>
-            </div>
-        </div>
-    </div>*@
+
 

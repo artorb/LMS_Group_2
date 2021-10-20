@@ -28,10 +28,10 @@ namespace Lms.Web.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-
-            return View();
+            var schema = await VeckoSchema();
+            return View(schema);
         }
 
         public async Task<IActionResult> CourseDetail()
@@ -52,7 +52,7 @@ namespace Lms.Web.Controllers
             return PartialView("GetCourseDetailsPartial", model);
         }
 
-        public async Task<IActionResult> VeckoSchema()
+        public async Task<List<VeckoSchemaViewModel>> VeckoSchema()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
@@ -89,14 +89,14 @@ namespace Lms.Web.Controllers
                             WeekDay = date.DayOfWeek.ToString(),
                             Name = activity.Name,
                             ActivityTypeName = activity.ActivityType.TypeName,
-                            DeadLine = activity.Deadline == date ? true : false 
+                            DeadLine = activity.Deadline == date ? true : false
                         };
                         veckoSchema.Add(dagsSchema);
                     }
                 }
             }
 
-            return PartialView("VeckoSchema", veckoSchema);
+            return veckoSchema;
         }
     }
 }
