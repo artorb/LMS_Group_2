@@ -4,7 +4,7 @@
 
 <h4 id="StudentModuleViewTitle"> @Html.DisplayFor(model => model.ModuleName) </h4>
 
-<hr/>
+<hr />
 
 <section class="container">
     <section class="row">
@@ -30,88 +30,89 @@
         </div>
 
 
-        <div class="moduleDetailsForStudent">
+        <div style="float:none">
             <table class="table">
                 <thead>
-                <tr>
-                    <th> @Html.DisplayNameFor(model => model.Activities) </th>
-                    <th> @Html.DisplayNameFor(model => model.ModuleStartDate) </th>
-                    <th> @Html.DisplayNameFor(model => model.ModuleEndDate) </th>
-                    <th > Status </th>
-                    <th> </th>
-                </tr>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Documents)</th>
+                    </tr>
                 </thead>
                 <tbody>
-                @foreach (var item in Model.Activities)
-                {
-                    <tr>
-                        <td>
-                            <a asp-controller="Students" asp-action="ActivityDetail" asp-route-id="@item.Id"
-                               data-ajax="true"
-                               data-ajax-method="GET"
-                               data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
-                               data-ajax-mode="replace">
-                                @Html.DisplayFor(modelItem => item.ActivityType.TypeName)
-                            </a>
-                        </td>
-                        <td> @Convert.ToDateTime(item.StartDate).ToString("yyyy/MM/dd HH:mm") </td>
-                        <td> @Convert.ToDateTime(item.EndDate).ToString("yyyy/MM/dd HH:mm") </td>
-
-                   
-                        @{                           
-                            var status = service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result;
-                        }
-                        @if (status == "Uploaded" && item.ActivityType.TypeName == "Assignment")
-                        {
+                    @foreach (var item in Model.Documents)
+                    {
+                        <tr>
                             <td>
-                                <span class="badge badge-success">Uploaded</span>
+                                @if (item.ApplicationUserId == null)
+                                    @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
                             </td>
-                        }
-                        else if (status == "Delayed" && item.ActivityType.TypeName == "Assignment")
-                        {
-                            <td>
-                                <span class="badge badge-warning">Past due date</span>
-                            </td>
-                        }
-
-
-                        else if (status == "Not uploaded" && item.ActivityType.TypeName == "Assignment")
-                        {
-                                <td>
-                                    <span class="badge badge-danger">Not Uploaded</span>
-                                </td>
-                            }
-                            
-
-                        <td></td>
-                    </tr>
-                            }
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
-
-
-        <div class="moduleDetailsForStudent">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.Documents)</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach (var item in Model.Documents)
-                {
-                    <tr>
-                        <td>
-                            @if (item.ApplicationUserId == null)
-                                @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
-                        </td>
-                    </tr>
-                }
-                </tbody>
-            </table>
-        </div>
-
-
     </section>
 </section>
+
+<div class="moduleDetailsForStudent">
+    <table class="table">
+        <thead>
+            <tr>
+                <th> @Html.DisplayNameFor(model => model.Activities) </th>
+                <th> @Html.DisplayNameFor(model => model.ModuleStartDate) </th>
+                <th> @Html.DisplayNameFor(model => model.ModuleEndDate) </th>
+                <th> Status </th>
+                <th> </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Activities)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="Students" asp-action="ActivityDetail" asp-route-id="@item.Id"
+                           data-ajax="true"
+                           data-ajax-method="GET"
+                           data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
+                           data-ajax-mode="replace">
+                            @Html.DisplayFor(modelItem => item.ActivityType.TypeName)
+                        </a>
+                    </td>
+                    <td> @Convert.ToDateTime(item.StartDate).ToString("yyyy/MM/dd HH:mm") </td>
+                    <td> @Convert.ToDateTime(item.EndDate).ToString("yyyy/MM/dd HH:mm") </td>
+
+
+                    @{
+                        var status = service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result;
+                    }
+                    @if (status == "Uploaded" && item.ActivityType.TypeName == "Assignment")
+                    {
+                        <td>
+                            <span class="badge badge-success">Uploaded</span>
+                        </td>
+                    }
+                    else if (status == "Delayed" && item.ActivityType.TypeName == "Assignment")
+                    {
+                        <td>
+                            <span class="badge badge-warning">Past due date</span>
+                        </td>
+                    }
+
+
+                    else if (status == "Not uploaded" && item.ActivityType.TypeName == "Assignment")
+                    {
+                        <td>
+                            <span class="badge badge-danger">Not Uploaded</span>
+                        </td>
+                    }
+
+
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+

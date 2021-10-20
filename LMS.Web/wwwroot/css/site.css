@@ -175,7 +175,7 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
-    /*    background-size: cover;
+       /*/ background-size: cover;
         background-repeat: no-repeat;
         background-image: url('/img/gray-abstract-wireframe-technology-background.jpg');*/
 }

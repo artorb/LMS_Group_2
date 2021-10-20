@@ -68,7 +68,7 @@ namespace Lms.Web.Controllers
             var course = await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, d => d.Users);
 
             var models = (from user in course.Users
-                where user.Id != userId
+                //where user.Id != userId
                 select new StudentCommonCourseViewModel { StudentName = user.Name, Email = user.Email }).ToList();
             return PartialView("_CourseStudentsPartial", models);
         }
