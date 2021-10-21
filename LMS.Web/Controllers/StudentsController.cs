@@ -52,7 +52,7 @@ namespace Lms.Web.Controllers
             return PartialView("GetCourseDetailsPartial", model);
         }
 
-        public async Task<List<VeckoSchemaViewModel>> VeckoSchema()
+        public async Task<List<DaySchemaViewModel>> VeckoSchema()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
@@ -72,7 +72,7 @@ namespace Lms.Web.Controllers
                 activities.AddRange(act);
             }
 
-            List<VeckoSchemaViewModel> veckoSchema = new();
+            List<DaySchemaViewModel> weekSchema = new();
 
             for (int i = 0; i < 7; i++)
             {
@@ -80,23 +80,29 @@ namespace Lms.Web.Controllers
 
                 if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday) continue;
 
+                var daySchema = new DaySchemaViewModel()
+                {
+                    WeekDay = date.DayOfWeek.ToString(),
+                    ActivitySchemas = new List<ActivitySchemaViewModel>()
+            };
                 foreach (var activity in activities)
                 {
                     if (activity.StartDate <= date && activity.EndDate >= date)
                     {
-                        var dagsSchema = new VeckoSchemaViewModel()
+                        var activitySchema = new ActivitySchemaViewModel()
                         {
-                            WeekDay = date.DayOfWeek.ToString(),
                             Name = activity.Name,
                             ActivityTypeName = activity.ActivityType.TypeName,
                             DeadLine = activity.Deadline == date ? true : false
                         };
-                        veckoSchema.Add(dagsSchema);
+
+                        daySchema.ActivitySchemas.Add(activitySchema);
                     }
                 }
+                weekSchema.Add(daySchema);
             }
 
-            return veckoSchema;
+            return weekSchema;
         }
     }
 }
