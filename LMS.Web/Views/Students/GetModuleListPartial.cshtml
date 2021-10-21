@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Lms.Core.Entities.Module>
+
+<br/>
+<div class="card-deck">
+    <div class="card border-0">
+
+        <strong>  @Html.DisplayNameFor(model => model.Name) </strong>
+
+        @foreach (var item in Model)
+        {
+            <a class ="btn btn-primary" id="moduleListForStudent"  asp-controller="Students" asp-action="ModuleDetail" asp-route-id="@item.Id"
+               data-ajax="true"
+               data-ajax-method="GET"
+               data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
+               data-ajax-mode="replace">
+                @Html.DisplayFor(modelItem => item.Name)
+            </a>
+        }
+    </div>
+
+    <div class="card border-0">
+        <div id="getModuleDetailOrActivityDetailsWithAjax"></div>       
+    </div>
+</div>
+
+
+   
+

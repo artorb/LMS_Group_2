@@ -10,6 +10,8 @@ using Lms.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
+using Lms.Data;
+
 namespace Lms.Web
 {
     public class Program
@@ -27,7 +29,7 @@ namespace Lms.Web
 
                 context.Database.EnsureDeleted();
                 context.Database.Migrate();
-                SeedData.InitAsync(context, services).Wait();
+                SeedData.InitAsync(context, services).Wait();            
             }
             host.Run();
         }

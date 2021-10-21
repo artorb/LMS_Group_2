@@ -13,17 +13,17 @@ namespace Lms.Data.Repositories
     {
         private readonly LmsDbContext db = null;
 
-        public CourseRepository(LmsDbContext context):base(context)
+        public CourseRepository(LmsDbContext context) : base(context)
         {
-            db = context ?? throw new ArgumentNullException(nameof(db));     
+            db = context ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public async Task<IEnumerable<Course>> FindByNameAsync(string courseName) 
+        public async Task<IEnumerable<Course>> FindByNameAsync(string courseName)
         {
-            return await db.Courses.Include(m=>m.Modules).Include(u=>u.Users).Where(
-                string.IsNullOrWhiteSpace(courseName)? 
-                c=> true :
-                c => c.Name.ToUpper().Contains(courseName.ToUpper())).ToListAsync();                
+            return await db.Courses.Include(m => m.Modules).Include(u => u.Users).Where(
+                string.IsNullOrWhiteSpace(courseName)
+                    ? c => true
+                    : c => c.Name.ToUpper().Contains(courseName.ToUpper())).ToListAsync();
         }
     }
 }

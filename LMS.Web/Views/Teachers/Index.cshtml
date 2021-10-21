@@ -8,57 +8,55 @@
 
 <h3>Kurser</h3>
 
-        <form asp-action="Search" asp-controller="Teachers">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Enter course name..."  name="CourseName">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="submit" >Search</button>
-                </div>
-            </div>
-            </form>
-            <a class="btn btn-primary" asp-action="Create" asp-controller="Courses"> Add new course </a>
+<form asp-action="Search" asp-controller="Teachers">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Enter course name..." name="CourseName">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+        </div>
+    </div>
+</form>
+<a class="btn btn-primary" asp-action="Create" asp-controller="Courses"> Add new course </a>
 
 
-
-
-            <section class="mb-5">
-                <div class="table-responsive bg-blurry shadow-4-strong rounded">
-                    <table class="table table-borderless table-hover align-middle mb-0 ">
-                        <thead>
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.CourseName)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.ActiveModuleName)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.NextModuleName)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.NumberOfParticipants)
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.CourseName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.ActiveModuleName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.NextModuleName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.NumberOfParticipants)
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+<section class="mb-5">
+    <div class="table-responsive bg-blurry shadow-4-strong rounded">
+        <table class="table table-borderless table-hover align-middle mb-0 ">
+            <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.CourseName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ActiveModuleName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NextModuleName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NumberOfParticipants)
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CourseName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ActiveModuleName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NextModuleName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumberOfParticipants)
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

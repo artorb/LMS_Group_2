@@ -1,0 +1,122 @@
+﻿@using Lms.Web.Extensions
+@model Lms.Core.Models.ViewModels.StudentActivityViewModel
+
+<h4 id="StudentActivityViewTitle"> @Html.DisplayFor(model => model.ActivityName) </h4>
+<hr/>
+
+<section class="container">
+    <section class="row">
+
+
+        <div class="activityDetailsForStudent">
+            <div>
+                <strong> @Html.DisplayNameFor(model => model.ActivityStartDate) </strong>
+            </div>
+            <div> @Html.DisplayFor(model => model.ActivityStartDate) </div>
+            <div>
+                <strong> @Html.DisplayNameFor(model => model.ActivityEndDate) </strong>
+            </div>
+            <div> @Html.DisplayFor(model => model.ActivityEndDate) </div>
+        </div>
+
+
+        <div class="activityDetailsForStudent" id="activityDetailsTypeAndStatusForStudent">
+            <div>
+                <strong> @Html.DisplayNameFor(model => model.ActivityTypes.TypeName) </strong>
+            </div>
+            <div> @Html.DisplayFor(model => model.ActivityTypes.TypeName) </div>
+            <div>
+                <strong> @Html.DisplayNameFor(model => model.Status) </strong>
+            </div>
+            <div> @Html.DisplayFor(model => model.Status) </div>
+        </div>
+
+
+
+
+
+        <div>
+            @using (Html.BeginFormActivity("UploadFiles", "Upload",  new { activityId = Model.Id}, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="form-horizontal">
+
+                    <div class="form-group uploadButtonGroup">
+                        <div class="uploadButtonContainer">
+                            <input type="file" class="upload-box" multiple name="files" id="Files"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Upload" class="btn btn-sm btn-primary submitButton"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10 text-success">
+                            @ViewBag.UploadStatus
+                        </div>
+                    </div>
+
+                </div>
+            }
+        </div>
+
+
+        <div class="activityDetailsForStudent">
+            <div>
+                <strong> @Html.DisplayNameFor(model => model.ActivityDescription) </strong>
+            </div>
+            <div> @Html.DisplayFor(model => model.ActivityDescription) </div>
+        </div>
+
+
+        <div class="activityDetailsForStudent">
+            @*<div>
+                <strong> @Html.DisplayNameFor(model => model.Documents) </strong>
+            </div>*@
+            <table class="table">
+                <tbody>
+                    @foreach (var item in Model.Documents)
+                    {
+
+                        @if (item.ApplicationUserId == null && item.Activity.ActivityTypeId != 3)
+                        {                        
+                            <strong> @Html.DisplayNameFor(model => model.Documents) </strong>
+                            <tr>
+                                @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                         
+                            </tr>
+                        }
+
+
+
+                        @if (item.ApplicationUserId == null && item.Activity.ActivityTypeId == 3)
+                        {
+                            <tr>
+                                <p>                                
+                                    <strong> Assignment fo the activity: </strong>
+                                    @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                                 
+                                </p>
+                            </tr>
+                        }
+
+
+
+                        @if (item.ApplicationUserId != null)
+                        {
+                            <tr>
+                                <p>
+                                    <strong>Your uploaded assignment</strong>
+                                    @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                                </p>
+                            </tr>
+                        }
+
+
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+</section>

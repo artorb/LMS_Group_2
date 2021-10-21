@@ -6,13 +6,13 @@ namespace Lms.Core.Entities
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public DateTime UploadDate { get; set; }
-        public string HashName { get; set; }
+        public DateTime UploadDate { get; set; } 
+        public string HashName { get; set; } //Path, file directory for ex.
 
-        public string Uploader { get; set; } // History log for uploader
-        
-        public string ApplicationUserId { get; set; } // A file attached to a user account
-        public ApplicationUser ApplicationUser { get; set; }
+        public string Uploader { get; set; } // Who uploaded the file
+
+        public string ApplicationUserId { get; set; } // A file attached to a user account 
+        public ApplicationUser ApplicationUser { get; set; } //I upload for me or for the teacher
         
         public int? CourseId { get; set; }
         public Course Course { get; set; }

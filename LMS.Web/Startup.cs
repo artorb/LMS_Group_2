@@ -15,6 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Lms.Core.Repositories;
 using Lms.Data.Repositories;
+using Lms.Web.Service;
+using System.Net.Http.Headers;
 
 namespace Lms.Web
 {
@@ -35,13 +37,33 @@ namespace Lms.Web
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            services.AddDefaultIdentity<ApplicationUser>(options =>
+                    {
+                        options.SignIn.RequireConfirmedAccount = false;
+                        options.Password.RequireDigit = false;
+                        options.Password.RequiredLength = 1;
+                        options.Password.RequireLowercase = false;
+                        options.Password.RequireUppercase = false;
+                        options.Password.RequireNonAlphanumeric = false;
+                        options.User.RequireUniqueEmail = false;
+                    }
+                )
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<LmsDbContext>();
+                .AddEntityFrameworkStores<LmsDbContext>()
+                .AddDefaultTokenProviders();
             services.AddControllersWithViews();
 
+            services.AddTransient<IActivityService, ActivityService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IPdfSeedToUploadRepository, PdfSeedToUploadRepository>();
 
+            // API > IHttpClientFactory using named client
+            services.AddHttpClient("LiteratureClient", client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:5001/api/");
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,21 +87,21 @@ namespace Lms.Web
 
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-        {
-
-
-
-            endpoints.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-            endpoints.MapRazorPages();
+      
+                app.UseEndpoints(endpoints =>
+            {
 
 
-        });
 
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
 
+                
+            });
+
+           
         }
     }
 }

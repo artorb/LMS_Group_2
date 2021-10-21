@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="iTextSharp" Version="5.5.13.2" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.10" />
@@ -20,6 +21,135 @@
   <ItemGroup>
     <ProjectReference Include="..\Lms.Core\Lms.Core.csproj" />
     <ProjectReference Include="..\Lms.Data\Lms.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\Uploads\Projektdokument_ Lexicon LMS.pdf" />
+    <Content Remove="wwwroot\Uploads\Group2.xd" />
+    <Content Remove="wwwroot\Uploads\Picture.jpg" />
+    <Content Remove="wwwroot\Uploads\Android Course\Android Module 2\Android Module 2.doc" />
+    <Content Remove="wwwroot\Uploads\Embedded Dev\Embedded Dev Module 1\Embedded Dev Module 1.doc" />
+    <Content Remove="wwwroot\Uploads\Self-Paced Programs\Self-Paced Programs.doc" />
+    <Content Remove="wwwroot\Uploads\Computer Security Analyst\Computer Security Analyst Module 1\Computer Security Analyst Module 1.doc" />
+    <Content Remove="wwwroot\Uploads\Cloud Security\Cloud Security Module 2\Cloud Security Module 2.doc" />
+    <Content Remove="wwwroot\Uploads\Self-Paced Programs\Self-Paced Programs Module 1\Self-Paced Programs Module 1.doc" />
+    <Content Remove="wwwroot\Uploads\Big Data\Big Data.doc" />
+    <Content Remove="wwwroot\Uploads\C# Backend\C# Backend Module 2\C# Backend Module 2.doc" />
+    <Content Remove="wwwroot\Uploads\C# Backend\C# Backend.doc" />
+    <Content Remove="wwwroot\Uploads\Digitization of the Legal Sector\Digitization of the Legal Sector Module 1\Digitization of the Legal Sector Module 1.doc" />
+    <Content Remove="wwwroot\Uploads\Digitization of the Legal Sector\Digitization of the Legal Sector.doc" />
+    <Content Remove="wwwroot\Uploads\C# Backend\C# Backend Module 1\C# Backend Module 1.doc" />
+    <Content Remove="wwwroot\Uploads\Android Course\Android Module 1\Android Module 1.doc" />
+    <Content Remove="wwwroot\Uploads\Embedded Dev\Embedded Dev.doc" />
+    <Content Remove="wwwroot\Uploads\Web Design\Web Design Module 2\Web Design Module 2.doc" />
+    <Content Remove="wwwroot\Uploads\Big Data\Big Data Module 1\Big Data Module 1.doc" />
+    <Content Remove="wwwroot\Uploads\Computer Security Analyst\Computer Security Analyst.doc" />
+    <Content Remove="wwwroot\Uploads\Cybersecurity\Cybersecurity Module 1\Cybersecurity Module 1.doc" />
+    <Content Remove="wwwroot\Uploads\Self-Paced Programs\Self-Paced Programs Module 2\Self-Paced Programs Module 2.doc" />
+    <Content Remove="wwwroot\Uploads\Web Design\Web Design.doc" />
+    <Content Remove="wwwroot\Uploads\Android Course\Android Course.doc" />
+    <Content Remove="wwwroot\Uploads\Cloud Security\Cloud Security Module 1\Cloud Security Module 1.doc" />
+    <Content Remove="wwwroot\Uploads\Digitization of the Legal Sector\Digitization of the Legal Sector Module 2\Digitization of the Legal Sector Module 2.doc" />
+    <Content Remove="wwwroot\Uploads\Computer Security Analyst\Computer Security Analyst Module 2\Computer Security Analyst Module 2.doc" />
+    <Content Remove="wwwroot\Uploads\Embedded Dev\Embedded Dev Module 2\Embedded Dev Module 2.doc" />
+    <Content Remove="wwwroot\Uploads\Cloud Security\Cloud Security.doc" />
+    <Content Remove="wwwroot\Uploads\Cybersecurity\Cybersecurity Module 2\Cybersecurity Module 2.doc" />
+    <Content Remove="wwwroot\Uploads\Big Data\Big Data Module 2\Big Data Module 2.doc" />
+    <Content Remove="wwwroot\Uploads\Web Design\Web Design Module 1\Web Design Module 1.doc" />
+    <Content Remove="wwwroot\Uploads\Cybersecurity\Cybersecurity.doc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\3ff5b3b6-9f2c-484f-81a9-53ed098c95fc\Android Course\Android Module 1\Android Activity 1\Web Design Activity 1.pdf" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\001bf048-5497-40cd-8e86-0f9c27146f77\Computer Security Analyst\Computer Security Analyst Module 1\Computer Security Analyst Activity 1\Group2.pdf" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\2b02744e-cb44-4252-874e-9cbe76861d9d\C# Backend\C# Backend Module 2\C# Backend Activity 3\Index - Lms.Web.pdf" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Android Course\Android Course.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Android Course\Android Module 1\Android Activity 1\Android Activity 1.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Android Course\Android Module 1\Android Module 1.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Android Course\Android Module 2\Android Activity 3\Android Activity 3.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Android Course\Android Module 2\Android Module 2.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\C# Backend\C# Backend Module 1\C# Backend Activity 1\C# Backend Activity 1.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\C# Backend\C# Backend Module 1\C# Backend Module 1.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\C# Backend\C# Backend Module 2\C# Backend Activity 3\C# Backend Activity 3.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\C# Backend\C# Backend Module 2\C# Backend Module 2.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\C# Backend\C# Backend.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Cloud Security\Cloud Security Module 1\Cloud Security Activity 1\Cloud Security Activity 1.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Cloud Security\Cloud Security Module 1\Cloud Security Module 1.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Cloud Security\Cloud Security Module 2\Cloud Security Activity 3\Cloud Security Activity 3.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Cloud Security\Cloud Security Module 2\Cloud Security Module 2.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Cloud Security\Cloud Security.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Cybersecurity\Cybersecurity Module 1\Cybersecurity Activity 1\Cybersecurity Activity 1.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Cybersecurity\Cybersecurity Module 1\Cybersecurity Module 1.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Cybersecurity\Cybersecurity Module 2\Cybersecurity Activity 3\Cybersecurity Activity 3.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Cybersecurity\Cybersecurity Module 2\Cybersecurity Module 2.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Cybersecurity\Cybersecurity.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\e255df13-edef-4a5f-947f-f8a16f4d2010\Android Course\Android Module 1\Android Activity 1\Index - Lms.Web.pdf" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\f5e9188e-dd95-464d-9875-4f57ba04333b\Digitization of the Legal Sector\Digitization of the Legal Sector Module 2\Digitization of the Legal Sector Activity 3\Index - Lms.Web.pdf" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Web Design\Web Design Module 1\Web Design Activity 1\Web Design Activity 1.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Web Design\Web Design Module 1\Web Design Module 1.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Web Design\Web Design Module 2\Web Design Activity 3\Web Design Activity 3.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Web Design\Web Design Module 2\Web Design Module 2.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Web Design\Web Design.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\301f2366-ba82-4727-8e0a-a0d2a4b9490e\Digitization of the Legal Sector\Digitization of the Legal Sector Module 1\Digitization of the Legal Sector Activity 2\Cloud Security Activity 2.pdf" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\301f2366-ba82-4727-8e0a-a0d2a4b9490e\Digitization of the Legal Sector\Digitization of the Legal Sector Module 1\Digitization of the Legal Sector Activity 2\Web Design Activity 1.pdf" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\301f2366-ba82-4727-8e0a-a0d2a4b9490e\Digitization of the Legal Sector\Digitization of the Legal Sector Module 2\Digitization of the Legal Sector Activity 4\Cloud Security Activity 2.pdf" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\8c67b64b-b08d-4c70-9df9-1f03914371af\Web Design\Web Design Module 1\Web Design Activity 2\Cloud Security Activity 2.pdf" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\8c67b64b-b08d-4c70-9df9-1f03914371af\Web Design\Web Design Module 2\Web Design Activity 3\Cloud Security Activity 2.pdf" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Big Data\Big Data Module 1\Big Data Activity 1\Big Data Activity 1.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Big Data\Big Data Module 1\Big Data Module 1.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Big Data\Big Data Module 2\Big Data Activity 3\Big Data Activity 3.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Big Data\Big Data Module 2\Big Data Module 2.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Big Data\Big Data.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Computer Security Analyst\Computer Security Analyst Module 1\Computer Security Analyst Activity 1\Computer Security Analyst Activity 1.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Computer Security Analyst\Computer Security Analyst Module 1\Computer Security Analyst Module 1.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Computer Security Analyst\Computer Security Analyst Module 2\Computer Security Analyst Activity 3\Computer Security Analyst Activity 3.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Computer Security Analyst\Computer Security Analyst Module 2\Computer Security Analyst Module 2.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Computer Security Analyst\Computer Security Analyst.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Digitization of the Legal Sector\Digitization of the Legal Sector Module 1\Digitization of the Legal Sector Activity 1\Digitization of the Legal Sector Activity 1.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Digitization of the Legal Sector\Digitization of the Legal Sector Module 1\Digitization of the Legal Sector Module 1.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Digitization of the Legal Sector\Digitization of the Legal Sector Module 2\Digitization of the Legal Sector Activity 3\Digitization of the Legal Sector Activity 3.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Digitization of the Legal Sector\Digitization of the Legal Sector Module 2\Digitization of the Legal Sector Module 2.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Digitization of the Legal Sector\Digitization of the Legal Sector.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Self-Paced Programs\Self-Paced Programs Module 1\Self-Paced Programs Activity 1\Self-Paced Programs Activity 1.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Self-Paced Programs\Self-Paced Programs Module 1\Self-Paced Programs Module 1.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Self-Paced Programs\Self-Paced Programs Module 2\Self-Paced Programs Activity 3\Self-Paced Programs Activity 3.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Self-Paced Programs\Self-Paced Programs Module 2\Self-Paced Programs Module 2.doc" />
+    <_ContentIncludedByDefault Remove="wwwroot\Uploads\Self-Paced Programs\Self-Paced Programs.doc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Uploads" />
+    <Folder Include="wwwroot\Uploads\Android Course\Android Module 1\Android Activity 1" />
+    <Folder Include="wwwroot\Uploads\Android Course\Android Module 2\Android Activity 3" />
+    <Folder Include="wwwroot\Uploads\Big Data\Big Data Module 1\Big Data Activity 1" />
+    <Folder Include="wwwroot\Uploads\Big Data\Big Data Module 2\Big Data Activity 3" />
+    <Folder Include="wwwroot\Uploads\C# Backend\C# Backend Module 1\C# Backend Activity 1" />
+    <Folder Include="wwwroot\Uploads\C# Backend\C# Backend Module 2\C# Backend Activity 3" />
+    <Folder Include="wwwroot\Uploads\Cloud Security\Cloud Security Module 1\Cloud Security Activity 1" />
+    <Folder Include="wwwroot\Uploads\Cloud Security\Cloud Security Module 2\Cloud Security Activity 3" />
+    <Folder Include="wwwroot\Uploads\Computer Security Analyst\Computer Security Analyst Module 1\Computer Security Analyst Activity 1" />
+    <Folder Include="wwwroot\Uploads\Computer Security Analyst\Computer Security Analyst Module 2\Computer Security Analyst Activity 3" />
+    <Folder Include="wwwroot\Uploads\Cybersecurity\Cybersecurity Module 1\Cybersecurity Activity 1" />
+    <Folder Include="wwwroot\Uploads\Cybersecurity\Cybersecurity Module 2\Cybersecurity Activity 3" />
+    <Folder Include="wwwroot\Uploads\Digitization of the Legal Sector\Digitization of the Legal Sector Module 1\Digitization of the Legal Sector Activity 1" />
+    <Folder Include="wwwroot\Uploads\Digitization of the Legal Sector\Digitization of the Legal Sector Module 2\Digitization of the Legal Sector Activity 3" />
+    <Folder Include="wwwroot\Uploads\Embedded Dev\Embedded Dev Module 1\Embedded Dev Activity 1" />
+    <Folder Include="wwwroot\Uploads\Embedded Dev\Embedded Dev Module 2\Embedded Dev Activity 3" />
+    <Folder Include="wwwroot\Uploads\Self-Paced Programs\Self-Paced Programs Module 1\Self-Paced Programs Activity 1" />
+    <Folder Include="wwwroot\Uploads\Self-Paced Programs\Self-Paced Programs Module 2\Self-Paced Programs Activity 3" />
+    <Folder Include="wwwroot\Uploads\Web Design\Web Design Module 1\Web Design Activity 1" />
+    <Folder Include="wwwroot\Uploads\Web Design\Web Design Module 2\Web Design Activity 3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Students\GetActivityDetailsPartial.cshtml" />
+    <None Include="Views\Students\GetModuleDetailsPartial.cshtml" />
+    <None Include="Views\Students\GetModuleListPartial.cshtml" />
+    <None Include="Views\Students\Index.cshtml" />
+    <None Include="Views\Students\PdfToDownloadPartial.cshtml" />
+    <None Include="Views\Students\_CourseDetailsPartial.cshtml" />
+    <None Include="Views\Students\_CourseModulePartial.cshtml" />
+    <None Include="Views\Students\_CourseStudentsPartial.cshtml" />
   </ItemGroup>
 
 </Project>

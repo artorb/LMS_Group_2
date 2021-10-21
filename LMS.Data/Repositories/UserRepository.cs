@@ -23,7 +23,7 @@ namespace Lms.Data.Repositories
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
-
+        
         public async Task<ApplicationUser> GetIncludeTest(string id, Func<IQueryable<ApplicationUser>, IIncludableQueryable<ApplicationUser, object>> includes = null)
         {
             IQueryable<ApplicationUser> queryable = _context.Set<ApplicationUser>();
