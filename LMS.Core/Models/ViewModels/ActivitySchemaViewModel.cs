@@ -11,7 +11,6 @@ namespace Lms.Core.Models.ViewModels
         public string Name { get; set; }
         public string ActivityTypeName { get; set; }
         public bool DeadLine { get; set; }
-
-        //public bool Submitted { get; set; } //To be added if the code for handling hand-ins exists
+        public bool Submitted { get; set; }
     }
 }

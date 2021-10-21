@@ -7,19 +7,30 @@
         <div class="card">
             <div class="card-body text-center">
                 <h5 class="card-title">@daySchema.WeekDay</h5>
+                <hr />
                 @foreach (var activity in daySchema.ActivitySchemas)
                 {
+
                     <a class="card-text">@activity.Name</a>
+                    <br />
                     <a class="card-text">@activity.ActivityTypeName</a>
+                    <br />
                     @if (activity.DeadLine)
                     {
-                        <a class="card-text">
-                            <span class="badge badge-danger">Not Uploaded</span>
-                        </a>
+                        if (activity.Submitted)
+                        {
+                            <a class="card-text">
+                                <span class="badge badge-success">Uploaded</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="card-text">
+                                <span class="badge badge-danger">Not Uploaded</span>
+                            </a>
+                        }
                     }
-                    <br />
-                    <p class="card-text">Start time: </p>
-                    <br />
+                    <hr />
                 }
             </div>
         </div>

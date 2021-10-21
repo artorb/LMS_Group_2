@@ -33,7 +33,7 @@ namespace Lms.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var schema = await VeckoSchema();
+            var schema = await WeekSchema();
             return View(schema);
         }
 
@@ -153,28 +153,22 @@ namespace Lms.Web.Controllers
             return PartialView("GetActivityDetailsPartial", model);
         }
 
-        public async Task<List<DaySchemaViewModel>> VeckoSchema()
+        public async Task<List<DaySchemaViewModel>> WeekSchema()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
             var courseId = UserLoggedIn.CourseId;
 
-            var modules = await _context.Modules
-                .Include(m => m.Activities).ThenInclude(a => a.ActivityType)
-                .Where(m => m.CourseId == courseId && m.EndDate > DateTime.Today && m.StartDate <= DateTime.Today.AddDays(7))
-                .OrderBy(m => m.StartDate).ToListAsync();
+            var activities = await _unitOfWork.ModuleRepository.GetSortedListOfWeeklyActivitiesAsync((int)courseId);
 
-            List<Activity> activities = new();
-            foreach (var module in modules)
-            {
-                var act = module.Activities
-                    .Where(a => a.EndDate > DateTime.Today && a.StartDate <= DateTime.Today.AddDays(7))
-                    .OrderBy(a => a.StartDate).ToList();
-                activities.AddRange(act);
-            }
-            activities = activities.OrderBy(a => a.StartDate).ToList();
+            List<DaySchemaViewModel> weekSchema = await CreateWeeklySchema(UserLoggedIn, activities);
+
+            return weekSchema;
+        }
+
+        private async Task<List<DaySchemaViewModel>> CreateWeeklySchema(ApplicationUser UserLoggedIn, IEnumerable<Activity> activities)
+        {
             List<DaySchemaViewModel> weekSchema = new();
-
             for (int i = 0; i < 7; i++)
             {
                 var date = DateTime.Today.AddDays(i);
@@ -187,18 +181,7 @@ namespace Lms.Web.Controllers
                     ActivitySchemas = new List<ActivitySchemaViewModel>()
                 };
 
-                //Test för Dealine hantering
-                //if (date.DayOfWeek.ToString()=="Friday")
-                //{
-                //    var activitySchema = new ActivitySchemaViewModel()
-                //    {
-                //        Name = "TeST",
-                //        ActivityTypeName = "Lecture",
-                //        DeadLine = true
-                //    };
-
-                //    daySchema.ActivitySchemas.Add(activitySchema);
-                //}
+                TestActivityToSchema(date, daySchema);//Enbart för att testa HTML koden
 
                 foreach (var activity in activities)
                 {
@@ -208,8 +191,13 @@ namespace Lms.Web.Controllers
                         {
                             Name = activity.Name,
                             ActivityTypeName = activity.ActivityType.TypeName,
-                            DeadLine = activity.Deadline == date ? true : false
+                            DeadLine = activity.Deadline == date
                         };
+
+                        if (activitySchema.DeadLine)
+                        {
+                            activitySchema.Submitted = await _unitOfWork.DocumentRepository.HasUserSubmittedAssignment(UserLoggedIn, activity);
+                        }
 
                         daySchema.ActivitySchemas.Add(activitySchema);
                     }
@@ -218,6 +206,23 @@ namespace Lms.Web.Controllers
             }
 
             return weekSchema;
+        }
+
+        private static void TestActivityToSchema(DateTime date, DaySchemaViewModel daySchema)
+        {
+            //Test för Dealine hantering
+            if (date.DayOfWeek.ToString() == "Friday")
+            {
+                var activitySchema = new ActivitySchemaViewModel()
+                {
+                    Name = "TeST",
+                    ActivityTypeName = "Lecture",
+                    DeadLine = true,
+                    Submitted = true
+                };
+
+                daySchema.ActivitySchemas.Add(activitySchema);
+            }
         }
     }
 }

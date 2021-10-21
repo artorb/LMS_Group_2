@@ -20,15 +20,18 @@ namespace Lms.Web.Service
         {
             var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
             var documents = await _unitOfWork.DocumentRepository.GetWithIncludesAsync(a => a.Include(x => x.Activity));
-            
+
             var documentForActivity = documents.FirstOrDefault(a => a.Uploader == UserLoggedIn.Email && a.Activity == clickedActivity);
+
+
             if (documentForActivity == null)
                 return "Not uploaded";
+
             if (documentForActivity.Activity.Name == clickedActivity.Name)
             {
                 if (documentForActivity.UploadDate > clickedActivity.Deadline)
                     return "Delayed";
-                if (documentForActivity.UploadDate < clickedActivity.Deadline)
+                if (documentForActivity.UploadDate <= clickedActivity.Deadline)
                     return "Uploaded";
             }
 
