@@ -10,6 +10,8 @@ using Lms.Data.Data;
 using Lms.Data.Repositories;
 using Lms.Core.Repositories;
 using Lms.Web.Extensions;
+using System.Security.Claims;
+using Lms.Core.Models.ViewModels;
 
 namespace Lms.Web.Controllers
 {
@@ -175,5 +177,27 @@ namespace Lms.Web.Controllers
         {
             return _context.Courses.Any(e => e.Id == id);
         }
+
+
+        public async Task<IActionResult> CourseDetails()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
+            var courseId =
+                UserLoggedIn.CourseId;
+            var course = await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, d => d.Documents.Where(m => m.ApplicationUser == null));
+
+            var model = new StudentCourseViewModel()
+            {
+                CourseName = course.Name,
+                CourseDescription = course.Description,
+                CourseStartDate = course.StartDate,
+                CourseEndDate = course.EndDate,
+                Documents = course.Documents
+            };
+            return PartialView("_CourseDetailsPartial", model);
+        }
+
     }
 }

@@ -34,7 +34,7 @@ namespace Lms.Web.Controllers
             {
                 var viewModel = new TeacherLoginViewModel()
                 {
-                    CourseName = course.Name,
+                    Course = course,
                     ActiveModuleName = course.Modules.ElementAt(0).Name,//Fix to use StartDate and EndDate, and add null-handler
                     NextModuleName = course.Modules.ElementAt(1).Name,//Fix to use StartDate and EndDate, and add null-handler
                     NumberOfParticipants = course.Users.Count
@@ -43,6 +43,8 @@ namespace Lms.Web.Controllers
             }
             return View(viewModels);
         }
+
+
 
         public async Task<IActionResult> Search(string courseName)
         {
@@ -55,7 +57,7 @@ namespace Lms.Web.Controllers
             {
                 var viewModel = new TeacherLoginViewModel()
                 {
-                    CourseName = course.Name,
+                    Course = course,
                     ActiveModuleName = course.Modules.ElementAt(0).Name,
                     NextModuleName = course.Modules.ElementAt(1).Name,
                     NumberOfParticipants = course.Users.Count
@@ -65,5 +67,56 @@ namespace Lms.Web.Controllers
 
             return View(nameof(Index), viewModels);
         }
+
+
+
+        public async Task<IActionResult> IndexCourseForTeacher(int id)
+        {
+            var model = new StudentsAndTeachersIndexViewModel()
+            {
+                idFromCourse = id
+            };
+            return View(model);
+        }
+
+        /*
+        public async Task<IActionResult> CourseDetails(int idFromCourse)
+        {
+            var course = await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)idFromCourse, d => d.Documents.Where(m => m.ApplicationUser == null));
+
+            var model = new StudentCourseViewModel()
+            {
+                CourseName = course.Name,
+                CourseDescription = course.Description,
+                CourseStartDate = course.StartDate,
+                CourseEndDate = course.EndDate,
+                Documents = course.Documents
+            };
+            //return PartialView("~/Views/Students/_CourseDetailsPartial.cshtml", model);
+            return RedirectToAction("Students", "CourseDetails", new { idFromCourse = course.Id });
+        }
+        */
+
+        public async Task<IActionResult> CourseDetails(int idFromCourse)
+        {           
+            return RedirectToAction("Students", "CourseDetails", new { idFromCourse = idFromCourse });
+        }
+
+     
+        public async Task<IActionResult> CourseStudentsDetails(int idFromCourse)
+        {             
+            return RedirectToAction("Students", "CourseStudentsDetails", new { idFromCourse = idFromCourse });    
+        }
+
+
+       
+        public async Task<IActionResult> ModuleList(int idFromCourse)
+        {
+            return RedirectToAction("Students", "ModuleList", new { idFromCourse = idFromCourse });      
+        }
+
+
+
+
     }
 }

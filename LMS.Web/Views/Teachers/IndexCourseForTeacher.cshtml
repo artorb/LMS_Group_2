@@ -1,0 +1,45 @@
+﻿@model Lms.Core.Models.ViewModels.StudentsAndTeachersIndexViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+@if (User.IsInRole("Student"))
+{
+    <h1>Welcome Student!</h1>
+}
+
+@if (User.IsInRole("Teacher"))
+{
+    <h1>Welcome Teacher!</h1>
+}
+
+
+
+<a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Students" asp-action="CourseDetails" asp-route-idFromCourse=@Model.idFromCourse
+   data-ajax="true"
+   data-ajax-method="GET"
+   data-ajax-update="#getCourseWithAjax"
+   data-ajax-mode="replace">
+    Course information
+</a>
+
+
+<a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Students" asp-action="CourseStudentsDetails" asp-route-idFromCourse=@Model.idFromCourse
+   data-ajax="true"
+   data-ajax-method="GET"
+   data-ajax-update="#getCourseWithAjax"
+   data-ajax-mode="replace">
+    Participants
+</a>
+
+
+<a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Students" asp-action="ModuleList" asp-route-idFromCourse=@Model.idFromCourse
+   data-ajax="true"
+   data-ajax-method="GET"
+   data-ajax-update="#getCourseWithAjax"
+   data-ajax-mode="replace">Module information</a>
+
+
+<div id="getCourseWithAjax"></div>
+
+<br />

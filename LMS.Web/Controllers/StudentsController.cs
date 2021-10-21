@@ -27,14 +27,17 @@ namespace Lms.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> CourseDetails()
+        public async Task<IActionResult> CourseDetails(int? idFromCourse)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
+                var courseId =  UserLoggedIn.CourseId;
+                var course = (idFromCourse == null) ?       
 
-            var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
-            var courseId =
-                UserLoggedIn.CourseId; 
-            var course = await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, d => d.Documents.Where(m=>m.ApplicationUser==null));
+            //Student
+            await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, d => d.Documents.Where(m => m.ApplicationUser == null)) :    
+            //Teacher
+            await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)idFromCourse, d => d.Documents.Where(m => m.ApplicationUser == null));  
 
             var model = new StudentCourseViewModel()
             {
@@ -47,44 +50,40 @@ namespace Lms.Web.Controllers
             return PartialView("_CourseDetailsPartial", model);
         }
 
-        // public async Task<IActionResult> ModuleDetails()
-        // {
-        //     var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-        //
-        //     var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
-        //     var courseId =
-        //         UserLoggedIn.CourseId; //Can throw error if you are already logged in when the application starts
-        //     var course = await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, d => d.Documents);
-        //     return null;
-        // }
 
 
-        public async Task<IActionResult> CourseStudentsDetails()
+        public async Task<IActionResult> CourseStudentsDetails(int? idFromCourse)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
             var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
-            var courseId = UserLoggedIn.CourseId; 
-            var course = await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, d => d.Users);
+            var courseId = UserLoggedIn.CourseId;
 
-            var models = (from user in course.Users
-                //where user.Id != userId
+            var course = (idFromCourse == null) ?
+                //Student
+            await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, d => d.Users) :
+            //Teacher
+            await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)idFromCourse, d => d.Users);
+
+            var models = (from user in course.Users            
                 select new StudentCommonCourseViewModel { StudentName = user.Name, Email = user.Email }).ToList();
             return PartialView("_CourseStudentsPartial", models);
         }
 
 
-        public async Task<IActionResult> ModuleList()
+        public async Task<IActionResult> ModuleList(int? idFromCourse)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var UserLoggedIn =
-                await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
-            var courseId =
-                UserLoggedIn.CourseId; 
+            var UserLoggedIn =  await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
+            var courseId = UserLoggedIn.CourseId;
 
-            var course = _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, m => m.Modules).Result;
+            var course = (idFromCourse == null) ?
+            //Student
+            _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, m => m.Modules).Result:
+            //Teacher
+            _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)idFromCourse, m => m.Modules).Result;
+
+
             var modulesToCourse = course.Modules;
-
             return PartialView("GetModuleListPartial", modulesToCourse);
         }
 
@@ -106,18 +105,41 @@ namespace Lms.Web.Controllers
                 }
             }
 
-            var model = new StudentModuleViewModel()
-            {
-                ModuleName = module.Name,
-                ModuleDescription = module.Description,
-                ModuleStartDate = module.StartDate,
-                ModuleEndDate = module.EndDate,
-                Documents = module.Documents,
-                Activities = module.Activities,
-                Status = _activityService.GetStatusForStudentModule(module, userId).Result
-            };
 
-            return PartialView("GetModuleDetailsPartial", model);
+            if (User.IsInRole("Student"))
+            {
+                var model = new StudentModuleViewModel()
+                {
+                    ModuleName = module.Name,
+                    ModuleDescription = module.Description,
+                    ModuleStartDate = module.StartDate,
+                    ModuleEndDate = module.EndDate,
+                    Documents = module.Documents,
+                    Activities = module.Activities,
+                    Status = _activityService.GetStatusForStudentModule(module, userId).Result
+                };
+                return PartialView("GetModuleDetailsPartial", model);
+            }
+
+           else
+            {
+                var model = new StudentModuleViewModel()
+                {
+                    ModuleName = module.Name,
+                    ModuleDescription = module.Description,
+                    ModuleStartDate = module.StartDate,
+                    ModuleEndDate = module.EndDate,
+                    Documents = module.Documents,
+                    Activities = module.Activities,
+                    Status = "Uploaded"
+                };
+                return PartialView("GetModuleDetailsPartial", model);
+            }
+
+
+
+
+            //return PartialView("GetModuleDetailsPartial", model);
         }
 
         public IActionResult ActivityDetail(int Id)
