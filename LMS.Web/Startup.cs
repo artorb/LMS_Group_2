@@ -64,6 +64,8 @@ namespace Lms.Web
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             });
+
+            services.AddScoped<LitteratureSelectListService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

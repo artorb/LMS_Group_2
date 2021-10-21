@@ -1,4 +1,5 @@
-﻿@model Lms.Core.Models.ViewModels.LiteratureViewModel
+﻿@model Lms.Core.Models.ViewModels.LiteratureCreateViewModel
+@inject Lms.Web.Service.LitteratureSelectListService service
 
 @{
     ViewData["Title"] = "Create";
@@ -9,7 +10,7 @@
 <h4>Literature</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -23,19 +24,152 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Subject" class="control-label"></label>
-                <input asp-for="Subject" class="form-control" />
-                <span asp-validation-for="Subject" class="text-danger"></span>
+                <label asp-for="SubjectId" class="control-label"></label>
+                <select asp-for="SubjectId" asp-items="@await service.GetSubjectsToSelectListItem()" class="form-control">
+                    <option selected="selected" value="">Please Select</option>
+                </select>
+                <span asp-validation-for="SubjectId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Level" class="control-label"></label>
-                <input asp-for="Level" class="form-control" />
-                <span asp-validation-for="Level" class="text-danger"></span>
+                <label asp-for="LevelId" class="control-label"></label>
+                <select asp-for="LevelId" asp-items="@await service.GetLevelsToSelectListItem()" class="form-control">
+                    <option selected="selected" value="">Please Select</option>
+                </select>
+                <span asp-validation-for="LevelId" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
+            <div id="authorFormGroup">
+                <label asp-for="Authors" class="text-info"></label>
+                <div class="form-row border border-light pt-1 mb-2">
+                    <div class="form-group col-md-4">
+                        <label asp-for="Authors.ElementAt(0).FirstName" class="control-label"></label>
+                        <input asp-for="Authors.ElementAt(0).FirstName" class="form-control">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="Authors.ElementAt(0).LastName" class="control-label"></label>
+                        <input asp-for="Authors.ElementAt(0).LastName" class="form-control">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="Authors.ElementAt(0).BirthDay" class="control-label"></label>
+                        <input asp-for="Authors.ElementAt(0).BirthDay" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn" id="addRowBtn"><span class="text-success"><i class="fa fa-plus-circle"></i></span></button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
-            </div>*@
+            </div>
         </form>
+        @*<form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubjectId" class="control-label"></label>
+                <select asp-for="SubjectId" asp-items="@await service.GetSubjectsToSelectListItem()" class="form-control">
+                    <option selected="selected" value="">Please Select</option>
+                </select>
+                <span asp-validation-for="SubjectId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LevelId" class="control-label"></label>
+                <select asp-for="LevelId" asp-items="@await service.GetLevelsToSelectListItem()" class="form-control">
+                    <option selected="selected" value="">Please Select</option>
+                </select>
+                <span asp-validation-for="LevelId" class="text-danger"></span>
+            </div>
+            <div id="authorFormGroup">
+                @for (int i = 0; i < @Model.Authors.Count; i++) <!------------------------------------------------------ Null pointer exeception -->
+                {
+                    <label asp-for="@Model.Authors." class="text-info"></label>
+                    <div class="form-row border border-light pt-1 mb-2">
+                        <div class="form-group col-md-4">
+                            <label asp-for="Authors." class="control-label"></label>
+                            <input asp-for="@Model.Authors.ElementAt(i).FirstName" class="form-control">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="@Model.Authors.ElementAt(i).LastName" class="control-label"></label>
+                            <input asp-for="@Model.Authors.ElementAt(i).LastName" class="form-control">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label asp-for="@Model.Authors.ElementAt(i).BirthDay" class="control-label"></label>
+                            <input asp-for="@Model.Authors.ElementAt(i).BirthDay" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn" id="addRowBtn"><i class="fa fa-plus-circle"></i></button>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>*@
+        @*<form asp-action="Create">
+            @for (int i = 0; i < Model.Count; i++) <!------------------------------------------------------ Null pointer exeception -->
+            {
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="@Model[i].Title" class="control-label"></label>
+                    <input asp-for="@Model[i].Title" class="form-control" />
+                    <span asp-validation-for="@Model[i].Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model[i].Description" class="control-label"></label>
+                    <input asp-for="@Model[i].Description" class="form-control" />
+                    <span asp-validation-for="@Model[i].Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model[i].SubjectId" class="control-label"></label>
+                    <select asp-for="@Model[i].SubjectId" asp-items="@await service.GetSubjectsToSelectListItem()" class="form-control">
+                        <option selected="selected" value="">Please Select</option>
+                    </select>
+                    <span asp-validation-for="@Model[i].SubjectId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model[i].LevelId" class="control-label"></label>
+                    <select asp-for="@Model[i].LevelId" asp-items="@await service.GetLevelsToSelectListItem()" class="form-control">
+                        <option selected="selected" value="">Please Select</option>
+                    </select>
+                    <span asp-validation-for="@Model[i].LevelId" class="text-danger"></span>
+                </div>
+                <div id="authorFormGroup">
+                    @for (int j = 0; j < Model[i].Authors.Count; j++)
+                    {
+                        <label asp-for="@Model[i].Authors" class="text-info"></label>
+                        <div class="form-row border border-light pt-1 mb-2">
+                            <div class="form-group col-md-4">
+                                <label asp-for="@Model[i].Authors.ElementAt(j).FirstName" class="control-label"></label>
+                                <input asp-for="@Model[i].Authors.ElementAt(j).FirstName" class="form-control">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label asp-for="@Model[i].Authors.ElementAt(j).LastName" class="control-label"></label>
+                                <input asp-for="@Model[i].Authors.ElementAt(j).LastName" class="form-control">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label asp-for="@Model[i].Authors.ElementAt(j).BirthDay" class="control-label"></label>
+                                <input asp-for="@Model[i].Authors.ElementAt(j).BirthDay" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn" id="addRowBtn"><i class="fa fa-plus-circle"></i></button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>*@
     </div>
 </div>
 

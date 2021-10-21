@@ -8,6 +8,7 @@ namespace LmsApi.Core.Interfaces
         IGenericRepository<Author> AuthorsRepo { get; }
         IGenericRepository<Literature> LiteraturesRepo { get; }
         IGenericRepository<Subject> SubjectsRepo { get; }
+        IGenericRepository<Level> LevelsRepo { get; }
         Task<bool> CompleteAsync();
     }
 }

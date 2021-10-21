@@ -15,6 +15,14 @@ namespace LmsApi.Core.Mappers
             // When updating there should not be able to change includes, except authors or id to the others.
             CreateMap<LiteratureForCreateUpdateDto, Literature>();
 
+            CreateMap<Subject, SelectListItemDto>()
+                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Name));
+
+            CreateMap<Level, SelectListItemDto>()
+                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Name));
+
             CreateMap<Literature, LiteratureForCreateUpdateDto>();
                 //.ForMember(dest => dest.Subject.Name);
 

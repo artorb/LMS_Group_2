@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace Lms.Web.Controllers
@@ -32,6 +34,12 @@ namespace Lms.Web.Controllers
                 {
                     literatures = await DeserializeAsync<IEnumerable<LiteratureViewModel>>(responseStream);
                 }
+            }
+            else
+            {
+                literatures = Enumerable.Empty<LiteratureViewModel>();
+
+                ModelState.AddModelError(string.Empty, $"Server error at {nameof(Index)}. Status code: {responseMsg.StatusCode}.");
             }
             return View(literatures);
         }
@@ -64,27 +72,28 @@ namespace Lms.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(LiteratureViewModel model)
+        public async Task<IActionResult> Create(LiteratureCreateViewModel viewModel)
         {
             var client = clientFactory.CreateClient("LiteratureClient");
 
             var requestMsg = new HttpRequestMessage(HttpMethod.Post, "literatures");
 
-            //var serializedModel = Serialize
+            requestMsg.Content = JsonContent.Create(viewModel);
 
             var responseMsg = await client.SendAsync(requestMsg);
             if (responseMsg.IsSuccessStatusCode)
             {
-                using (var responseStream = await responseMsg.Content.ReadAsStreamAsync())
-                {
-                    return RedirectToAction(nameof(Index));
-                }
+                return RedirectToAction(nameof(Index));
             }
-            return View(model);
+            else
+            {
+                ModelState.AddModelError(string.Empty, $"Server error at {nameof(Create)}. Status code: {responseMsg.StatusCode}.");
+            }
+            return View(viewModel);
         }
 
         // Source: https://newbedev.com/can-json-net-serialize-deserialize-to-from-a-stream
-        private static async Task<T> DeserializeAsync<T>(Stream stream)
+        public static async Task<T> DeserializeAsync<T>(Stream stream)
         {
             using (var streamReader = new StreamReader(stream))
             {
@@ -96,8 +105,9 @@ namespace Lms.Web.Controllers
             }
         }
 
-        private static async Task Serialize<T>(T entity, Stream stream)
+        private static async Task SerializeAsync(object entity)
         {
+            MemoryStream stream = new MemoryStream();
             using (var streamWriter = new StreamWriter(stream))
             {
                 using (var jsonWriter = new JsonTextWriter(streamWriter))

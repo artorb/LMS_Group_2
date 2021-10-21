@@ -85,7 +85,8 @@ namespace LmsApi.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure: {ex}");
+                return BadRequest("This title already exist...");
+                //return StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure: {ex}");
             }
             return BadRequest(); // E.g. if the CompleteAsync fails...
         }
@@ -130,7 +131,7 @@ namespace LmsApi.Api.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure...");
             }
             return BadRequest("Failed to delete the literature");
         }

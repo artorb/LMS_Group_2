@@ -13,6 +13,7 @@ namespace LmsApi.Data.Services
         private readonly IGenericRepository<Author> authorsRepo;
         private readonly IGenericRepository<Literature> literaturesRepo;
         private readonly IGenericRepository<Subject> subjectsRepo;
+        private readonly IGenericRepository<Level> levelsRepo;
 
         public UnitOfWork(LmsApiDbContext context)
         {
@@ -28,6 +29,9 @@ namespace LmsApi.Data.Services
 
         public IGenericRepository<Subject> SubjectsRepo => 
             subjectsRepo ?? new GenericRepository<Subject>(context);
+
+        public IGenericRepository<Level> LevelsRepo =>
+            levelsRepo ?? new GenericRepository<Level>(context);
 
         public async Task<bool> CompleteAsync() => 
             await context.SaveChangesAsync() > 0;
