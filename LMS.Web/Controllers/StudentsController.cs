@@ -84,7 +84,21 @@ namespace Lms.Web.Controllers
                 {
                     WeekDay = date.DayOfWeek.ToString(),
                     ActivitySchemas = new List<ActivitySchemaViewModel>()
-            };
+                };
+
+                //Test för Dealine hantering
+                //if (date.DayOfWeek.ToString()=="Friday")
+                //{
+                //    var activitySchema = new ActivitySchemaViewModel()
+                //    {
+                //        Name = "TeST",
+                //        ActivityTypeName = "Lecture",
+                //        DeadLine = true
+                //    };
+
+                //    daySchema.ActivitySchemas.Add(activitySchema);
+                //}
+
                 foreach (var activity in activities)
                 {
                     if (activity.StartDate <= date && activity.EndDate >= date)
