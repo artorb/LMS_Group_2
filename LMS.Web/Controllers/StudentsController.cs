@@ -12,12 +12,8 @@ using Lms.Core.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using System.Security.Claims;
 using Lms.Core.Models.ViewModels;
-using Lms.Core.Repositories;
-using Lms.Data.Data;
 using Lms.Web.Service;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lms.Web.Controllers
@@ -47,8 +43,8 @@ namespace Lms.Web.Controllers
 
             var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
             var courseId =
-                UserLoggedIn.CourseId; 
-            var course = await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, d => d.Documents.Where(m=>m.ApplicationUser==null));
+                UserLoggedIn.CourseId;
+            var course = await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, d => d.Documents.Where(m => m.ApplicationUser == null));
 
             var model = new StudentCourseViewModel()
             {
@@ -78,12 +74,12 @@ namespace Lms.Web.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
-            var courseId = UserLoggedIn.CourseId; 
+            var courseId = UserLoggedIn.CourseId;
             var course = await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, d => d.Users);
 
             var models = (from user in course.Users
-                where user.Id != userId
-                select new StudentCommonCourseViewModel { StudentName = user.Name, Email = user.Email }).ToList();
+                          where user.Id != userId
+                          select new StudentCommonCourseViewModel { StudentName = user.Name, Email = user.Email }).ToList();
             return PartialView("_CourseStudentsPartial", models);
         }
 
@@ -94,7 +90,7 @@ namespace Lms.Web.Controllers
             var UserLoggedIn =
                 await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
             var courseId =
-                UserLoggedIn.CourseId; 
+                UserLoggedIn.CourseId;
 
             var course = _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, m => m.Modules).Result;
             var modulesToCourse = course.Modules;
@@ -139,7 +135,7 @@ namespace Lms.Web.Controllers
             var activity = _unitOfWork.ActivityRepository
                 .GetWithIncludesIdAsync((int)Id, d => d.Documents, a => a.ActivityType).Result;
             if (activity == null) return NotFound();
-            
+
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             var model = new StudentActivityViewModel()
@@ -176,7 +172,7 @@ namespace Lms.Web.Controllers
                     .OrderBy(a => a.StartDate).ToList();
                 activities.AddRange(act);
             }
-
+            activities = activities.OrderBy(a => a.StartDate).ToList();
             List<DaySchemaViewModel> weekSchema = new();
 
             for (int i = 0; i < 7; i++)
