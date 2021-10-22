@@ -32,16 +32,31 @@ namespace Lms.Web.Controllers
 
             foreach (var course in courses)
             {
+                (string activeModuleName, string nextModuleName) = GetCurrentModules(course);
                 var viewModel = new TeacherLoginViewModel()
                 {
                     CourseName = course.Name,
-                    ActiveModuleName = course.Modules.ElementAt(0).Name,//Fix to use StartDate and EndDate, and add null-handler
-                    NextModuleName = course.Modules.ElementAt(1).Name,//Fix to use StartDate and EndDate, and add null-handler
+                    ActiveModuleName = activeModuleName,
+                    NextModuleName = nextModuleName,
                     NumberOfParticipants = course.Users.Count
                 };
                 viewModels.Add(viewModel);
             }
             return View(viewModels);
+        }
+
+        private static (string activeModuleName, string nextModuleName) GetCurrentModules(Course course)
+        {
+            var activeModule = course.Modules
+                .Where(m => m.StartDate < DateTime.Today && m.EndDate >= DateTime.Today)
+                .FirstOrDefault();
+            var nextModule = course.Modules
+                .Where(m => m.StartDate.Date >= activeModule.EndDate.Date)
+                .FirstOrDefault();
+
+            var activeModuleName = activeModule != null ? activeModule.Name : "No more Modules";
+            var nextModuleName = nextModule != null ? nextModule.Name : "No more Modules";
+            return (activeModuleName, nextModuleName);
         }
 
         public async Task<IActionResult> Search(string courseName)
