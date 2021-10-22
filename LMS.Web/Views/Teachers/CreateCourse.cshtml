@@ -1,8 +1,4 @@
-﻿@model Lms.Core.Entities.Course
-
-@{
-    ViewData["Title"] = "Create";
-}
+﻿@model Lms.Core.Models.ViewModels.NewCourseViewModel
 
 <h1>Create</h1>
 
@@ -10,7 +6,7 @@
 <hr/>
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="CreateCourse">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -32,28 +28,41 @@
                 <input asp-for="EndDate" class="form-control"/>
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary"/>
-                <a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Modules" asp-action="Create"
-                   data-ajax="true"
-                   data-ajax-method="GET"
-                   data-ajax-update="#savedModule"
-                   data-ajax-mode="replace">
-                    Create
-                </a>
+            <br>
+            <div id="savedModule">
+                @* @foreach (var module in Model.Modules) *@
+                @* { *@
+                @*     if (module != null) *@
+                @*     { *@
+                @*         <div> *@
+                @*             <label class="control-label">@module.Name</label> *@
+                @*         </div> *@
+                @*     } *@
+                @* } *@
+            </div>
+             <a href="#createModule" class="btn btn-success" data-toggle="modal"><i class="fa fa-cog" aria-hidden="true"></i>Update</a>
+            <br>
+            <div id="createModule" class="modal">
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary"/>
+                    <a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Modules" asp-action="Create"
+                       data-ajax="true"
+                       data-ajax-method="GET"
+                       data-ajax-update="#savedModule"
+                       data-ajax-mode="replace">
+                        Create
+                    </a>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
-<div id="savedModule">
-    
-</div>
 
 <div>
     <a asp-action="Index" asp-controller="Teachers"> Back to List</a>
 </div>
 
-@section Scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-}
+@* @section Scripts { *@
+@*     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); } *@
+@* } *@
