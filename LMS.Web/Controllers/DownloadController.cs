@@ -9,10 +9,10 @@ namespace Lms.Web.Controllers
     public class DownloadController : Controller
     {
 
-        private readonly IPdfSeedToUploadRepository _pdfSeedToUploadRepository = null;
-        public DownloadController(IPdfSeedToUploadRepository pdfSeedToUploadRepository)
+     
+        public DownloadController()
         {
-            _pdfSeedToUploadRepository = pdfSeedToUploadRepository;
+         
         }
 
         [HttpGet]

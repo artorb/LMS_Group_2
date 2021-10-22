@@ -1,13 +1,18 @@
-﻿using System;
+﻿using Lms.Core.Entities;
+using Lms.Core.Validations;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Lms.Core.Validations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Lms.Core.Entities
+namespace Lms.Core.Models.ViewModels
 {
-    public class Course : BaseEntity
+   public class ChangeActivityViewModel
     {
-        [Required(ErrorMessage = "Please enter name!")]
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Please enter name!")]
         [MinLength(2, ErrorMessage = "Minimum length: 2 character!")]
         [MaxLength(40, ErrorMessage = "Maximum length: 40 character!")]
         public string Name { get; set; }
@@ -21,21 +26,31 @@ namespace Lms.Core.Entities
 
         [Required(ErrorMessage = "Please enter start date!")]
         [Display(Name = "Start date")]
-        [CourseStartTimeCheck]      
+        [AcitivtyStartTimeCheck]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd H:mm}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
 
 
         [Required(ErrorMessage = "Please enter end date!")]
         [Display(Name = "End date")]
-        [CourseEndTimeCheck]       
+        [ActivityEndTimeCheck]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd H:mm}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
 
 
-        public ICollection<Document> Documents { get; set; }
-        public ICollection<ApplicationUser> Users { get; set; }
-        public ICollection<Module> Modules { get; set; }
+        [ActivityEndTimeCheck]
+        public DateTime? Deadline { get; set; }
 
+
+
+        public int ModuleId { get; set; }
+        public Module Module { get; set; }
+
+        public int ActivityTypeId { get; set; }
+ 
+
+        public ICollection<Document> Documents { get; set; }
+
+        public IEnumerable<SelectListItem> ActivityType { get; set; }
     }
 }

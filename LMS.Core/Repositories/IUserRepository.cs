@@ -11,7 +11,12 @@ namespace Lms.Core.Repositories
     {
         Task<ApplicationUser> FirstOrDefaultAsync(string id);
 
-        Task<ApplicationUser> GetIncludeTest(string id,
-            Func<IQueryable<ApplicationUser>, IIncludableQueryable<ApplicationUser, object>> includes = null);
+        Task<ApplicationUser> GetIncludeTest(string id, Func<IQueryable<ApplicationUser>, IIncludableQueryable<ApplicationUser, object>> includes = null);
+
+        Task<bool> AnyAsync(string? id);
+
+        Task<ApplicationUser> FindAsync(string? id);
+
+        void Update(ApplicationUser user);
     }
 }

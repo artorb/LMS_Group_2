@@ -48,6 +48,7 @@ namespace Lms.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Courses", x => x.Id);
+
                 });
 
             migrationBuilder.CreateTable(

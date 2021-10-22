@@ -55,7 +55,7 @@ namespace Lms.Web
 
             services.AddTransient<IActivityService, ActivityService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IPdfSeedToUploadRepository, PdfSeedToUploadRepository>();
+          
 
             // API > IHttpClientFactory using named client
             services.AddHttpClient("LiteratureClient", client =>

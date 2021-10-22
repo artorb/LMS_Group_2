@@ -163,8 +163,7 @@ namespace Lms.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var course = await _unitOfWork.CourseRepository.GetWithIncludesAsyncTest(id,
-                query => query.Include(d => d.Documents),
+            var course = await _unitOfWork.CourseRepository.GetWithIncludesAsyncTest(id, query => query.Include(d => d.Documents),
                 query => query.Include(m => m.Modules).ThenInclude(m => m.Documents),
                 query => query.Include(a => a.Modules).ThenInclude(a => a.Activities).ThenInclude(d => d.Documents));
             // var documents = course.;

@@ -26,6 +26,12 @@ namespace Lms.Data.Data
                 .HasMany<ApplicationUser>(b => b.Users)
                 .WithOne(c => c.Course)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<Course>()
+         .HasMany<Module>(b => b.Modules)
+         .WithOne(c => c.Course)
+         .OnDelete(DeleteBehavior.SetNull);
+
         }
     }
 }

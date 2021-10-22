@@ -20,11 +20,13 @@ namespace Lms.Web.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IActivityService _activityService;
+        private readonly LmsDbContext db;
 
-        public ActivitiesController(IUnitOfWork unitOfWork, IActivityService activityService)
+        public ActivitiesController(IUnitOfWork unitOfWork, IActivityService activityService, LmsDbContext context)
         {
             _unitOfWork = unitOfWork;
             _activityService = activityService;
+            db = context;
         }
 
         public async Task<IActionResult> ActivityDetail(int Id)
@@ -35,6 +37,7 @@ namespace Lms.Web.Controllers
 
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+            ViewData["ActivityId"] = activity.Id;
             var model = new StudentActivityViewModel()
             {
                 Id = activity.Id,
@@ -97,8 +100,7 @@ namespace Lms.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("Id,Name,Description,StartDate,EndDate,Deadline,ModuleId,ActivityTypeId")]
-            Activity activity)
+            [Bind("Id,Name,Description,StartDate,EndDate,Deadline,ModuleId,ActivityTypeId")] Activity activity)
         {
             if (ModelState.IsValid)
             {
@@ -110,6 +112,18 @@ namespace Lms.Web.Controllers
             return View(activity);
         }
 
+
+
+        private async Task<IEnumerable<SelectListItem>> GetAllActivityTypesAsync()
+        {
+            return await db.ActivityTypes.Select(act => new SelectListItem
+            {
+                Text = act.TypeName,
+                Value = act.Id.ToString(),
+            }).ToListAsync();
+        }
+
+
         // GET: Activities/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -117,14 +131,27 @@ namespace Lms.Web.Controllers
             {
                 return NotFound();
             }
-
+         
             var activity = await _unitOfWork.ActivityRepository.FindAsync(id);
+            var model = new ChangeActivityViewModel
+            {
+                Name = activity.Name,
+                Description = activity.Description,
+                StartDate = activity.StartDate,
+                EndDate = activity.EndDate,
+                Deadline = activity.Deadline,
+                ActivityType = await GetAllActivityTypesAsync(),
+                ActivityTypeId = activity.ActivityTypeId,
+                ModuleId = activity.ModuleId
+            };
+
             if (activity == null)
             {
                 return NotFound();
             }
 
-            return View(activity);
+            // return View(activity);
+            return View("Change", model);
         }
 
         // POST: Activities/Edit/5
@@ -132,9 +159,7 @@ namespace Lms.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,
-            [Bind("Id,Name,Description,StartDate,EndDate,Deadline,ModuleId,ActivityTypeId")]
-            Activity activity)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,StartDate,EndDate,Deadline,ModuleId,ActivityTypeId")] Activity activity)
         {
             if (id != activity.Id)
             {
@@ -159,12 +184,12 @@ namespace Lms.Web.Controllers
                         throw;
                     }
                 }
-
                 return RedirectToAction(nameof(Index));
             }
-
             return View(activity);
         }
+        
+
 
         // GET: Activities/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -174,34 +199,48 @@ namespace Lms.Web.Controllers
                 return NotFound();
             }
 
-            var activity = await _unitOfWork.ActivityRepository.GetWithIncludesAsync
-            (a => a.Include(act => act.ActivityType).Include(activity => activity.Module)
-                .Include(ac => ac.Documents));
+            var activity = await _unitOfWork.ActivityRepository.FindAsync(id);
 
-            var found = activity.FirstOrDefault(c => c.Id == id);
+            //var activity = await _unitOfWork.ActivityRepository.GetWithIncludesAsync
+            //(a => a.Include(act => act.ActivityType).Include(activity => activity.Module)
+            //    .Include(ac => ac.Documents));
 
-            if (found == null)
+            //var found = activity.FirstOrDefault(c => c.Id == id);
+
+            //if (found == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return View(found);
+
+            if (activity == null)
             {
                 return NotFound();
             }
 
-            return View(found);
+            return View(activity);
         }
+    
 
         // POST: Activities/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var activity =
-                await _unitOfWork.ActivityRepository.GetWithIncludesIdAsync(id, a => a.Documents);
-            var documents = activity.Documents;
 
-            // TODO FIXME
-            foreach (var doc in documents)
-            {
-                _unitOfWork.DocumentRepository.Remove(doc);
-            }
+            var activity = await _unitOfWork.ActivityRepository.GetWithIncludesAsyncTest(id, query => query.Include(d => d.Documents));
+          
+
+
+            //var activity = await _unitOfWork.ActivityRepository.GetWithIncludesIdAsync(id, a => a.Documents);
+            //var documents = activity.Documents;
+
+            //// TODO FIXME
+            //foreach (var doc in documents)
+            //{
+            //    _unitOfWork.DocumentRepository.Remove(doc);
+            //}
             
             _unitOfWork.ActivityRepository.Remove(activity);
             await _unitOfWork.CompleteAsync();

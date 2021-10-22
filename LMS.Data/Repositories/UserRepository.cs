@@ -35,5 +35,26 @@ namespace Lms.Data.Repositories
 
             return await queryable.FirstOrDefaultAsync(x => x.Id == id);
         }
+
+
+    
+
+
+        public async Task<bool> AnyAsync(string? id)
+        {
+            return await _context.Users.AnyAsync(g => g.Id.Equals(id));
+        }
+
+
+        public async Task<ApplicationUser> FindAsync(string? id)
+        {
+            return await _context.Users.FindAsync(id);
+        }
+
+
+        public void Update(ApplicationUser user)
+        {
+            _context.Users.Update(user);
+        }
     }
 }

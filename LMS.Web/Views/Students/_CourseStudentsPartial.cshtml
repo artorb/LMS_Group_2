@@ -1,26 +1,28 @@
 ﻿@model IEnumerable<Lms.Core.Models.ViewModels.StudentCommonCourseViewModel>
 
+<br />
+<h4>Participants</h4>
 
-    <br />
-    <h4>Participants</h4>
- 
+<section class="container">
+    <section class="row">
 
-
-    <div>
         <table class="table table-hover">
             <thead>
                 <tr>
                     <th> @Html.DisplayNameFor(model => model.StudentName)         </th>
-                    <th> @Html.DisplayNameFor(model => model.Email)    </th>     
+                    <th> @Html.DisplayNameFor(model => model.Email)    </th>
                 </tr>
             </thead>
             <tbody>
                 @{int i = 1;}
                 @foreach (var item in Model)
                 {
-                <tr>                
+                <tr>
                     <td><span>@i. </span>  @Html.DisplayFor(modelItem => item.StudentName)               </td>
-                    <td> @Html.DisplayFor(modelItem => item.Email)               </td>                 
+                    <td> @Html.DisplayFor(modelItem => item.Email)               </td>
+                    <td> <a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="Edit" asp-route-Id="@ViewData["Id"]">Edit</a></td>
+                    <td> <a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="Delete" asp-route-Id="@ViewData["Id"]">Delete</a></td>
+                    <td> <a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="Details" asp-route-Id="@ViewData["Id"]">Details</a></td>
                 </tr>
                     {
                         i++;
@@ -28,15 +30,6 @@
                 }
             </tbody>
         </table>
-    </div>
 
-
-
-
-
-
-
-
-
-
-
+    </section>
+</section>

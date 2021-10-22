@@ -41,7 +41,7 @@ namespace Lms.Web.Controllers
                 }
             }
 
-
+            ViewData["ModuleId"] = module.Id;
             if (User.IsInRole("Student"))
             {
                 var model = new StudentModuleViewModel()
@@ -162,8 +162,8 @@ namespace Lms.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,StartDate,EndDate")] Module @module)
-        {
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,StartDate,EndDate,CourseId")] Module module)
+        {            
             if (id != module.Id)
             {
                 return NotFound();
@@ -178,7 +178,7 @@ namespace Lms.Web.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ModuleExists(module.Id).Result)
+                    if (! await ModuleExists(module.Id))
                     {
                         return NotFound();
                     }
@@ -202,14 +202,13 @@ namespace Lms.Web.Controllers
                 return NotFound();
             }
 
-            var @module = await _unitOfWork.ModuleRepository
-                .FindAsync(id);
-            if (@module == null)
+            var module = await _unitOfWork.ModuleRepository.FindAsync(id);
+            if (module == null)
             {
                 return NotFound();
             }
 
-            return View(@module);
+            return View(module);
         }
 
         // POST: Modules/Delete/5
@@ -217,14 +216,21 @@ namespace Lms.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var module = await _unitOfWork.ModuleRepository.GetWithIncludesIdAsync(id, a => a.Documents);
-            var documents = module.Documents;
+            //var module = await _unitOfWork.ModuleRepository.GetWithIncludesIdAsync(id, a => a.Documents);
+            //var documents = module.Documents;
+            var module = await _unitOfWork.ModuleRepository.GetWithIncludesAsyncTest(id, query => query.Include(d => d.Documents),      
+              query => query.Include(a => a.Activities).ThenInclude(d => d.Documents));
+
 
             // TODO FIXME
-            foreach (var doc in documents)
-            {
-                _unitOfWork.DocumentRepository.Remove(doc);
-            }
+            //foreach (var doc in documents)
+            //{
+            //    _unitOfWork.DocumentRepository.Remove(doc);
+            //}
+
+
+
+
             _unitOfWork.ModuleRepository.Remove(module);
             await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
