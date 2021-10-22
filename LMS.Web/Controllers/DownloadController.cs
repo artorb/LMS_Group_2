@@ -32,16 +32,5 @@ namespace Lms.Web.Controllers
             var fileName = Path.GetFileName(path);
             return File(mem, contentType, fileName);
         }
-
-
-        public ActionResult PdfSeedToDownload() {
-            return View();
-        }
-
-        public JsonResult GetPdfSeedToDownload()
-        {
-            var pdfToDownload = _pdfSeedToUploadRepository.GetpdfSeedToUpload();
-            return Json(pdfToDownload);
-        }
     }
 }

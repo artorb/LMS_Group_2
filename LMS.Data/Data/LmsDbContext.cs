@@ -18,5 +18,14 @@ namespace Lms.Data.Data
         public DbSet<Course> Courses { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<Module> Modules { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<Course>()
+                .HasMany<ApplicationUser>(b => b.Users)
+                .WithOne(c => c.Course)
+                .OnDelete(DeleteBehavior.SetNull);
+        }
     }
 }

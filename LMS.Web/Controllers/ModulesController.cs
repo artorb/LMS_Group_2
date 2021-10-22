@@ -1,28 +1,102 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Lms.Core.Entities;
+using Lms.Core.Models.ViewModels;
+using Lms.Core.Repositories;
 using Lms.Data.Data;
+using Lms.Web.Service;
 
 namespace Lms.Web.Controllers
 {
     public class ModulesController : Controller
     {
-        private readonly LmsDbContext _context;
+        private readonly IActivityService _activityService;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ModulesController(LmsDbContext context)
+        public ModulesController(IUnitOfWork unitOfWork, IActivityService activityService)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
+            _activityService = activityService;
+        }
+
+        public async Task<IActionResult> ModuleDetail(int Id)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var module = await _unitOfWork.ModuleRepository
+                .GetWithIncludesIdAsync((int)Id, d => d.Documents, a => a.Activities);
+
+            if (module == null) return NotFound();
+
+            if (module.Activities != null)
+            {
+                foreach (var item in module.Activities)
+                {
+                    item.ActivityType = _unitOfWork.ActivityTypeRepository.GetAsync(item.ActivityTypeId).Result;
+                }
+            }
+
+
+            if (User.IsInRole("Student"))
+            {
+                var model = new StudentModuleViewModel()
+                {
+                    ModuleName = module.Name,
+                    ModuleDescription = module.Description,
+                    ModuleStartDate = module.StartDate,
+                    ModuleEndDate = module.EndDate,
+                    Documents = module.Documents,
+                    Activities = module.Activities,
+                    Status = _activityService.GetStatusForStudentModule(module, userId).Result
+                };
+                return PartialView("~/Views/Students/GetModuleDetailsPartial.cshtml", model);
+            }
+
+            else
+            {
+                var model = new StudentModuleViewModel()
+                {
+                    ModuleName = module.Name,
+                    ModuleDescription = module.Description,
+                    ModuleStartDate = module.StartDate,
+                    ModuleEndDate = module.EndDate,
+                    Documents = module.Documents,
+                    Activities = module.Activities,
+                    Status = "Uploaded"
+                };
+                return PartialView("~/Views/Students/GetModuleDetailsPartial.cshtml", model);
+            }
+        }
+
+
+        public async Task<IActionResult> ModuleList(int? idFromCourse)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
+            var courseId = UserLoggedIn.CourseId;
+
+            var course = (idFromCourse == null)
+                ?
+                //Student
+                _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, m => m.Modules).Result
+                :
+                //Teacher
+                _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)idFromCourse, m => m.Modules).Result;
+
+
+            var modulesToCourse = course.Modules;
+            return PartialView("~/Views/Students/GetModuleListPartial.cshtml", modulesToCourse);
         }
 
         // GET: Modules
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Modules.ToListAsync());
+            return View(await _unitOfWork.ModuleRepository.GetAllAsync());
         }
 
         // GET: Modules/Details/5
@@ -33,14 +107,14 @@ namespace Lms.Web.Controllers
                 return NotFound();
             }
 
-            var @module = await _context.Modules
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (@module == null)
+            var module = await _unitOfWork.ModuleRepository
+                .FindAsync(id);
+            if (module == null)
             {
                 return NotFound();
             }
 
-            return View(@module);
+            return View(module);
         }
 
         // GET: Modules/Create
@@ -58,11 +132,12 @@ namespace Lms.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(@module);
-                await _context.SaveChangesAsync();
+                _unitOfWork.ModuleRepository.Add(module);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(@module);
+
+            return View(module);
         }
 
         // GET: Modules/Edit/5
@@ -73,12 +148,13 @@ namespace Lms.Web.Controllers
                 return NotFound();
             }
 
-            var @module = await _context.Modules.FindAsync(id);
-            if (@module == null)
+            var module = await _unitOfWork.ModuleRepository.FindAsync(id);
+            if (module == null)
             {
                 return NotFound();
             }
-            return View(@module);
+
+            return View(module);
         }
 
         // POST: Modules/Edit/5
@@ -88,7 +164,7 @@ namespace Lms.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,StartDate,EndDate")] Module @module)
         {
-            if (id != @module.Id)
+            if (id != module.Id)
             {
                 return NotFound();
             }
@@ -97,12 +173,12 @@ namespace Lms.Web.Controllers
             {
                 try
                 {
-                    _context.Update(@module);
-                    await _context.SaveChangesAsync();
+                    _unitOfWork.ModuleRepository.Update(module);
+                    await _unitOfWork.CompleteAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ModuleExists(@module.Id))
+                    if (!ModuleExists(module.Id).Result)
                     {
                         return NotFound();
                     }
@@ -111,9 +187,11 @@ namespace Lms.Web.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(@module);
+
+            return View(module);
         }
 
         // GET: Modules/Delete/5
@@ -124,8 +202,8 @@ namespace Lms.Web.Controllers
                 return NotFound();
             }
 
-            var @module = await _context.Modules
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var @module = await _unitOfWork.ModuleRepository
+                .FindAsync(id);
             if (@module == null)
             {
                 return NotFound();
@@ -139,15 +217,22 @@ namespace Lms.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var @module = await _context.Modules.FindAsync(id);
-            _context.Modules.Remove(@module);
-            await _context.SaveChangesAsync();
+            var module = await _unitOfWork.ModuleRepository.GetWithIncludesIdAsync(id, a => a.Documents);
+            var documents = module.Documents;
+
+            // TODO FIXME
+            foreach (var doc in documents)
+            {
+                _unitOfWork.DocumentRepository.Remove(doc);
+            }
+            _unitOfWork.ModuleRepository.Remove(module);
+            await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ModuleExists(int id)
+        private async Task<bool> ModuleExists(int id)
         {
-            return _context.Modules.Any(e => e.Id == id);
+            return await _unitOfWork.ModuleRepository.AnyAsync(id);
         }
     }
 }

@@ -43,7 +43,9 @@
                         <tr>
                             <td>
                                 @if (item.ApplicationUserId == null)
+                                {
                                     @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                                }
                             </td>
                         </tr>
                     }
@@ -69,7 +71,7 @@
             {
                 <tr>
                     <td>
-                        <a asp-controller="Students" asp-action="ActivityDetail" asp-route-id="@item.Id"
+                        <a asp-controller="Activities" asp-action="ActivityDetail" asp-route-id="@item.Id"
                            data-ajax="true"
                            data-ajax-method="GET"
                            data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
@@ -82,7 +84,7 @@
 
 
                     @{
-                        var status = service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier).Value).Result;
+                        var status = service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier)?.Value).Result;
                     }
                     @if (status == "Uploaded" && item.ActivityType.TypeName == "Assignment")
                     {

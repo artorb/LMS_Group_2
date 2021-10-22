@@ -23,6 +23,18 @@ namespace Lms.Data.Repositories
             table = db.Set<T>();
         }
 
+        public async Task<T> GetWithIncludesAsyncTest(int id,
+            params Func<IQueryable<T>, IIncludableQueryable<T, object>>[] includes)
+        {
+            IQueryable<T> queryable = db.Set<T>();
+
+            queryable = includes.
+                Where(inc => inc != null).
+                Aggregate(queryable, (current, inc) => inc(current));
+
+            return await queryable.FirstOrDefaultAsync(a => a.Id == id);
+        }
+
         public async Task<IEnumerable<T>> GetWithIncludesAsync(
             Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
         {

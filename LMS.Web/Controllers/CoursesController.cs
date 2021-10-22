@@ -17,13 +17,10 @@ namespace Lms.Web.Controllers
 {
     public class CoursesController : Controller
     {
-        private readonly LmsDbContext _context;
-
         private readonly IUnitOfWork _unitOfWork;
 
-        public CoursesController(LmsDbContext context, IUnitOfWork unitOfWork)
+        public CoursesController(IUnitOfWork unitOfWork)
         {
-            _context = context;
             _unitOfWork = unitOfWork;
         }
 
@@ -32,8 +29,7 @@ namespace Lms.Web.Controllers
         {
             /*GetAll with params example */
             var allCourses =
-                _unitOfWork.CourseRepository.
-                GetAllWithIncludesAsync(course => course.Modules).Result;
+                await _unitOfWork.CourseRepository.GetAllWithIncludesAsync(course => course.Modules);
 
             var activityTest = _unitOfWork.ActivityRepository.GetAllWithIncludesAsync(x => x.ActivityType).Result;
 
@@ -43,30 +39,28 @@ namespace Lms.Web.Controllers
             return View(allCourses);
         }
 
-
-
-
-        // GET: Courses/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> CourseDetails(int? idFromCourse)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
+            var courseId = UserLoggedIn.CourseId;
+            var course = (idFromCourse == null)
+                ? await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId,
+                    d => d.Documents.Where(m => m.ApplicationUser == null))
+                : await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)idFromCourse,
+                    d => d.Documents.Where(m => m.ApplicationUser == null));
 
-            var course = await _context.Courses
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (course == null)
+            ViewData["CourseId"] = course.Id;
+            var model = new StudentCourseViewModel()
             {
-                return NotFound();
-            }
-
-            // return Request.isAjax() ? PartialView("GetCourseDetailsPartial", course) : View(course);
-            return View(course);
+                CourseName = course.Name,
+                CourseDescription = course.Description,
+                CourseStartDate = course.StartDate,
+                CourseEndDate = course.EndDate,
+                Documents = course.Documents
+            };
+            return PartialView("~/Views/Students/_CourseDetailsPartial.cshtml", model);
         }
-
-
-
 
         // GET: Courses/Create
         public IActionResult Create()
@@ -83,13 +77,11 @@ namespace Lms.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                IUnitOfWork unitOfWork = new UnitOfWork(_context);
-                unitOfWork.CourseRepository.Add(course);
-                //_context.Add(course);
-                await unitOfWork.CompleteAsync();
-                //await _context.SaveChangesAsync();
+                _unitOfWork.CourseRepository.Add(course);
+                await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(course);
         }
 
@@ -101,11 +93,12 @@ namespace Lms.Web.Controllers
                 return NotFound();
             }
 
-            var course = await _context.Courses.FindAsync(id);
+            var course = await _unitOfWork.CourseRepository.FindAsync(id);
             if (course == null)
             {
                 return NotFound();
             }
+
             return View(course);
         }
 
@@ -125,12 +118,12 @@ namespace Lms.Web.Controllers
             {
                 try
                 {
-                    _context.Update(course);
-                    await _context.SaveChangesAsync();
+                    _unitOfWork.CourseRepository.Update(course);
+                    await _unitOfWork.CompleteAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CourseExists(course.Id))
+                    if (!CourseExists(course.Id).Result)
                     {
                         return NotFound();
                     }
@@ -139,8 +132,10 @@ namespace Lms.Web.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(course);
         }
 
@@ -152,8 +147,9 @@ namespace Lms.Web.Controllers
                 return NotFound();
             }
 
-            var course = await _context.Courses
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var course = await _unitOfWork.CourseRepository.FindAsync(id);
+            // var course =
+            // //     await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)id, c => c.Modules, c => c.Documents);
             if (course == null)
             {
                 return NotFound();
@@ -167,37 +163,25 @@ namespace Lms.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var course = await _context.Courses.FindAsync(id);
-            _context.Courses.Remove(course);
-            await _context.SaveChangesAsync();
+            var course = await _unitOfWork.CourseRepository.GetWithIncludesAsyncTest(id,
+                query => query.Include(d => d.Documents),
+                query => query.Include(m => m.Modules).ThenInclude(m => m.Documents),
+                query => query.Include(a => a.Modules).ThenInclude(a => a.Activities).ThenInclude(d => d.Documents));
+            // var documents = course.;
+
+            // TODO FIXME
+            // foreach (var doc in documents)
+            // {
+            //     _unitOfWork.DocumentRepository.Remove(doc);
+            // }
+            _unitOfWork.CourseRepository.Remove(course);
+            await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CourseExists(int id)
+        private async Task<bool> CourseExists(int id)
         {
-            return _context.Courses.Any(e => e.Id == id);
+            return await _unitOfWork.CourseRepository.AnyAsync(id);
         }
-
-
-        public async Task<IActionResult> CourseDetails()
-        {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
-            var courseId =
-                UserLoggedIn.CourseId;
-            var course = await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, d => d.Documents.Where(m => m.ApplicationUser == null));
-
-            var model = new StudentCourseViewModel()
-            {
-                CourseName = course.Name,
-                CourseDescription = course.Description,
-                CourseStartDate = course.StartDate,
-                CourseEndDate = course.EndDate,
-                Documents = course.Documents
-            };
-            return PartialView("_CourseDetailsPartial", model);
-        }
-
     }
 }

@@ -1,4 +1,4 @@
-﻿@model Lms.Core.Models.ViewModels.StudentsAndTeachersIndexViewModel
+﻿@* @model Lms.Core.Models.ViewModels.StudentsAndTeachersIndexViewModel *@
 @{
     ViewData["Title"] = "Index";
 }
@@ -15,7 +15,8 @@
 
 
 
-<a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Students" asp-action="CourseDetails" asp-route-idFromCourse=@Model.idFromCourse
+@* <a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Courses" asp-action="CourseDetails" asp-route-idFromCourse=@Model.idFromCourse *@
+<a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Courses" asp-action="CourseDetails" asp-route-idFromCourse=@ViewData["CourseId"]
    data-ajax="true"
    data-ajax-method="GET"
    data-ajax-update="#getCourseWithAjax"
@@ -24,7 +25,7 @@
 </a>
 
 
-<a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Students" asp-action="CourseStudentsDetails" asp-route-idFromCourse=@Model.idFromCourse
+<a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Students" asp-action="CourseStudentsDetails" asp-route-idFromCourse=@ViewData["CourseId"]
    data-ajax="true"
    data-ajax-method="GET"
    data-ajax-update="#getCourseWithAjax"
@@ -33,7 +34,7 @@
 </a>
 
 
-<a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Students" asp-action="ModuleList" asp-route-idFromCourse=@Model.idFromCourse
+<a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Modules" asp-action="ModuleList" asp-route-idFromCourse=@ViewData["CourseId"]
    data-ajax="true"
    data-ajax-method="GET"
    data-ajax-update="#getCourseWithAjax"

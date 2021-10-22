@@ -1,38 +1,53 @@
 ﻿@model Lms.Core.Models.ViewModels.StudentCourseViewModel
 
 
-<br />
+<br/>
 <h4>@Html.DisplayFor(model => model.CourseName)</h4>
-<hr />
+<hr/>
 
 <div class="card-deck">
     <div class="card border-0">
 
-        <div> <strong>  @Html.DisplayNameFor(model => model.CourseStartDate)  </strong> </div>
-        <div>           @Convert.ToDateTime(Model.CourseStartDate).ToString("yyyy/MM/dd HH:mm")               </div>
-        <div><strong>   @Html.DisplayNameFor(model => model.CourseEndDate)   </strong>  </div>
-        <div>           @Convert.ToDateTime(Model.CourseEndDate).ToString("yyyy/MM/dd HH:mm")                 </div>
+        <div>
+            <strong> @Html.DisplayNameFor(model => model.CourseStartDate) </strong>
+        </div>
+        <div> @Convert.ToDateTime(Model.CourseStartDate).ToString("yyyy/MM/dd HH:mm") </div>
+        <div>
+            <strong> @Html.DisplayNameFor(model => model.CourseEndDate) </strong>
+        </div>
+        <div> @Convert.ToDateTime(Model.CourseEndDate).ToString("yyyy/MM/dd HH:mm") </div>
     </div>
 
     <div class="card border-0">
-        <div> <strong>  @Html.DisplayNameFor(model => model.CourseDescription) </strong> </div>
-        <div>           @Html.DisplayFor(model => model.CourseDescription)               </div>
+        <div>
+            <strong> @Html.DisplayNameFor(model => model.CourseDescription) </strong>
+        </div>
+        <div> @Html.DisplayFor(model => model.CourseDescription) </div>
     </div>
 
 
     <div class="card border-0">
-        <div> <strong>  @Html.DisplayNameFor(model => model.Documents)  </strong> </div>
+        <div>
+            <strong> @Html.DisplayNameFor(model => model.Documents) </strong>
+        </div>
         <table class="table">
             <tbody>
-                @foreach (var item in Model.Documents)
-                {
-                    <tr>
-                        @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
-                    </tr>
-                }
+            @foreach (var item in Model.Documents)
+            {
+                <tr>
+                    @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                </tr>
+            }
             </tbody>
         </table>
     </div>
+</div>
+
+<div class="delete">
+    @* <a class="btn btn-primary" asp-controller = "Courses" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> *@
+    @* <a class="btn btn-primary" asp-controller = "Courses" asp-action="Delete" asp-route-id="@Model.Id">Delete</a> *@
+    <a class="btn btn-primary" asp-controller="Courses" asp-action="Edit" asp-route-id="@ViewData["CourseId"]">Edit</a>
+    <a class="btn btn-primary" asp-controller="Courses" asp-action="Delete" asp-route-id="@ViewData["CourseId"]">Delete</a>
 </div>
 
 @*<button id="btnPrint" class="btn btn-primary ignoreForPdf">Print</button>
@@ -66,4 +81,3 @@
     
 
 </script>*@
-

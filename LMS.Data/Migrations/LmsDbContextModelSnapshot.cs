@@ -402,7 +402,8 @@ namespace Lms.Data.Migrations
                 {
                     b.HasOne("Lms.Core.Entities.Course", "Course")
                         .WithMany("Users")
-                        .HasForeignKey("CourseId");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Course");
                 });

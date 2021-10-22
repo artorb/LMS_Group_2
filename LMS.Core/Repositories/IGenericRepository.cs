@@ -11,6 +11,7 @@ namespace Lms.Core.Repositories
 {
     public interface IGenericRepository<T> where T : BaseEntity
     {
+        Task<T> GetWithIncludesAsyncTest(int id,params Func<IQueryable<T>, IIncludableQueryable<T, object>>[] includes);
         Task<IEnumerable<T>> GetWithIncludesAsync(Func<IQueryable<T>, IIncludableQueryable<T, object>> includes);
 
         Task<IEnumerable<T>> GetAllWithIncludesAsync(

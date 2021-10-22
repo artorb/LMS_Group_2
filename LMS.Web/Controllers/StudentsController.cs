@@ -27,34 +27,9 @@ namespace Lms.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> CourseDetails(int? idFromCourse)
-        {
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
-                var courseId =  UserLoggedIn.CourseId;
-                var course = (idFromCourse == null) ?       
-
-            //Student
-            await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, d => d.Documents.Where(m => m.ApplicationUser == null)) :    
-            //Teacher
-            await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)idFromCourse, d => d.Documents.Where(m => m.ApplicationUser == null));  
-
-            var model = new StudentCourseViewModel()
-            {
-                CourseName = course.Name,
-                CourseDescription = course.Description,
-                CourseStartDate = course.StartDate,
-                CourseEndDate = course.EndDate,
-                Documents = course.Documents
-            };
-            return PartialView("_CourseDetailsPartial", model);
-        }
-
-
-
         public async Task<IActionResult> CourseStudentsDetails(int? idFromCourse)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
             var courseId = UserLoggedIn.CourseId;
 
@@ -67,102 +42,6 @@ namespace Lms.Web.Controllers
             var models = (from user in course.Users            
                 select new StudentCommonCourseViewModel { StudentName = user.Name, Email = user.Email }).ToList();
             return PartialView("_CourseStudentsPartial", models);
-        }
-
-
-        public async Task<IActionResult> ModuleList(int? idFromCourse)
-        {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var UserLoggedIn =  await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
-            var courseId = UserLoggedIn.CourseId;
-
-            var course = (idFromCourse == null) ?
-            //Student
-            _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, m => m.Modules).Result:
-            //Teacher
-            _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)idFromCourse, m => m.Modules).Result;
-
-
-            var modulesToCourse = course.Modules;
-            return PartialView("GetModuleListPartial", modulesToCourse);
-        }
-
-
-        // kolla generic repo för att undvika fler anrop - inte nödvändigt
-        public IActionResult ModuleDetail(int Id)
-        {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var module = _unitOfWork.ModuleRepository
-                .GetWithIncludesIdAsync((int)Id, d => d.Documents, a => a.Activities)
-                .Result;
-            if (module == null) return NotFound();
-
-            if (module.Activities != null)
-            {
-                foreach (var item in module.Activities)
-                {
-                    item.ActivityType = _unitOfWork.ActivityTypeRepository.GetAsync(item.ActivityTypeId).Result;
-                }
-            }
-
-
-            if (User.IsInRole("Student"))
-            {
-                var model = new StudentModuleViewModel()
-                {
-                    ModuleName = module.Name,
-                    ModuleDescription = module.Description,
-                    ModuleStartDate = module.StartDate,
-                    ModuleEndDate = module.EndDate,
-                    Documents = module.Documents,
-                    Activities = module.Activities,
-                    Status = _activityService.GetStatusForStudentModule(module, userId).Result
-                };
-                return PartialView("GetModuleDetailsPartial", model);
-            }
-
-           else
-            {
-                var model = new StudentModuleViewModel()
-                {
-                    ModuleName = module.Name,
-                    ModuleDescription = module.Description,
-                    ModuleStartDate = module.StartDate,
-                    ModuleEndDate = module.EndDate,
-                    Documents = module.Documents,
-                    Activities = module.Activities,
-                    Status = "Uploaded"
-                };
-                return PartialView("GetModuleDetailsPartial", model);
-            }
-
-
-
-
-            //return PartialView("GetModuleDetailsPartial", model);
-        }
-
-        public IActionResult ActivityDetail(int Id)
-        {
-            var activity = _unitOfWork.ActivityRepository
-                .GetWithIncludesIdAsync((int)Id, d => d.Documents, a => a.ActivityType).Result;
-            if (activity == null) return NotFound();
-            
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            var model = new StudentActivityViewModel()
-            {
-                Id = activity.Id,
-                ActivityName = activity.Name,
-                ActivityTypes = activity.ActivityType,
-                ActivityDescription = activity.Description,
-                ActivityStartDate = activity.StartDate,
-                ActivityEndDate = activity.EndDate,
-                Documents = activity.Documents,
-                Status = _activityService.GetStatusForStudentActivity(activity, userId).Result
-            };
-
-            return PartialView("GetActivityDetailsPartial", model);
         }
     }
 }

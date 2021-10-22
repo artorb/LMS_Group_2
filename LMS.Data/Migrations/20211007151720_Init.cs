@@ -101,6 +101,7 @@ namespace Lms.Data.Migrations
                         column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "Id",
+                        // onDelete: ReferentialAction.SetNull);
                         onDelete: ReferentialAction.Restrict);
                 });
 
