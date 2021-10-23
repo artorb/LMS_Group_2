@@ -12,6 +12,8 @@ namespace Lms.Core.Models.ViewModels
     {
         public int Id { get; set; }
 
+        public string UserId { get; set; }
+
         [Display(Name = "Activity name")]
         public string ActivityName { get; set; }
 

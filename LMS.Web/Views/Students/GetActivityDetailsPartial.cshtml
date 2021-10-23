@@ -32,33 +32,32 @@
         </div>
 
 
-
-
-
         <div>
-            @using (Html.BeginFormActivity("UploadFiles", "Upload", new { activityId = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            @if (User.IsInRole("Student")|| User.IsInRole("Teacher"))
             {
-                <div class="form-horizontal">
+                @using (Html.BeginFormActivity("UploadFiles", "Upload", new { activityId = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="form-horizontal">
 
-                    <div class="form-group uploadButtonGroup">
-                        <div class="uploadButtonContainer">
-                            <input type="file" class="upload-box" multiple name="files" id="Files" />
+                        <div class="form-group uploadButtonGroup">
+                            <div class="uploadButtonContainer">
+                                <input type="file" class="upload-box" multiple name="files" id="Files" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Upload" class="btn btn-sm btn-primary submitButton" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10 text-success">
+                                @ViewBag.UploadStatus
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Upload" class="btn btn-sm btn-primary submitButton" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10 text-success">
-                            @ViewBag.UploadStatus
-                        </div>
-                    </div>
-
-                </div>
+                }
             }
-        </div>
+            </div>
 
 
         <div class="activityDetailsForStudent">
@@ -69,15 +68,11 @@
         </div>
 
 
-        <div class="activityDetailsForStudent">
-            @*<div>
-                <strong> @Html.DisplayNameFor(model => model.Documents) </strong>
-            </div>*@
+        <div class="activityDetailsForStudent"> 
             <table class="table">
                 <tbody>
                     @foreach (var item in Model.Documents)
                     {
-
                         @if (item.ApplicationUserId == null && item.Activity.ActivityTypeId != 3)
                         {
                             <strong> @Html.DisplayNameFor(model => model.Documents) </strong>
@@ -88,12 +83,11 @@
                         }
 
 
-
                         @if (item.ApplicationUserId == null && item.Activity.ActivityTypeId == 3)
                         {
                             <tr>
                                 <p>
-                                    <strong> Assignment fo the activity: </strong>
+                                    <strong> Assignment description for the activity: </strong>
                                     @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
 
                                 </p>
@@ -101,26 +95,25 @@
                         }
 
 
-
-                        @if (item.ApplicationUserId != null)
+                        @if (item.ApplicationUserId != null )
+                        {
+                                @if (User.IsInRole("Student") && (item.ApplicationUserId ==Model.UserId) || User.IsInRole("Teacher"))                       
                         {
                             <tr>
                                 <p>
-                                    <strong>Your uploaded assignment</strong>
+                                    <strong>Uploaded assignment</strong>
                                     @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
                                 </p>
                             </tr>
                         }
-
-
+                        }
                     }
                 </tbody>
             </table>
         </div>
 
+
         <div class="delete">
-            @*<a class="btn btn-primary" asp-controller = "Modules" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-            <a class="btn btn-primary" asp-controller = "Modules" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>*@
             <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Edit" asp-route-id="@ViewData["ActivityId"]">Edit</a>
             <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Delete" asp-route-id="@ViewData["ActivityId"]">Delete</a>
         </div>

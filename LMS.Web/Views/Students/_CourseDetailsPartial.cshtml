@@ -44,40 +44,9 @@
 </div>
 
 <div class="delete">
-    @* <a class="btn btn-primary" asp-controller = "Courses" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> *@
-    @* <a class="btn btn-primary" asp-controller = "Courses" asp-action="Delete" asp-route-id="@Model.Id">Delete</a> *@
     <a class="btn btn-sm btn-primary" asp-controller="Courses" asp-action="Edit" asp-route-id="@ViewData["CourseId"]">Edit</a>
     <a class="btn btn-sm btn-primary" asp-controller="Courses" asp-action="Delete" asp-route-id="@ViewData["CourseId"]">Delete</a>
 </div>
 
-@*<button id="btnPrint" class="btn btn-primary ignoreForPdf">Print</button>
 
 
-<script src="~/js/jquery/jquery.min.js"></script>
-<script type="text/javascript">
-
-
-
-    $(document).ready(function () {
-
-            /*  Controller/GetPdfSeedToDownload, (In the PdfSeedToUploadRepository in the GetpdfSeedToUpload there is dataToShow) */
-        $.getJSON("../dataToShow/GetPdfSeedToDownload", function (dataToShow) {
-
-                /*   pdf is just to get a name */
-            $.map(dataToShow, function (pdf) {
-
-                    /*  this is the table id */
-                    $("#pdfToDownload tbody").append("<tr><td>" + pdf.Text + "</td></tr>")
-                });
-        });
-            /* print out the table */
-            $("#btnPrint").click(function () {
-                $(".ignoreForPdf").hide();
-                window.print();
-                $(".ignoreForPdf").show();
-            });
-        });
-
-    
-
-</script>*@

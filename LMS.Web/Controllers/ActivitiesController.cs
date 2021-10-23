@@ -38,9 +38,11 @@ namespace Lms.Web.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             ViewData["ActivityId"] = activity.Id;
+            ViewData["userId"] = userId;
             var model = new StudentActivityViewModel()
             {
                 Id = activity.Id,
+                UserId = userId,
                 ActivityName = activity.Name,
                 ActivityTypes = activity.ActivityType,
                 ActivityDescription = activity.Description,

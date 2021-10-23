@@ -1,6 +1,7 @@
 ﻿@using System.Security.Claims
 @model Lms.Core.Models.ViewModels.StudentModuleViewModel
 @inject Lms.Web.Service.IActivityService service
+@using Lms.Web.Extensions
 
 <h4 id="StudentModuleViewTitle"> @Html.DisplayFor(model => model.ModuleName) </h4>
 
@@ -21,11 +22,13 @@
         </div>
 
 
+
         <div class="moduleDetailsForStudent">
             <div>
                 <strong> @Html.DisplayNameFor(model => model.ModuleDescription) </strong>
             </div>
-            <div>   @Html.DisplayFor(model => model.ModuleDescription) </div>
+            <div> @Html.DisplayFor(model => model.ModuleDescription) </div>
+
 
         </div>
 
@@ -39,7 +42,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.Documents)
+                    @foreach (var item in Model.Documents.Where(a => a.ActivityId == null && a.ModuleId != null))
                     {
                         <tr>
                             <td>
@@ -57,14 +60,14 @@
 </section>
 
 
+
 <div class="delete">
-    @*<a class="btn btn-primary" asp-controller = "Modules" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-        <a class="btn btn-primary" asp-controller = "Modules" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>*@
     <a class="btn btn-sm btn-primary" asp-controller="Modules" asp-action="Edit" asp-route-id="@ViewData["ModuleId"]">Edit</a>
     <a class="btn btn-sm btn-primary" asp-controller="Modules" asp-action="Delete" asp-route-id="@ViewData["ModuleId"]">Delete</a>
 </div>
+<br />
 
-<br/>
+
 
 <div class="moduleDetailsForStudent">
     <table class="table">
@@ -73,7 +76,10 @@
                 <th> @Html.DisplayNameFor(model => model.Activities) </th>
                 <th> @Html.DisplayNameFor(model => model.ModuleStartDate) </th>
                 <th> @Html.DisplayNameFor(model => model.ModuleEndDate) </th>
-                <th> Status </th>
+                @if (User.IsInRole("Student"))
+                {
+                    <th> @Html.DisplayNameFor(model => model.Status) </th>
+                }
                 <th> </th>
             </tr>
         </thead>
@@ -97,28 +103,28 @@
                     @{
                         var status = service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier)?.Value).Result;
                     }
-                    @if (status == "Uploaded" && item.ActivityType.TypeName == "Assignment")
+
+                    @if (User.IsInRole("Student"))
                     {
-                        <td>
-                            <span class="badge badge-success">Uploaded</span>
-                        </td>
+                        @if (status == "Uploaded" && item.ActivityType.TypeName == "Assignment")
+                        {
+                            <td>
+                                <span class="badge badge-success">Uploaded</span>
+                            </td>
+                        }
+                        else if (status == "Delayed" && item.ActivityType.TypeName == "Assignment")
+                        {
+                            <td>
+                                <span class="badge badge-warning">Past due date</span>
+                            </td>
+                        }
+                        else if (status == "Not uploaded" && item.ActivityType.TypeName == "Assignment")
+                        {
+                            <td>
+                                <span class="badge badge-danger">Not Uploaded</span>
+                            </td>
+                        }
                     }
-                    else if (status == "Delayed" && item.ActivityType.TypeName == "Assignment")
-                    {
-                        <td>
-                            <span class="badge badge-warning">Past due date</span>
-                        </td>
-                    }
-
-
-                    else if (status == "Not uploaded" && item.ActivityType.TypeName == "Assignment")
-                    {
-                        <td>
-                            <span class="badge badge-danger">Not Uploaded</span>
-                        </td>
-                    }
-
-
                     <td></td>
                 </tr>
             }
@@ -127,5 +133,33 @@
 </div>
 
 
+<div>
+    @if (User.IsInRole("Teacher"))
+        {
+    @using (Html.BeginFormActivity("TeacherUploadFilesForModule", "Upload", new { moduleId = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="form-horizontal">
 
+            <div class="form-group uploadButtonGroup">
+                <div class="uploadButtonContainer">
+                    <input type="file" class="upload-box" multiple name="files" id="Files" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Upload" class="btn btn-sm btn-primary submitButton" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10 text-success">
+                    @ViewBag.UploadStatus
+                </div>
+            </div>
+
+        </div>
+    }
+    }
+</div>
 

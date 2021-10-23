@@ -46,6 +46,7 @@ namespace Lms.Web.Controllers
             {
                 var model = new StudentModuleViewModel()
                 {
+                    Id = module.Id,
                     ModuleName = module.Name,
                     ModuleDescription = module.Description,
                     ModuleStartDate = module.StartDate,
@@ -61,6 +62,7 @@ namespace Lms.Web.Controllers
             {
                 var model = new StudentModuleViewModel()
                 {
+                    Id = module.Id,
                     ModuleName = module.Name,
                     ModuleDescription = module.Description,
                     ModuleStartDate = module.StartDate,

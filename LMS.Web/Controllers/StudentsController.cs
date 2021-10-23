@@ -54,9 +54,6 @@ namespace Lms.Web.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
 
-            //get the participant with courseId
-            //var userWithCourse = db.Users.Where(u => u.Id == userId).Include(c => c.Course);
-
          
             ViewData["Id"] = userId;
             var model = new ApplicationUserViewModel()

@@ -1,0 +1,106 @@
+ctor      	konstruktor letrehozas
+ctr + .   	megold sok mindent
+cw tab tab	letrehoz Control.WriteLine()
+prop tab tab	property letrehozas
+propfull tab tab field+property letrehozas
+ctr+k, aztan ctr+d helyere rakni a kodot.
+
+ctr+k, ctr+c   minden megjegyzesbe megy.
+
+jobb eger Peek definition: honnan jon a method
+
+a@gmail.com
+b@gmail.com
+c@gmail.com
+LexiconNET21!
+
+admin@Gymbokning.se
+AdminNet21!
+
+1	Cardio	2021-09-30 09:22:00	01:30:00	Workout
+2	HIIT	2021-09-20 14:00:00	00:30:00	High Intensity Workout
+3	Yoga	2021-09-20 10:00:00	01:00:00	Relax and meditation
+4	Spinning	2021-09-20 15:00:00	00:45:00	Be fast
+
+23:59:59.9999999
+
+******************Microsoft: *********************************
+https://www.microsoft.com/ AdobeXd / Trello
+Teams + Visual Studio + kattis:
+judith1horvath@outlook.com
+01011977
+EmeztTalaldki5
+
+Kattis eseten user: judit-horvath1
+1212
+
+On Windows Shift + Alt + F.
+
+----------------Pluralsight ----------------------------------
+https://app.pluralsight.com/
+judith1horvath@outlook.com
+judithorvath.sv@gmail.com
+Talaldki5
+
+
++++++++++++++++++++GitHub ++++++++++++++++++++++++++++++++++++
+judithorvathsv
+judith1horvath@outlook.com
+judithorvath.sv@gmail.com
+EmeztTalaldki5
+
+https://www.youtube.com/watch?v=77HOPaNbeIE
+
+SQL:
+Tutorialsql
+sa
+Tutorial
+
+https://openexchangerates.org/
+judith1horvath@outlook.com
+EmeztTalaldki5
+9c3a579f97544c43860701f39fa9748b
+
+Unity
+judith1horvath@outlook.com
+EmeztTalaldki5
+Account: JuditH55
+Name: Judit H
+
+/////////////////////Eco web hosting/////////////////////
+https://www.ecowebhosting.co.uk/cp/home
+judithorvath.sv@gmail.com
+EmeztTalaldki5
+Udemy:judit-horvath-10
+judithorvath.com
+
+Wordpress:
+http://judithorvath-com.stackstaging.com/wordpress/
+username: 
+judithorvath
+password:
+KSJj@cyWQ%CujJHiS4
+
+MySQL:	
+usersDatabase-31383695fd
+5bc34nb0k6
+Masik database:	
+secretdi-313836388a
+ili40autyp
+
+openweathermap.org
+mymailboxforme55@gmail.com
+KSJj@cyWQ%CujJHiS4
+API key: - Your API key is 0d0137be6f4a700009d183535022f23b
+http://judithorvath-com.stackstaging.com/api/WeatherWithAPI.php
+
+
+ ------------- Postman ------------------
+
+judith1horvath@outlook.com
+EmeztTalaldki55
+username: hjudith
+
+
+
+
