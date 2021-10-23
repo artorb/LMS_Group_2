@@ -62,9 +62,12 @@
 
 
 <div class="delete">
-    <a class="btn btn-sm btn-primary" asp-controller="Modules" asp-action="Edit" asp-route-id="@ViewData["ModuleId"]">Edit</a>
-    <a class="btn btn-sm btn-primary" asp-controller="Modules" asp-action="Delete" asp-route-id="@ViewData["ModuleId"]">Delete</a>
-</div>
+    @if (User.IsInRole("Teacher"))
+    {
+        <a class="btn btn-sm btn-primary" asp-controller="Modules" asp-action="Edit" asp-route-id="@ViewData["ModuleId"]">Edit</a>
+        <a class="btn btn-sm btn-primary" asp-controller="Modules" asp-action="Delete" asp-route-id="@ViewData["ModuleId"]">Delete</a>
+    }
+    </div>
 <br />
 
 

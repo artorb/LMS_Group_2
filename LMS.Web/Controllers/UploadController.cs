@@ -166,23 +166,23 @@ namespace Lms.Web.Controllers
                 var userLoggedIn = _unitOfWork.UserRepository.FindAsync(userId).Result;           
 
                 //get clicked module (module contains courseId)
-                var moduleToClickedActivity = _unitOfWork.ModuleRepository.FindAsync(moduleId).Result;
-                var courseId = moduleToClickedActivity.CourseId;           
-                var courseToClickedActivity = _unitOfWork.CourseRepository.FindAsync(courseId).Result;
+                var clickedModule = _unitOfWork.ModuleRepository.FindAsync(moduleId).Result;
+                var courseId = clickedModule.CourseId;           
+                var courseToClickedModule = _unitOfWork.CourseRepository.FindAsync(courseId).Result;
 
                 var paths = new List<string>();
                 foreach (var file in files)
                 {
                     if (file == null) continue;
-                    if (!Directory.Exists($"wwwroot/Uploads/{courseToClickedActivity.Name}/{moduleToClickedActivity.Name}"))
+                    if (!Directory.Exists($"wwwroot/Uploads/{courseToClickedModule.Name}/{clickedModule.Name}"))
                     {
                         //creating folders for teacher (course/module/activity)
-                        Directory.CreateDirectory($"wwwroot/Uploads/{courseToClickedActivity.Name}/{moduleToClickedActivity.Name}");
+                        Directory.CreateDirectory($"wwwroot/Uploads/{courseToClickedModule.Name}/{clickedModule.Name}");
                     }
 
 
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(),
-                        $"wwwroot/Uploads/{courseToClickedActivity.Name}/{moduleToClickedActivity.Name}", file.FileName);
+                        $"wwwroot/Uploads/{courseToClickedModule.Name}/{clickedModule.Name}", file.FileName);
 
                     paths.Add(filePath);
 
@@ -195,12 +195,12 @@ namespace Lms.Web.Controllers
                     var document = new Document
                     {
                         Name = $"{file.FileName}",
-                        Description = $"{moduleToClickedActivity.Description}",
+                        Description = $"{clickedModule.Description}",
                         UploadDate = DateTime.Now,
-                        HashName = $"{courseToClickedActivity.Name}/{moduleToClickedActivity.Name}/{file.FileName}",
+                        HashName = $"{courseToClickedModule.Name}/{clickedModule.Name}/{file.FileName}",
                         Uploader = $"{userLoggedIn.Email}",                    
                         ModuleId = moduleId,
-                        Course = courseToClickedActivity
+                        Course = courseToClickedModule
                     };
                     _context.Documents.Add(document);
                     await _context.SaveChangesAsync();    
