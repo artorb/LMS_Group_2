@@ -53,6 +53,7 @@ namespace Lms.Web.Controllers
             ViewData["CourseId"] = course.Id;
             var model = new StudentCourseViewModel()
             {
+                Id = course.Id,
                 CourseName = course.Name,
                 CourseDescription = course.Description,
                 CourseStartDate = course.StartDate,

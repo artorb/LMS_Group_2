@@ -1,9 +1,10 @@
 ﻿@model Lms.Core.Models.ViewModels.StudentCourseViewModel
+@using Lms.Web.Extensions
 
 
-<br/>
+<br />
 <h4>@Html.DisplayFor(model => model.CourseName)</h4>
-<hr/>
+<hr />
 
 <div class="card-deck">
     <div class="card border-0">
@@ -32,16 +33,18 @@
         </div>
         <table class="table">
             <tbody>
-            @foreach (var item in Model.Documents)
-            {
-                <tr>
-                    @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
-                </tr>
-            }
+                @foreach (var item in Model.Documents.Where(a=>a.ActivityId == null && a.ModuleId == null && a.CourseId != null))
+                {
+                    <tr>
+                        @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
 </div>
+
+
 
 <div class="delete">
     <a class="btn btn-sm btn-primary" asp-controller="Courses" asp-action="Edit" asp-route-id="@ViewData["CourseId"]">Edit</a>
@@ -50,3 +53,32 @@
 
 
 
+<div>
+    @if (User.IsInRole("Teacher"))
+    {
+        @using (Html.BeginFormActivity("TeacherUploadFilesForCourse", "Upload", new { courseId = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="form-horizontal">
+
+                <div class="form-group uploadButtonGroup">
+                    <div class="uploadButtonContainer">
+                        <input type="file" class="upload-box" multiple name="files" id="Files" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Upload" class="btn btn-sm btn-primary submitButton" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10 text-success">
+                        @ViewBag.UploadStatus
+                    </div>
+                </div>
+
+            </div>
+        }
+    }
+</div>

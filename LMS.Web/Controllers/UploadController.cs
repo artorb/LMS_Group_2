@@ -34,9 +34,7 @@ namespace Lms.Web.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
                 var userLoggedIn = _unitOfWork.UserRepository.GetIncludeTest(userId, c =>
-                    c.Include(c => c.Course).ThenInclude(c => c.Modules).ThenInclude(c => c.Activities)).Result;
-
-               
+                    c.Include(c => c.Course).ThenInclude(c => c.Modules).ThenInclude(c => c.Activities)).Result;               
 
                 var paths = new List<string>();
                 foreach (var file in files)
@@ -122,7 +120,6 @@ namespace Lms.Web.Controllers
                     Directory.CreateDirectory($"wwwroot/Uploads/{courseToClickedActivity.Name}/{moduleToClickedActivity.Name}/{clickedActivity.Name}");
                 }
 
-
       
                 var filePath = Path.Combine(Directory.GetCurrentDirectory(),
                     $"wwwroot/Uploads/{courseToClickedActivity.Name}/{moduleToClickedActivity.Name}/{clickedActivity.Name}", file.FileName);
@@ -148,14 +145,10 @@ namespace Lms.Web.Controllers
                         Activity = clickedActivity
                     };
                     _context.Documents.Add(document);
-                    await _context.SaveChangesAsync();
-
-                    //----------------------------------------------------------------------------------------------------------------------
-                  
+                    await _context.SaveChangesAsync();        
                             }
                 return RedirectToAction("Index", "Teachers");
-            }                   
-            
+            }  
             return RedirectToAction("Index", "Students");
         }
 
@@ -166,7 +159,7 @@ namespace Lms.Web.Controllers
             var size = files.Sum(f => f.Length);
             // update Documents for User
      
-            //teacher upload into course / into module / into activity
+            //teacher upload into course / into module 
      
                 //get userIdfor teacher (CourseId == NULL!)
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -174,7 +167,7 @@ namespace Lms.Web.Controllers
 
                 //get clicked module (module contains courseId)
                 var moduleToClickedActivity = _unitOfWork.ModuleRepository.FindAsync(moduleId).Result;
-                var courseId = moduleToClickedActivity.CourseId;              
+                var courseId = moduleToClickedActivity.CourseId;           
                 var courseToClickedActivity = _unitOfWork.CourseRepository.FindAsync(courseId).Result;
 
                 var paths = new List<string>();
@@ -214,6 +207,60 @@ namespace Lms.Web.Controllers
 
                 }
                 return RedirectToAction("Index", "Teachers");   
+        }
+
+
+
+        [HttpPost]
+        public async Task<ActionResult> TeacherUploadFilesForCourse(List<IFormFile> files, int courseId)
+        {
+            var size = files.Sum(f => f.Length);
+            // update Documents for User
+
+            //teacher upload into course 
+
+            //get userIdfor teacher (CourseId == NULL!)
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userLoggedIn = _unitOfWork.UserRepository.FindAsync(userId).Result;
+
+            //get clicked course        
+            var clickedCourse = _unitOfWork.CourseRepository.FindAsync(courseId).Result;
+
+            var paths = new List<string>();
+            foreach (var file in files)
+            {
+                if (file == null) continue;
+                if (!Directory.Exists($"wwwroot/Uploads/{clickedCourse.Name}"))
+                {
+                    //creating folders for teacher (course/module/activity)
+                    Directory.CreateDirectory($"wwwroot/Uploads/{clickedCourse.Name}");
+                }
+
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(),
+                    $"wwwroot/Uploads/{clickedCourse.Name}", file.FileName);
+
+                paths.Add(filePath);
+
+                await using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                //creating document in the database
+                var document = new Document
+                {
+                    Name = $"{file.FileName}",
+                    Description = $"{clickedCourse.Description}",
+                    UploadDate = DateTime.Now,
+                    HashName = $"{clickedCourse.Name}/{file.FileName}",
+                    Uploader = $"{userLoggedIn.Email}",
+                    CourseId = courseId
+                };
+                _context.Documents.Add(document);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Index", "Teachers");
         }
 
 

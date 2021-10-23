@@ -10,6 +10,8 @@ namespace Lms.Core.Models.ViewModels
 {
    public class StudentCourseViewModel
     {
+        public int Id { get; set; }
+
         [Display(Name = "Course")]
         public string CourseName { get; set; }
 
