@@ -74,6 +74,12 @@ namespace Lms.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(LiteratureCreateViewModel viewModel)
         {
+            if (viewModel.Authors.Count > 0 && viewModel.Authors[0].FirstName == null)
+            {
+                viewModel.Authors.Clear();
+            }
+            ViewBag.AuthorsCount = viewModel.Authors.Count();
+            
             var client = clientFactory.CreateClient("LiteratureClient");
 
             var requestMsg = new HttpRequestMessage(HttpMethod.Post, "literatures");
@@ -83,6 +89,7 @@ namespace Lms.Web.Controllers
             var responseMsg = await client.SendAsync(requestMsg);
             if (responseMsg.IsSuccessStatusCode)
             {
+                //ModelState.AddModelError(string.Empty, $"{responseMsg.Content}");
                 return RedirectToAction(nameof(Index));
             }
             else

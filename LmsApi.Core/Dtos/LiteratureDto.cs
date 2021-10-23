@@ -10,6 +10,7 @@ namespace LmsApi.Core.Dtos
         public string Description { get; set; }
         public DateTime PublishDate { get; set; }
         public string Url { get; set; }
+        public string Category { get; set; }
         public string Subject { get; set; }
         public string Level { get; set; }
 

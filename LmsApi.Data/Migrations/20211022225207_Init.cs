@@ -8,7 +8,7 @@ namespace LmsApi.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Author",
+                name: "Authors",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -19,11 +19,11 @@ namespace LmsApi.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Author", x => x.Id);
+                    table.PrimaryKey("PK_Authors", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Level",
+                name: "Categories",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -32,11 +32,11 @@ namespace LmsApi.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Level", x => x.Id);
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Subject",
+                name: "Levels",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -45,7 +45,20 @@ namespace LmsApi.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Subject", x => x.Id);
+                    table.PrimaryKey("PK_Levels", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Subjects",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Subjects", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -55,10 +68,10 @@ namespace LmsApi.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PublishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
                     SubjectId = table.Column<int>(type: "int", nullable: false),
                     LevelId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -66,15 +79,21 @@ namespace LmsApi.Data.Migrations
                 {
                     table.PrimaryKey("PK_Literatures", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Literatures_Level_LevelId",
-                        column: x => x.LevelId,
-                        principalTable: "Level",
+                        name: "FK_Literatures_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Literatures_Subject_SubjectId",
+                        name: "FK_Literatures_Levels_LevelId",
+                        column: x => x.LevelId,
+                        principalTable: "Levels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Literatures_Subjects_SubjectId",
                         column: x => x.SubjectId,
-                        principalTable: "Subject",
+                        principalTable: "Subjects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -90,9 +109,9 @@ namespace LmsApi.Data.Migrations
                 {
                     table.PrimaryKey("PK_AuthorLiterature", x => new { x.AuthorsId, x.LiteraturesId });
                     table.ForeignKey(
-                        name: "FK_AuthorLiterature_Author_AuthorsId",
+                        name: "FK_AuthorLiterature_Authors_AuthorsId",
                         column: x => x.AuthorsId,
-                        principalTable: "Author",
+                        principalTable: "Authors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -107,6 +126,11 @@ namespace LmsApi.Data.Migrations
                 name: "IX_AuthorLiterature_LiteraturesId",
                 table: "AuthorLiterature",
                 column: "LiteraturesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Literatures_CategoryId",
+                table: "Literatures",
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Literatures_LevelId",
@@ -125,16 +149,19 @@ namespace LmsApi.Data.Migrations
                 name: "AuthorLiterature");
 
             migrationBuilder.DropTable(
-                name: "Author");
+                name: "Authors");
 
             migrationBuilder.DropTable(
                 name: "Literatures");
 
             migrationBuilder.DropTable(
-                name: "Level");
+                name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "Subject");
+                name: "Levels");
+
+            migrationBuilder.DropTable(
+                name: "Subjects");
         }
     }
 }

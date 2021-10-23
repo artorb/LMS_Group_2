@@ -18,6 +18,32 @@ namespace Lms.Web.Service
             clientFactory = httpClientFactory;
         }
 
+        public async Task<IEnumerable<SelectListItem>> GetCategoriesToSelectListItem()
+        {
+            IEnumerable<SelectListItem> selectListItems = null;
+
+            var client = clientFactory.CreateClient("LiteratureClient");
+
+            var requestMsg = new HttpRequestMessage(HttpMethod.Get, "categories");
+
+            var responseMsg = await client.SendAsync(requestMsg);
+            if (responseMsg.IsSuccessStatusCode)
+            {
+                using (var responseStream = await responseMsg.Content.ReadAsStreamAsync())
+                {
+                    var subjects = await DeserializeAsync<IEnumerable<LiteratureSelectListItemVM>>(responseStream);
+
+                    selectListItems = subjects.OrderBy(s => s.Text).Select(s =>
+                                            new SelectListItem(s.Text, s.Value.ToString()));
+                }
+            }
+            else
+            {
+                selectListItems = Enumerable.Empty<SelectListItem>();
+            }
+            return selectListItems;
+        }
+
         public async Task<IEnumerable<SelectListItem>> GetSubjectsToSelectListItem()
         {
             IEnumerable<SelectListItem> selectListItems = null;
@@ -40,8 +66,6 @@ namespace Lms.Web.Service
             else
             {
                 selectListItems = Enumerable.Empty<SelectListItem>();
-
-                //ModelState.AddModelError(string.Empty, $"Server error at {nameof(Index)}. Status code: {responseMsg.StatusCode}.");
             }
             return selectListItems;
         }
@@ -68,8 +92,6 @@ namespace Lms.Web.Service
             else
             {
                 selectListItems = Enumerable.Empty<SelectListItem>();
-
-                //ModelState.AddModelError(string.Empty, $"Server error at {nameof(Index)}. Status code: {responseMsg.StatusCode}.");
             }
             return selectListItems;
         }

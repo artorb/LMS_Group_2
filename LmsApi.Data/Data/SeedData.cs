@@ -14,25 +14,50 @@ namespace LmsApi.Data.Data
         {
             if (await context.Literatures.AnyAsync()) return;
 
+            await context.Categories.AddRangeAsync(GetCategories());
             await context.Subjects.AddRangeAsync(GetSubjects());
             await context.Levels.AddRangeAsync(GetLevels());
             await context.SaveChangesAsync();
 
-            await context.Literatures.AddRangeAsync(GetLiteratures());
+            // They're not needed since literatures are generated in GetAuthors
+            //await context.Literatures.AddRangeAsync(GetLiteratures());
+            //await context.SaveChangesAsync();
+
+            await context.Authors.AddRangeAsync(GetAuthors());
             await context.SaveChangesAsync();
+        }
+
+        private static List<Category> GetCategories()
+        {
+            return new List<Category>
+            {
+                new Category { Name = "Books" },
+                new Category { Name = "Articles" },
+                new Category { Name = "Documentations" },
+                new Category { Name = "Blog posts" },
+                new Category { Name = "Learning" },
+                new Category { Name = "Uncategorized" },
+            };
         }
 
         private static List<Subject> GetSubjects()
         {
             return new List<Subject>
             {
+                new Subject { Name = "IT" },
+                new Subject { Name = "Software Development" },
                 new Subject { Name = "C#" },
                 new Subject { Name = "Frontend" },
                 new Subject { Name = "ASP.NET Core" },
-                new Subject { Name = "MVC" },
-                new Subject { Name = "Database" },
+                new Subject { Name = "Databases" },
                 new Subject { Name = "API" },
                 new Subject { Name = "Cloud" },
+                new Subject { Name = "Test" },
+                new Subject { Name = "Project Management" },
+                new Subject { Name = "Support" },
+                new Subject { Name = "Economics" },
+                new Subject { Name = "Sales" },
+                new Subject { Name = "Marketing" }
             };
         }
 
@@ -43,6 +68,7 @@ namespace LmsApi.Data.Data
                 new Level { Name = "Beginner" },
                 new Level { Name = "Intermediate" },
                 new Level { Name = "Advanced" },
+                new Level { Name = "Unspecified" }
             };
         }
 
@@ -50,14 +76,18 @@ namespace LmsApi.Data.Data
         {
             return new List<Author>
             {
-                new Author { FirstName = "Tom", LastName = "Dykstra"/*, Literatures = GetLiteratures()*/},
-                new Author { FirstName = "Wade", LastName = "Pickett"},
-                new Author { FirstName = "Rick", LastName = "Anderson"},
-                new Author { FirstName = "Kirk", LastName = "Larkin"}
+                new Author { FirstName = "Tom", LastName = "Dykstra", Literatures = GetRandomListContent() },
+                new Author { FirstName = "Wade", LastName = "Pickett", Literatures = GetRandomListContent() },
+                new Author { FirstName = "Rick", LastName = "Anderson", Literatures = GetRandomListContent() },
+                new Author { FirstName = "Kirk", LastName = "Larkin", Literatures = GetRandomListContent() },
+                new Author { FirstName = "Steve", LastName = "Jobs", Literatures = GetRandomListContent() },
+                new Author { FirstName = "Bill", LastName = "Gates", Literatures = GetRandomListContent() },
+                new Author { FirstName = "Elon", LastName = "Musk", Literatures = GetRandomListContent() },
+                new Author { FirstName = "Jeff", LastName = "Bezos", Literatures = GetRandomListContent() }
             };
         }
 
-        private static List<Literature> GetLiteratures(/*int number*/)
+        private static List<Literature> GetLiteratures()
         {
             return new List<Literature>
             {
@@ -66,6 +96,7 @@ namespace LmsApi.Data.Data
                     Title = "Implementing the Repository and Unit of Work Patterns in an ASP.NET MVC Application",
                     Description = "Microsoft Docs...",
                     PublishDate = new DateTime(2021, 03, 05),
+                    CategoryId = 3,
                     SubjectId = 4,
                     LevelId = 2,
                 },
@@ -74,6 +105,7 @@ namespace LmsApi.Data.Data
                     Title = "Web API with ASP.NET Core",
                     Description = "Microsoft Docs...",
                     PublishDate = new DateTime(2021, 10, 07),
+                    CategoryId = 3,
                     SubjectId = 2,
                     LevelId = 1,
                 },
@@ -82,7 +114,8 @@ namespace LmsApi.Data.Data
                     Title = "Literature 1",
                     Description = "This is the desc...",
                     PublishDate = new DateTime(2021, 03, 05),
-                    SubjectId = 4,
+                    CategoryId = 1,
+                    SubjectId = 1,
                     LevelId = 1,
                 },
                 new Literature
@@ -90,6 +123,7 @@ namespace LmsApi.Data.Data
                     Title = "Literature 2",
                     Description = "This is the desc...",
                     PublishDate = new DateTime(2021, 10, 07),
+                    CategoryId = 2,
                     SubjectId = 2,
                     LevelId = 2,
                 },
@@ -98,6 +132,7 @@ namespace LmsApi.Data.Data
                     Title = "Literature 3",
                     Description = "This is the desc...",
                     PublishDate = new DateTime(2021, 03, 05),
+                    CategoryId = 4,
                     SubjectId = 5,
                     LevelId = 3,
                 },
@@ -106,6 +141,7 @@ namespace LmsApi.Data.Data
                     Title = "Literature 4",
                     Description = "This is the desc...",
                     PublishDate = new DateTime(2021, 10, 07),
+                    CategoryId = 4,
                     SubjectId = 2,
                     LevelId = 1,
                 },
@@ -114,6 +150,7 @@ namespace LmsApi.Data.Data
                     Title = "Literature 5",
                     Description = "This is the desc...",
                     PublishDate = new DateTime(2021, 03, 05),
+                    CategoryId = 5,
                     SubjectId = 4,
                     LevelId = 2,
                 },
@@ -122,12 +159,34 @@ namespace LmsApi.Data.Data
                     Title = "Literature 6",
                     Description = "This is the desc...",
                     PublishDate = new DateTime(2021, 10, 07),
+                    CategoryId = 4,
                     SubjectId = 1,
                     LevelId = 1,
                 }
             };
         }
 
+        // Add random literatures to an author
+        private static List<Literature> GetRandomListContent()
+        {
+            var random = new Random();
+            int randomIndex;
+
+            var literatures = GetLiteratures();
+            int literatureCount = literatures.Count;
+
+            var randomLiteratures = new List<Literature>();
+            int randomLoops = random.Next(0, literatureCount);
+            int counter = 0;
+
+            while (counter < randomLoops)
+            {
+                randomIndex = random.Next(0, literatureCount);
+                randomLiteratures.Add(literatures.ElementAtOrDefault(randomIndex));
+                counter++;
+            }
+            return randomLiteratures;
+        }
 
     }
 }

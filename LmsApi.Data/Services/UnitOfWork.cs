@@ -12,6 +12,7 @@ namespace LmsApi.Data.Services
         private readonly LmsApiDbContext context;
         private readonly IGenericRepository<Author> authorsRepo;
         private readonly IGenericRepository<Literature> literaturesRepo;
+        private readonly IGenericRepository<Category> categoriesRepo;
         private readonly IGenericRepository<Subject> subjectsRepo;
         private readonly IGenericRepository<Level> levelsRepo;
 
@@ -20,12 +21,15 @@ namespace LmsApi.Data.Services
             this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        // using expression body for properties and method instead of regular block body.
+        // using expression body for properties (w/ get) and method instead of regular block body.
         public IGenericRepository<Author> AuthorsRepo => 
             authorsRepo ?? new GenericRepository<Author>(context);
 
         public IGenericRepository<Literature> LiteraturesRepo => 
             literaturesRepo ?? new GenericRepository<Literature>(context);
+
+        public IGenericRepository<Category> CategoriesRepo =>
+            categoriesRepo ?? new GenericRepository<Category>(context);
 
         public IGenericRepository<Subject> SubjectsRepo => 
             subjectsRepo ?? new GenericRepository<Subject>(context);
