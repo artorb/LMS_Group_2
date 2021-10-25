@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Lms.Core.Models.ViewModels.TeacherLoginViewModel>
+﻿@model Lms.Core.Models.ViewModels.TeacherIndexViewModel
+@* @model IEnumerable<Lms.Core.Models.ViewModels.TeacherTableViewModel> *@
 
 @{
     ViewData["Title"] = "Index";
@@ -34,7 +35,10 @@
                                 <div class="col-lg-8 grid-margin stretch-card">
                                     <div class="card"><div class="card-body">
                                         <hr>
-                                        @*@await Html.PartialAsync("CreateCourse", Model.ElementAt(0).Course)*@
+                                        @* @await Html.PartialAsync("CreateCourse", Model.ElementAt(0).Course) *@
+                                        @{
+                                            await Html.RenderPartialAsync("CreateCourse", Model.CourseToCreate);
+                                        }
                                     </div></div>
                                 </div>
                             </div>
@@ -44,54 +48,14 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="submit" value="Create" class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>
 </div>
-
-<section class="mb-5">
-    <div class="table-responsive bg-blurry shadow-4-strong rounded">
-        <table id="responsiveTable" class="table table-borderless table-hover align-middle mb-0 ">
-            <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Course.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ActiveModuleName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.NextModuleName)
-                </th>
-                <th>
-                    <p class="text-success">@TempData["ChangedParticipant"]</p>
-                    @Html.DisplayNameFor(model => model.NumberOfParticipants)
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        <a asp-controller="Teachers" asp-action="IndexCourseForTeacher" asp-route-id=@item.Course.Id> @Html.DisplayFor(modelItem => item.Course.Name) </a>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ActiveModuleName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NextModuleName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NumberOfParticipants)
-                    </td>
-                </tr>
-            }
-            </tbody>
-        </table>
-    </div>
-</section>
+@{
+    await Html.RenderPartialAsync("_TeacherTablePartial", Model.TeacherTables);
+}
 
 
 @* *@
@@ -262,14 +226,14 @@
 @*     </div> *@
 @* *@
 @* <div class="container"> *@
-@*     <div id="accordionExample" class="accordion shadow"> *@
+@*     <div id="accordionexample" class="accordion shadow"> *@
 @*         <div class="card"> *@
-@*             <div id="headingOne" class="card-header bg-white shadow-sm border-0"> *@
-@*                 <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">Collapsible Group Item #1</a></h6> *@
+@*             <div id="headingone" class="card-header bg-white shadow-sm border-0"> *@
+@*                 <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#collapseone" aria-expanded="true" aria-controls="collapseone" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">collapsible group item #1</a></h6> *@
 @*             </div> *@
-@*             <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionExample" class="collapse show"> *@
+@*             <div id="collapseone" aria-labelledby="headingone" data-parent="#accordionexample" class="collapse show"> *@
 @*                 <div class="card-body p-5"> *@
-@*                     <p class="font-weight-light m-0">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.</p> *@
+@*                     <p class="font-weight-light m-0">anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. food truck quinoa nesciunt laborum eiusmod. brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.</p> *@
 @*                 </div> *@
 @*             </div> *@
 @*         </div> *@
