@@ -10,7 +10,8 @@ namespace Lms.Core.Models.ViewModels
 {
   public class ApplicationUserViewModel
     {
-      
+        public string Id { get; set; }
+
         public string Name { get; set; }
 
         public string Email { get; set; }

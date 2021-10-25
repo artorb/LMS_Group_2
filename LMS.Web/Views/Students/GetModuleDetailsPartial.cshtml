@@ -79,57 +79,76 @@
                 <th> @Html.DisplayNameFor(model => model.Activities) </th>
                 <th> @Html.DisplayNameFor(model => model.ModuleStartDate) </th>
                 <th> @Html.DisplayNameFor(model => model.ModuleEndDate) </th>
-                @if (User.IsInRole("Student"))
+
+
+
+                @*@if (User.IsInRole("Student"))
                 {
                     <th> @Html.DisplayNameFor(model => model.Status) </th>
-                }
+                }*@
+           
+
                 <th> </th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model.Activities)
             {
-                <tr>
-                    <td>
-                        <a asp-controller="Activities" asp-action="ActivityDetail" asp-route-id="@item.Id"
-                           data-ajax="true"
-                           data-ajax-method="GET"
-                           data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
-                           data-ajax-mode="replace">
-                            @Html.DisplayFor(modelItem => item.ActivityType.TypeName)
-                        </a>
-                    </td>
-                    <td> @Convert.ToDateTime(item.StartDate).ToString("yyyy/MM/dd HH:mm") </td>
-                    <td> @Convert.ToDateTime(item.EndDate).ToString("yyyy/MM/dd HH:mm") </td>
+            <tr>
+                <td>
+                    <a asp-controller="Activities" asp-action="ActivityDetail" asp-route-id="@item.Id"
+                       data-ajax="true"
+                       data-ajax-method="GET"
+                       data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
+                       data-ajax-mode="replace">
+                        @Html.DisplayFor(modelItem => item.ActivityType.TypeName)
+                    </a>
+                </td>
+                <td> @Convert.ToDateTime(item.StartDate).ToString("yyyy/MM/dd HH:mm") </td>
+                <td> @Convert.ToDateTime(item.EndDate).ToString("yyyy/MM/dd HH:mm") </td>
 
 
-                    @{
-                        var status = service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier)?.Value).Result;
-                    }
 
-                    @if (User.IsInRole("Student"))
+                @{
+                    var status = service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier)?.Value).Result;
+                }
+
+                @if (User.IsInRole("Student"))
+                {
+                    @if (status == "Uploaded" && item.ActivityType.TypeName == "Assignment")
                     {
-                        @if (status == "Uploaded" && item.ActivityType.TypeName == "Assignment")
-                        {
-                            <td>
-                                <span class="badge badge-success">Uploaded</span>
-                            </td>
-                        }
-                        else if (status == "Delayed" && item.ActivityType.TypeName == "Assignment")
-                        {
-                            <td>
-                                <span class="badge badge-warning">Past due date</span>
-                            </td>
-                        }
-                        else if (status == "Not uploaded" && item.ActivityType.TypeName == "Assignment")
-                        {
-                            <td>
-                                <span class="badge badge-danger">Not Uploaded</span>
-                            </td>
-                        }
+                        <td>
+                           <span class="badge badge-success">Uploaded</span>
+                        </td>
                     }
-                    <td></td>
-                </tr>
+                    else if (status == "Delayed" && item.ActivityType.TypeName == "Assignment")
+                    {
+                        <td>
+                           <span class="badge badge-warning">Past due date</span>
+                        </td>
+                    }
+                    else if (status == "Not uploaded" && item.ActivityType.TypeName == "Assignment")
+                    {
+                        <td>
+                            <span class="badge badge-danger">Not Uploaded</span>
+                        </td>
+                    }
+                }
+
+                @if (item.ActivityType.TypeName == "Assignment")
+                {
+                    <td>Deadline: @Convert.ToDateTime(item.Deadline).ToString("yyyy/MM/dd HH:mm") </td>
+                }
+                else
+                {
+                    
+                }
+
+
+
+
+                <td></td>
+            </tr>
             }
         </tbody>
     </table>

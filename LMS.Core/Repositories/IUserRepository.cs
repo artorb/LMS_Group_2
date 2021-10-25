@@ -9,6 +9,9 @@ namespace Lms.Core.Repositories
 {
     public interface IUserRepository
     {
+
+        Task<IEnumerable<ApplicationUser>> GetAllAsync();
+
         Task<ApplicationUser> FirstOrDefaultAsync(string id);
 
         Task<ApplicationUser> GetIncludeTest(string id, Func<IQueryable<ApplicationUser>, IIncludableQueryable<ApplicationUser, object>> includes = null);
@@ -18,5 +21,7 @@ namespace Lms.Core.Repositories
         Task<ApplicationUser> FindAsync(string? id);
 
         void Update(ApplicationUser user);
+
+        void Remove(ApplicationUser user);
     }
 }

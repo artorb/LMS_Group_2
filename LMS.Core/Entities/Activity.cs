@@ -35,8 +35,7 @@ namespace Lms.Core.Entities
 
 
         [ActivityEndTimeCheck]
-        public DateTime? Deadline { get; set; }
-        
+        public DateTime? Deadline { get; set; }       
 
 
         public int ModuleId { get; set; }

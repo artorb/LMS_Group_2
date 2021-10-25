@@ -19,6 +19,11 @@ namespace Lms.Data.Repositories
             _context = context;
         }
 
+        public async Task<IEnumerable<ApplicationUser>> GetAllAsync()
+        {
+            return await _context.Users.ToListAsync();
+        }
+
 
         public async Task<ApplicationUser> FirstOrDefaultAsync(string id)
         {
@@ -36,7 +41,7 @@ namespace Lms.Data.Repositories
             }
 
             return await queryable.FirstOrDefaultAsync(x => x.Id == id);
-        }    
+        }
 
 
         public async Task<bool> AnyAsync(string? id)
@@ -54,6 +59,12 @@ namespace Lms.Data.Repositories
         public void Update(ApplicationUser user)
         {
             _context.Users.Update(user);
+        }
+
+
+        public void Remove(ApplicationUser user)
+        {
+            _context.Users.Remove(user);
         }
     }
 }

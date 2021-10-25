@@ -15,6 +15,11 @@ namespace Lms.Core.Models.ViewModels
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
+        public string ModuleName { get; set; }
+        public string ModuleDescription { get; set; }
+        public DateTime ModuleStartDate { get; set; }
+        public DateTime ModuleEndDate { get; set; }
+
         public ICollection<Document> Documents { get; set; }
         public ICollection<Module> Modules { get; set; }
     }

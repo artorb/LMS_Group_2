@@ -1,10 +1,10 @@
 ﻿@* @model Lms.Core.Models.ViewModels.NewCourseViewModel *@
-@model Lms.Core.Entities.Course
+@model Lms.Core.Models.ViewModels.NewCourseViewModel
 
 
 <h4 class="card-title text-center">Add course</h4>
 <form asp-action="CreateCourse">
-    <!-- 2 column grid layout with text inputs for the first and last names -->
+  
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-outline mb-4">
         <label asp-for="Name" class="form-label"></label>
@@ -40,36 +40,38 @@
     <div class="card-body">
         <h4 class="card-title text-center">Add module</h4>
         <hr>
-        <div id="addModule" class="table-responsive">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-outline mb-4">
-                <label asp-for="Name" class="form-label"></label>
-                <input asp-for="Name" class="form-control"/>
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
+        <div id="addModule" class="table-responsive">  
 
-            <div class="row mb-4">
-                <div class="col">
-                    <div class="form-outline">
-                        <label asp-for="StartDate" class="form-label"></label>
-                        <input asp-for="StartDate" class="form-control"/>
-                        <span asp-validation-for="StartDate" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-outline">
-                        <label asp-for="EndDate" class="form-label"></label>
-                        <input asp-for="EndDate" class="form-control"/>
-                        <span asp-validation-for="EndDate" class="text-danger"></span>
-                    </div>
-                </div>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-outline mb-4">
+        <label asp-for="ModuleName" class="form-label"></label>
+        <input asp-for="ModuleName" class="form-control"/>
+        <span asp-validation-for="ModuleName" class="text-danger"></span>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <div class="form-outline">
+                <label asp-for="ModuleStartDate" class="form-label"></label>
+                <input asp-for="ModuleStartDate" class="form-control"/>
+                <span asp-validation-for="ModuleStartDate" class="text-danger"></span>
             </div>
-            <!-- Message input -->
+        </div>
+        <div class="col">
+            <div class="form-outline">
+                <label asp-for="ModuleEndDate" class="form-label"></label>
+                <input asp-for="ModuleEndDate" class="form-control"/>
+                <span asp-validation-for="ModuleEndDate" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+             Message input 
             <div class="form-outline mb-4">
-                <label class="form-label" for="form6Example7">Description</label>
-                <textarea asp-for="Description" class="form-control" id="form6Example7" rows="4"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
+        <label class="form-label" for="form6Example7">Description</label>
+        <textarea asp-for="ModuleDescription" class="form-control" id="form6Example7" rows="4"></textarea>
+        <span asp-validation-for="ModuleDescription" class="text-danger"></span>
+    </div>
         </div>
         <div class="text-center">
             <button onclick="addfaqs();" class="badge badge-success"><i class="fa fa-plus"></i> ADD NEW</button>

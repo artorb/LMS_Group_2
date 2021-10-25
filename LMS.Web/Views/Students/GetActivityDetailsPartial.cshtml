@@ -9,117 +9,121 @@
 
 
         <div class="activityDetailsForStudent">
-            <div>
-                <strong> @Html.DisplayNameFor(model => model.ActivityStartDate) </strong>
-            </div>
+            <div>    <strong> @Html.DisplayNameFor(model => model.ActivityStartDate) </strong>   </div>
             <div> @Html.DisplayFor(model => model.ActivityStartDate) </div>
-            <div>
-                <strong> @Html.DisplayNameFor(model => model.ActivityEndDate) </strong>
-            </div>
+
+            <div>     <strong> @Html.DisplayNameFor(model => model.ActivityEndDate) </strong>    </div>
             <div> @Html.DisplayFor(model => model.ActivityEndDate) </div>
-        </div>
 
-
-        <div class="activityDetailsForStudent" id="activityDetailsTypeAndStatusForStudent">
             <div>
-                <strong> @Html.DisplayNameFor(model => model.ActivityTypes.TypeName) </strong>
-            </div>
-            <div> @Html.DisplayFor(model => model.ActivityTypes.TypeName) </div>
-            <div>
-                <strong> @Html.DisplayNameFor(model => model.Status) </strong>
-            </div>
-            <div> @Html.DisplayFor(model => model.Status) </div>
-        </div>
-
-
-        <div>
-            @if (User.IsInRole("Student")|| User.IsInRole("Teacher"))
-            {
-                @using (Html.BeginFormActivity("UploadFiles", "Upload", new { activityId = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                @if (Model.ActivityTypes.TypeName == "Assignment")
                 {
-                    <div class="form-horizontal">
-
-                        <div class="form-group uploadButtonGroup">
-                            <div class="uploadButtonContainer">
-                                <input type="file" class="upload-box" multiple name="files" id="Files" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-offset-2 col-md-10">
-                                <input type="submit" value="Upload" class="btn btn-sm btn-primary submitButton" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-offset-2 col-md-10 text-success">
-                                @ViewBag.UploadStatus
-                            </div>
-                        </div>
-                    </div>
+                    <div>     <strong> @Html.DisplayNameFor(model => model.ActivityDeadline) </strong>    </div>
+                    <div> @Html.DisplayFor(model => model.ActivityDeadline) </div>
                 }
-            }
-            </div>
+             </div>
 
 
-        <div class="activityDetailsForStudent">
-            <div>
-                <strong> @Html.DisplayNameFor(model => model.ActivityDescription) </strong>
-            </div>
-            <div> @Html.DisplayFor(model => model.ActivityDescription) </div>
-        </div>
+                <div class="activityDetailsForStudent" id="activityDetailsTypeAndStatusForStudent">
+                    <div>
+                        <strong> @Html.DisplayNameFor(model => model.ActivityTypes.TypeName) </strong>
+                    </div>
+                    <div> @Html.DisplayFor(model => model.ActivityTypes.TypeName) </div>
+                    <div>
+                        <strong> @Html.DisplayNameFor(model => model.Status) </strong>
+                    </div>
+                    <div> @Html.DisplayFor(model => model.Status) </div>
+                </div>
 
 
-        <div class="activityDetailsForStudent"> 
-            <table class="table">
-                <tbody>
-                    @foreach (var item in Model.Documents)
+                <div>
+                    @if (User.IsInRole("Student") || User.IsInRole("Teacher"))
                     {
-                        @if (item.ApplicationUserId == null && item.Activity.ActivityTypeId != 3)
+                        @using (Html.BeginFormActivity("UploadFiles", "Upload", new { activityId = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
                         {
-                            <strong> @Html.DisplayNameFor(model => model.Documents) </strong>
-                            <tr>
-                                @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                            <div class="form-horizontal">
 
-                            </tr>
-                        }
-
-
-                        @if (item.ApplicationUserId == null && item.Activity.ActivityTypeId == 3)
-                        {
-                            <tr>
-                                <p>
-                                    <strong> Assignment description for the activity: </strong>
-                                    @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
-
-                                </p>
-                            </tr>
-                        }
-
-
-                        @if (item.ApplicationUserId != null )
-                        {
-                                @if (User.IsInRole("Student") && (item.ApplicationUserId ==Model.UserId) || User.IsInRole("Teacher"))                       
-                        {
-                            <tr>
-                                <p>
-                                    <strong>Uploaded assignment</strong>
-                                    @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
-                                </p>
-                            </tr>
-                        }
+                                <div class="form-group uploadButtonGroup">
+                                    <div class="uploadButtonContainer">
+                                        <input type="file" class="upload-box" multiple name="files" id="Files" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <input type="submit" value="Upload" class="btn btn-sm btn-primary submitButton" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10 text-success">
+                                        @ViewBag.UploadStatus
+                                    </div>
+                                </div>
+                            </div>
                         }
                     }
-                </tbody>
-            </table>
-        </div>
+                </div>
 
 
-        <div class="delete">
-            @if (User.IsInRole("Teacher"))
-            {
-                <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Edit" asp-route-id="@ViewData["ActivityId"]">Edit</a>
-                <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Delete" asp-route-id="@ViewData["ActivityId"]">Delete</a>
-            }
-            </div>
+                <div class="activityDetailsForStudent">
+                    <div>
+                        <strong> @Html.DisplayNameFor(model => model.ActivityDescription) </strong>
+                    </div>
+                    <div> @Html.DisplayFor(model => model.ActivityDescription) </div>
+                </div>
 
-    </section>
+
+                <div class="activityDetailsForStudent">
+                    <table class="table">
+                        <tbody>
+                            @foreach (var item in Model.Documents)
+                            {
+                                @if (item.ApplicationUserId == null && item.Activity.ActivityTypeId != 3)
+                                {
+                                    <strong> @Html.DisplayNameFor(model => model.Documents) </strong>
+                                    <tr>
+                                        @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+
+                                    </tr>
+                                }
+
+
+                                @if (item.ApplicationUserId == null && item.Activity.ActivityTypeId == 3)
+                                {
+                                    <tr>
+                                        <p>
+                                            <strong> Assignment description for the activity: </strong>
+                                            @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+
+                                        </p>
+                                    </tr>
+                                }
+
+
+                                @if (item.ApplicationUserId != null)
+                                {
+                                    @if (User.IsInRole("Student") && (item.ApplicationUserId == Model.UserId) || User.IsInRole("Teacher"))
+                                    {
+                                        <tr>
+                                            <p>
+                                                <strong>Uploaded assignment</strong>
+                                                @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                                            </p>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div class="delete">
+                    @if (User.IsInRole("Teacher"))
+                    {
+                        <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Edit" asp-route-id="@ViewData["ActivityId"]">Edit</a>
+                        <a class="btn btn-sm btn-primary" asp-controller="Activities" asp-action="Delete" asp-route-id="@ViewData["ActivityId"]">Delete</a>
+                    }
+                </div>
+
+</section>
 </section>

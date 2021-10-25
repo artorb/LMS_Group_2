@@ -32,6 +32,11 @@ namespace Lms.Core.Models.ViewModels
         public DateTime ActivityEndDate { get; set; }
 
 
+        [Display(Name = "Deadline")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd HH:mm}")]
+        public DateTime? ActivityDeadline { get; set; }
+
+
         public string Status { get; set; }
     
 

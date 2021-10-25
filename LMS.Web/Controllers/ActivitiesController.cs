@@ -47,6 +47,7 @@ namespace Lms.Web.Controllers
                 ActivityTypes = activity.ActivityType,
                 ActivityDescription = activity.Description,
                 ActivityStartDate = activity.StartDate,
+                ActivityDeadline = activity.Deadline,
                 ActivityEndDate = activity.EndDate,
                 Documents = activity.Documents,
                 Status = _activityService.GetStatusForStudentActivity(activity, userId).Result

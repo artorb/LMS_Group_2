@@ -52,7 +52,7 @@ namespace Lms.Web.Controllers
                     ModuleStartDate = module.StartDate,
                     ModuleEndDate = module.EndDate,
                     Documents = module.Documents,
-                    Activities = module.Activities,
+                    Activities = module.Activities,                    
                     Status = _activityService.GetStatusForStudentModule(module, userId).Result
                 };
                 return PartialView("~/Views/Students/GetModuleDetailsPartial.cshtml", model);

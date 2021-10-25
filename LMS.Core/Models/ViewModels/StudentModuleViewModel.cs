@@ -32,7 +32,9 @@ namespace Lms.Core.Models.ViewModels
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd HH:mm}")]
         public DateTime ModuleEndDate { get; set; }
 
+
         public string Status { get; set; }
+
 
         public IEnumerable<Activity> Activities { get; set; }
 

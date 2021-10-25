@@ -158,8 +158,7 @@ namespace Lms.Web.Controllers
             }
 
             var course = await _unitOfWork.CourseRepository.FindAsync(id);
-            // var course =
-            // //     await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)id, c => c.Modules, c => c.Documents);
+           
             if (course == null)
             {
                 return NotFound();
@@ -176,13 +175,7 @@ namespace Lms.Web.Controllers
             var course = await _unitOfWork.CourseRepository.GetWithIncludesAsyncTest(id, query => query.Include(d => d.Documents),
                 query => query.Include(m => m.Modules).ThenInclude(m => m.Documents),
                 query => query.Include(a => a.Modules).ThenInclude(a => a.Activities).ThenInclude(d => d.Documents));
-            // var documents = course.;
-
-            // TODO FIXME
-            // foreach (var doc in documents)
-            // {
-            //     _unitOfWork.DocumentRepository.Remove(doc);
-            // }
+    
             _unitOfWork.CourseRepository.Remove(course);
             await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
