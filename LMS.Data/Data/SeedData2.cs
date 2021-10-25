@@ -189,11 +189,21 @@ namespace Lms.Data.Data
                     {
                         Name = name,
                         Description = description,
-                        StartDate = i % 2 == 0 ? module.StartDate : module.StartDate.AddDays(dayDifference),
-                        EndDate = i % 2 == 0 ? module.StartDate.AddDays(dayDifference) : module.EndDate,
-                        Deadline = i % 2 == 0 ? module.StartDate.AddDays(dayDifference) : module.EndDate,
+                        StartDate = i % 2 == 0 ?
+                            module.StartDate :
+                            module.StartDate.AddDays(dayDifference),
+                        EndDate = i % 2 == 0 ?
+                            module.StartDate.AddDays(dayDifference) :
+                            module.EndDate,
                         ActivityType = activityTypes.ElementAt(GetRangedIncludedRandom(to: activityTypes.Count()))
                     };
+                    if (activity.ActivityType.TypeName == "Assignment")
+                    {
+                        activity.Deadline = i % 2 == 0 ?
+                            module.StartDate.AddDays(dayDifference + 1) :
+                            module.EndDate.AddDays(1);
+                    }
+
                     module.Activities.Add(activity);
                     activities.Add(activity);
                 }
