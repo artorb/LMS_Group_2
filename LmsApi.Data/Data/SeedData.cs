@@ -10,6 +10,7 @@ namespace LmsApi.Data.Data
 {
     public class SeedData
     {
+
         public static async Task InitAsync(LmsApiDbContext context)
         {
             if (await context.Literatures.AnyAsync()) return;
@@ -22,8 +23,8 @@ namespace LmsApi.Data.Data
             // They're not needed since literatures are generated in GetAuthors
             //await context.Literatures.AddRangeAsync(GetLiteratures());
             //await context.SaveChangesAsync();
-
-            await context.Authors.AddRangeAsync(GetAuthors());
+            var literatures = GetLiteratures();
+            await context.Authors.AddRangeAsync(GetAuthors(literatures));
             await context.SaveChangesAsync();
         }
 
@@ -72,18 +73,18 @@ namespace LmsApi.Data.Data
             };
         }
 
-        private static List<Author> GetAuthors()
+        private static List<Author> GetAuthors(List<Literature> literatures)
         {
             return new List<Author>
             {
-                new Author { FirstName = "Tom", LastName = "Dykstra", Literatures = GetRandomListContent() },
-                new Author { FirstName = "Wade", LastName = "Pickett", Literatures = GetRandomListContent() },
-                new Author { FirstName = "Rick", LastName = "Anderson", Literatures = GetRandomListContent() },
-                new Author { FirstName = "Kirk", LastName = "Larkin", Literatures = GetRandomListContent() },
-                new Author { FirstName = "Steve", LastName = "Jobs", Literatures = GetRandomListContent() },
-                new Author { FirstName = "Bill", LastName = "Gates", Literatures = GetRandomListContent() },
-                new Author { FirstName = "Elon", LastName = "Musk", Literatures = GetRandomListContent() },
-                new Author { FirstName = "Jeff", LastName = "Bezos", Literatures = GetRandomListContent() }
+                new Author { FirstName = "Tom", LastName = "Dykstra", Literatures = GetRandomListContent(literatures) },
+                new Author { FirstName = "Wade", LastName = "Pickett", Literatures = GetRandomListContent(literatures) },
+                new Author { FirstName = "Rick", LastName = "Anderson", Literatures = GetRandomListContent(literatures) },
+                new Author { FirstName = "Kirk", LastName = "Larkin", Literatures = GetRandomListContent(literatures) },
+                new Author { FirstName = "Steve", LastName = "Jobs", Literatures = GetRandomListContent(literatures) },
+                new Author { FirstName = "Bill", LastName = "Gates", Literatures = GetRandomListContent(literatures) },
+                new Author { FirstName = "Elon", LastName = "Musk", Literatures = GetRandomListContent(literatures) },
+                new Author { FirstName = "Jeff", LastName = "Bezos", Literatures = GetRandomListContent(literatures) }
             };
         }
 
@@ -167,16 +168,16 @@ namespace LmsApi.Data.Data
         }
 
         // Add random literatures to an author
-        private static List<Literature> GetRandomListContent()
+        private static List<Literature> GetRandomListContent(List<Literature> literatures)
         {
             var random = new Random();
             int randomIndex;
 
-            var literatures = GetLiteratures();
+            //var literatures = GetLiteratures();
             int literatureCount = literatures.Count;
 
             var randomLiteratures = new List<Literature>();
-            int randomLoops = random.Next(0, literatureCount);
+            int randomLoops = random.Next(1, literatureCount);
             int counter = 0;
 
             while (counter < randomLoops)
