@@ -70,7 +70,7 @@ namespace Lms.Core.Models.ViewModels
         [MaxLength(500, ErrorMessage = "Maximum length: 500 character!")]
         public string ActivityDescription { get; set; }
 
-
+        //public IEnumerable<SelectListItem> ActivityType { get; set; }
 
         [Required(ErrorMessage = "Please enter the type!")]
         // FIXME from hardcoding
@@ -92,8 +92,8 @@ namespace Lms.Core.Models.ViewModels
                 Value = "3"
             }
         };
-        
-        
+
+
         [Required(ErrorMessage = "Please enter start date!")]
         [Display(Name = "Start date")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd H:mm}", ApplyFormatInEditMode = true)]

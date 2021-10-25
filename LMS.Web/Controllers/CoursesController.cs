@@ -127,6 +127,7 @@ namespace Lms.Web.Controllers
                 {
                     _unitOfWork.CourseRepository.Update(course);
                     await _unitOfWork.CompleteAsync();
+                    TempData["ChangedCourse"] = $"The {course.Name} has been changed!";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -140,9 +141,8 @@ namespace Lms.Web.Controllers
                     }
                 }
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Teachers");
             }
-
             return View(course);
         }
 
@@ -175,10 +175,20 @@ namespace Lms.Web.Controllers
             var course = await _unitOfWork.CourseRepository.GetWithIncludesAsyncTest(id, query => query.Include(d => d.Documents),
                 query => query.Include(m => m.Modules).ThenInclude(m => m.Documents),
                 query => query.Include(a => a.Modules).ThenInclude(a => a.Activities).ThenInclude(d => d.Documents));
-    
+
+            var courseWillBeDeleted = await _unitOfWork.CourseRepository.GetAsync(id);
+
+            var moduleToCourse = _unitOfWork.ModuleRepository.GetAllAsync().Result.Where(u => u.CourseId == id);
+            foreach(var item in moduleToCourse)
+            {
+                _unitOfWork.ModuleRepository.Remove(item);
+            }
+
+            TempData["DeleteCourse"] = $"The {course.Name} has been deleted!";
             _unitOfWork.CourseRepository.Remove(course);
             await _unitOfWork.CompleteAsync();
-            return RedirectToAction(nameof(Index));
+          
+            return RedirectToAction("Index", "Teachers");
         }
 
 

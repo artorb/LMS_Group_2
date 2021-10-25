@@ -56,6 +56,8 @@ namespace Lms.Web.Controllers
             return PartialView("~/Views/Students/GetActivityDetailsPartial.cshtml", model);
         }
 
+
+
         // GET: Activities
         public async Task<IActionResult> Index()
         {
@@ -65,10 +67,7 @@ namespace Lms.Web.Controllers
                 (a => a.Include(act => act.ActivityType).Include(activity => activity.Module));
             return View(activity.ToList());
         }
-        //public async Task<IEnumerable<Activity>> ActivitesWithTypeAndModule()
-        //{
-        //    return await _context.Activities.Include(a => a.ActivityType).Include(a => a.Module).ToListAsync();
-        //}
+
 
 
         // GET: Activities/Details/5
@@ -91,6 +90,8 @@ namespace Lms.Web.Controllers
             return View(found);
         }
 
+
+
         // GET: Activities/Create
         public IActionResult Create()
         {
@@ -111,7 +112,6 @@ namespace Lms.Web.Controllers
                 await _unitOfWork.CompleteAsync();
                 return RedirectToAction(nameof(Index));
             }
-
             return View(activity);
         }
 
@@ -125,6 +125,7 @@ namespace Lms.Web.Controllers
                 Value = act.Id.ToString(),
             }).ToListAsync();
         }
+        
 
 
         // GET: Activities/Edit/5
@@ -175,6 +176,7 @@ namespace Lms.Web.Controllers
                 {
                     _unitOfWork.ActivityRepository.Update(activity);
                     await _unitOfWork.CompleteAsync();
+                    TempData["ChangedActivity"] = $"The {activity.Name} has been changed!";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -187,7 +189,7 @@ namespace Lms.Web.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Teachers");
             }
             return View(activity);
         }
@@ -203,19 +205,6 @@ namespace Lms.Web.Controllers
             }
 
             var activity = await _unitOfWork.ActivityRepository.FindAsync(id);
-
-            //var activity = await _unitOfWork.ActivityRepository.GetWithIncludesAsync
-            //(a => a.Include(act => act.ActivityType).Include(activity => activity.Module)
-            //    .Include(ac => ac.Documents));
-
-            //var found = activity.FirstOrDefault(c => c.Id == id);
-
-            //if (found == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //return View(found);
 
             if (activity == null)
             {
@@ -233,21 +222,13 @@ namespace Lms.Web.Controllers
         {
 
             var activity = await _unitOfWork.ActivityRepository.GetWithIncludesAsyncTest(id, query => query.Include(d => d.Documents));
-          
 
 
-            //var activity = await _unitOfWork.ActivityRepository.GetWithIncludesIdAsync(id, a => a.Documents);
-            //var documents = activity.Documents;
-
-            //// TODO FIXME
-            //foreach (var doc in documents)
-            //{
-            //    _unitOfWork.DocumentRepository.Remove(doc);
-            //}
-            
+            TempData["DeleteCourse"] = $"The {activity.Name} has been deleted!";
             _unitOfWork.ActivityRepository.Remove(activity);
             await _unitOfWork.CompleteAsync();
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("Index", "Teachers");
         }
 
         private async Task<bool> ActivityExists(int id)

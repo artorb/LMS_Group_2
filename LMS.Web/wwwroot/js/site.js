@@ -5,6 +5,11 @@
 
 // File Upload
 // 
+
+function goBack() {
+    window.history.back();
+}
+
 function addMore() {
     $('#dynamictable').append('<form asp-action="Create">< div asp-validation-summary="ModelOnly" class= "text-danger" >' +
         '</div ><div class="form-group"><label asp-for="Name" class="control-label"></label><input asp-for="Name" class="form-control" />' +

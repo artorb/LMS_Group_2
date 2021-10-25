@@ -39,6 +39,7 @@ namespace Lms.Core.Models.ViewModels
 
 
         [ActivityEndTimeCheck]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd H:mm}", ApplyFormatInEditMode = true)]
         public DateTime? Deadline { get; set; }
 
 
@@ -46,6 +47,7 @@ namespace Lms.Core.Models.ViewModels
         public int ModuleId { get; set; }
         public Module Module { get; set; }
 
+        [Required(ErrorMessage = "Please choose type!")]
         public int ActivityTypeId { get; set; }
  
 

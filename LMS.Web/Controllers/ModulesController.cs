@@ -180,6 +180,7 @@ namespace Lms.Web.Controllers
                 {
                     _unitOfWork.ModuleRepository.Update(module);
                     await _unitOfWork.CompleteAsync();
+                    TempData["ChangedModule"] = $"The {module.Name} has been changed!";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -193,7 +194,7 @@ namespace Lms.Web.Controllers
                     }
                 }
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Teachers");
             }
 
             return View(module);
@@ -216,29 +217,22 @@ namespace Lms.Web.Controllers
             return View(module);
         }
 
+
+
         // POST: Modules/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            //var module = await _unitOfWork.ModuleRepository.GetWithIncludesIdAsync(id, a => a.Documents);
-            //var documents = module.Documents;
+
             var module = await _unitOfWork.ModuleRepository.GetWithIncludesAsyncTest(id, query => query.Include(d => d.Documents),      
               query => query.Include(a => a.Activities).ThenInclude(d => d.Documents));
 
-
-            // TODO FIXME
-            //foreach (var doc in documents)
-            //{
-            //    _unitOfWork.DocumentRepository.Remove(doc);
-            //}
-
-
-
-
+            TempData["DeleteModule"] = $"The {module.Name} has been deleted!";
             _unitOfWork.ModuleRepository.Remove(module);
             await _unitOfWork.CompleteAsync();
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("Index", "Teachers");
         }
 
         private async Task<bool> ModuleExists(int id)

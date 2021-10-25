@@ -3,6 +3,7 @@ using Lms.Core.Models.ViewModels;
 using Lms.Core.Repositories;
 using Lms.Data.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,12 @@ namespace Lms.Web.Controllers
     public class TeachersController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly LmsDbContext db;
 
-        public TeachersController(IUnitOfWork unitOfWork)
+        public TeachersController(IUnitOfWork unitOfWork, LmsDbContext context)
         {
             _unitOfWork = unitOfWork;
+            db = context;
         }
 
         [HttpGet]
@@ -25,7 +28,16 @@ namespace Lms.Web.Controllers
         {
             return View();
         }
-        
+
+
+        private async Task<IEnumerable<SelectListItem>> GetAllActivityTypesAsync()
+        {
+            return await db.ActivityTypes.Select(act => new SelectListItem
+            {
+                Text = act.TypeName,
+                Value = act.Id.ToString(),
+            }).ToListAsync();
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -44,6 +56,7 @@ namespace Lms.Web.Controllers
                     {
                         TypeName = "Laboratory"
                     }
+                    //ActivityType = (ActivityType)await GetAllActivityTypesAsync()
                 };
                 
                 var module = new Module

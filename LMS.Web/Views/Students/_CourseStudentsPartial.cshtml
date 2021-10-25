@@ -22,9 +22,9 @@
                     <td> @Html.DisplayFor(modelItem => item.Email)               </td>
                     @if (User.IsInRole("Teacher"))
                     {
-                        <td> <a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="Edit" asp-route-Id = "@item.Id">Edit</a></td>
-                        <td> <a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="Delete" asp-route-Id="@item.Id">Delete</a></td>
-                        @*<td> <a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="Details" asp-route-Id="@item.Id">Details</a></td>*@
+                        <td> <a class="btn btn-sm btn-success" asp-controller="Students" asp-action="Edit" asp-route-Id = "@item.Id">Edit</a></td>
+                        <td> <a class="btn btn-sm btn-danger" asp-controller="Students" asp-action="Delete" asp-route-Id="@item.Id">Delete</a></td>
+                       
                     }
                 </tr>
                     {

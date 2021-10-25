@@ -1,4 +1,5 @@
 ﻿using Lms.Core.Entities;
+using Lms.Core.Validations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,24 +15,31 @@ namespace Lms.Core.Models.ViewModels
 
         public string UserId { get; set; }
 
+        [Required(ErrorMessage = "Please enter name!")]
+        [MinLength(2, ErrorMessage = "Minimum length: 2 character!")]
+        [MaxLength(40, ErrorMessage = "Maximum length: 40 character!")]
         [Display(Name = "Activity name")]
         public string ActivityName { get; set; }
 
-
+        [Required(ErrorMessage = "Please enter description!")]
+        [MinLength(5, ErrorMessage = "Minimum length: 5 character!")]
+        [MaxLength(500, ErrorMessage = "Maximum length: 500 character!")]
         [Display(Name = "Description")]
         public string ActivityDescription { get; set; }
 
-
+        [Required(ErrorMessage = "Please enter start date!")]   
+        [AcitivtyStartTimeCheck]
         [Display(Name = "Start date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd HH:mm}")]
         public DateTime ActivityStartDate { get; set; }
 
-
+        [Required(ErrorMessage = "Please enter end date!")]
+        [ActivityEndTimeCheck]
         [Display(Name = "End date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd HH:mm}")]
         public DateTime ActivityEndDate { get; set; }
 
-
+        [ActivityEndTimeCheck]
         [Display(Name = "Deadline")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd HH:mm}")]
         public DateTime? ActivityDeadline { get; set; }

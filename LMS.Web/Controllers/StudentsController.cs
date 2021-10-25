@@ -7,6 +7,7 @@ using Lms.Core.Repositories;
 using Lms.Data.Data;
 using Lms.Web.Service;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lms.Web.Controllers
@@ -89,15 +90,13 @@ namespace Lms.Web.Controllers
             { 
                 Id = UserClicked.Id,
                 Name = UserClicked.Name,
-                Email = UserClicked.Email,
-                CourseId = UserClicked.CourseId
+                Email = UserClicked.Email             
             };
 
             return View(model);
         }
 
 
-        
         // POST: Students/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -109,9 +108,9 @@ namespace Lms.Web.Controllers
             {
                 return NotFound();
             }
-            var userInDatabase = await db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == Id);        
-     
-                if (ModelState.IsValid)
+            var userInDatabase = await db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == Id);          
+         
+            if (ModelState.IsValid)
                 {
                     try
                     {
@@ -123,22 +122,22 @@ namespace Lms.Web.Controllers
   
 
                     _unitOfWork.UserRepository.Update(userInDatabase);
-                    await _unitOfWork.CompleteAsync();
-                    TempData["ChangedParticipant"] = "The participant is changed!";
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ApplicationUserExists(applicationUsermodel.Id).Result)
-                    {
-                        return NotFound();
+                    await _unitOfWork.CompleteAsync();               
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!ApplicationUserExists(applicationUsermodel.Id).Result)
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
-                }
-            }        
-            return RedirectToAction("Index", "Teachers");
+                return RedirectToAction("Index", "Teachers");
+            }
+            return View(applicationUsermodel);
         }
 
 
@@ -185,8 +184,8 @@ namespace Lms.Web.Controllers
                 item.ApplicationUserId = null;
             }
 
+            TempData["DeleteParticipant"] = $"The {userWillBeDeleted.Name} has been deleted!";
             _unitOfWork.UserRepository.Remove(userWillBeDeleted);
-
             await _unitOfWork.CompleteAsync();  
             return RedirectToAction("Index", "Teachers");
         }

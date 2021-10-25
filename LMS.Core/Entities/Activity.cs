@@ -35,6 +35,7 @@ namespace Lms.Core.Entities
 
 
         [ActivityEndTimeCheck]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd H:mm}", ApplyFormatInEditMode = true)]
         public DateTime? Deadline { get; set; }       
 
 
