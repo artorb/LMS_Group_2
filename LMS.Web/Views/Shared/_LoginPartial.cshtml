@@ -1,25 +1,40 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Lms.Core.Entities
+@using Lms.Web.Controllers
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
 <ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
+    @if (HomeController.UserLoggedIn)
     {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
-        </li>
-        @if (User.IsInRole(UserRoles.Teacher))
+        @if (SignInManager.IsSignedIn(User))
         {
             <li class="nav-item">
-                <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Register new user</a>
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
+            </li>
+            @if (User.IsInRole(UserRoles.Teacher))
+            {
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                        Register new User
+                    </a>
+                    <div class="dropdown-menu">
+                        @foreach (var role in UserRoles.RolesList)
+                        {
+                            string pageName = "/Account/Register" + @role;
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" asp-area="Identity" asp-page=@pageName>Register new @role</a>
+                            <div class="dropdown-divider"></div>     
+                        }
+                    </div>
+                </li>
+            }
+            <li class="nav-item">
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                </form>
             </li>
         }
-        <li class="nav-item">
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-            </form>
-        </li>
     }
     else
     {

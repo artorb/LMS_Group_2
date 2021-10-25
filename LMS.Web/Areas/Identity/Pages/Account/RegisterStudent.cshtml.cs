@@ -59,7 +59,7 @@ namespace Lms.Web.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
-            public string Password { get { return "12"; } }
+            public string Password { get { return "123"; } }
 
             //Used to assign the role upon creation of the user
             [Required]
@@ -79,7 +79,6 @@ namespace Lms.Web.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-            var test = Input.CourseId;
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, Name = Input.Name, CourseId =Input.CourseId };
