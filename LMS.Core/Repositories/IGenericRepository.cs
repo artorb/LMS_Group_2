@@ -12,19 +12,25 @@ namespace Lms.Core.Repositories
     public interface IGenericRepository<T> where T : BaseEntity
     {
         Task<T> GetWithIncludesAsyncTest(int id,params Func<IQueryable<T>, IIncludableQueryable<T, object>>[] includes);
+
         Task<IEnumerable<T>> GetWithIncludesAsync(Func<IQueryable<T>, IIncludableQueryable<T, object>> includes);
 
-        Task<IEnumerable<T>> GetAllWithIncludesAsync(
-            params Expression<Func<T, object>>[] includeProperties);
+        Task<IEnumerable<T>> GetAllWithIncludesAsync(params Expression<Func<T, object>>[] includeProperties);
 
         Task<T> GetWithIncludesIdAsync(int id, params Expression<Func<T, object>>[] includeProperties);
-
+        
         Task<IEnumerable<T>> GetAllAsync();
+
         Task<T> FindAsync(int? id);
+
         Task<bool> AnyAsync(int? id);
+
         Task<T> GetAsync(int id);
+
         void Add(T obj);
+
         void Update(T obj);
+
         void Remove(T obj);
     }
 }

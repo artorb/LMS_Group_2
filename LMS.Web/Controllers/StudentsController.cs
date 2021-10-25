@@ -39,10 +39,13 @@ namespace Lms.Web.Controllers
                 //Student
             await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId, d => d.Users) :
             //Teacher
-            await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)idFromCourse, d => d.Users);
+            await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)idFromCourse, d => d.Users);       
 
             var models = (from user in course.Users            
-                select new StudentCommonCourseViewModel { StudentName = user.Name, Email = user.Email }).ToList();
+                select new StudentCommonCourseViewModel { 
+                    Id = user.Id,
+                    StudentName = user.Name, 
+                    Email = user.Email }).ToList();
             return PartialView("_CourseStudentsPartial", models);
         }
 
@@ -52,10 +55,9 @@ namespace Lms.Web.Controllers
         public async Task<IActionResult> Details(string? Id)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
-
-         
+            var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);         
             ViewData["Id"] = userId;
+
             var model = new ApplicationUserViewModel()
             {
                 Name = UserLoggedIn.Name,
@@ -68,6 +70,7 @@ namespace Lms.Web.Controllers
 
 
         // GET: Students/Edit/5
+        //string id==null
         public async Task<IActionResult> Edit(string? Id)
         {
             if (Id == null)
@@ -75,66 +78,135 @@ namespace Lms.Web.Controllers
                 return NotFound();
             }
 
-            var user = await _unitOfWork.UserRepository.FindAsync(Id);
-            var model = new ApplicationUserViewModel
-            {
-                Name = user.Name,
-                Email = user.Email,               
-                CourseId = user.CourseId              
-            };
+            var UserClicked = await _unitOfWork.UserRepository.FirstOrDefaultAsync(Id);
 
-            if (user == null)
+            if (UserClicked == null)
             {
                 return NotFound();
             }
 
+            var model = new ApplicationUserViewModel
+            {
+                Name = UserClicked.Name,
+                Email = UserClicked.Email,
+                CourseId = UserClicked.CourseId
+            };
+
             return View(model);
         }
 
+
+        
         // POST: Students/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string Id, [Bind("Id,Name, CourseId")] ApplicationUser applicationUser)
+        public async Task<IActionResult> Edit( string Id, ApplicationUser applicationUser)
         {
             if (Id != applicationUser.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var userInDatabase = await db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == Id);
+        
+            if (!Equals(userInDatabase, applicationUser))
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    _unitOfWork.UserRepository.Update(applicationUser);
-                    await _unitOfWork.CompleteAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ApplicationUserExists(applicationUser.Id).Result)
+                    try
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
 
-                return RedirectToAction(nameof(Index));
+                        //DbUpdateConcurrencyException: Database operation expected to affect 1 row(s) but actually affected 0 row(s).
+                        //Data may have been modified or deleted since entities were loaded. 
+                        //See http://go.microsoft.com/fwlink/?LinkId=527962 for information on understanding and handling optimistic concurrency exceptions.
+
+                        //db.Update(applicationUser);            
+                        //await db.SaveChangesAsync();                  
+
+                        db.Users.Update(applicationUser);
+                        await db.SaveChangesAsync();
+                        //db.Entry(applicationUser).State = EntityState.Modified;
+
+                        // _unitOfWork.UserRepository.Update(applicationUser);
+                        //await _unitOfWork.CompleteAsync();
+                        //TempData["ChangedParticipant"] = "The participant is changed!";
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!ApplicationUserExists(applicationUser.Id).Result)
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                } 
             }
+            return RedirectToAction("Index", "Teachers");
 
-            return View(applicationUser);
         }
+
+
+        /*
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string Id, ApplicationUser applicationUser)
+        {
+            //från databasen
+            var appUserFromDatabase = await _unitOfWork.UserRepository.FirstOrDefaultAsync(Id);
+              
+
+            var appUsermodel = new ApplicationUser
+            {
+                Name = applicationUser.Name,
+                Email = applicationUser.Email      
+            };
+
+            if (!Equals(appUserFromDatabase, appUsermodel))
+            {
+
+                if (Id != appUsermodel.Id)
+                {
+                    return NotFound();
+                }
+            
+
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        _unitOfWork.UserRepository.Update(appUsermodel);
+                        await db.SaveChangesAsync();
+                        TempData["ChangedVehicle"] = "The vehicle is changed!";
+                        return RedirectToAction("Details", new { id = appUsermodel.Id });
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {                       
+                            return NotFound();                     
+                        
+                    }
+                }
+            }
+            return RedirectToAction("Details", new { id = appUsermodel.Id });
+        }
+        */
+
+
+
 
         private async Task<bool> ApplicationUserExists(string Id)
         {
             return await _unitOfWork.UserRepository.AnyAsync(Id);
         }
 
+
+        /*
         // GET: Courses/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string? id)
         {
             if (id == null)
             {
@@ -152,14 +224,17 @@ namespace Lms.Web.Controllers
             return View(course);
         }
 
+
+
         // POST: Courses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var course = await _unitOfWork.CourseRepository.GetWithIncludesAsyncTest(id, query => query.Include(d => d.Documents),
+            var user = await _unitOfWork.UserRepository.GetWithStringIdIncludesAsyncTest(id, query => query.Include(d => d.Documents),
+                query => query.Include(c => c.Courses).ThenInclude(m => m.Documents),
                 query => query.Include(m => m.Modules).ThenInclude(m => m.Documents),
-                query => query.Include(a => a.Modules).ThenInclude(a => a.Activities).ThenInclude(d => d.Documents));
+                query => query.Include(a => a.Modules).ThenInclude(a => a.Activities).ThenInclude(d => d.Documents)).Where(u=>u.Id.Equals(id));
             // var documents = course.;
 
             // TODO FIXME
@@ -171,5 +246,6 @@ namespace Lms.Web.Controllers
             await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }
+        */
     }
 }

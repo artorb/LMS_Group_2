@@ -10,7 +10,13 @@ namespace Lms.Core.Models.ViewModels
 {
     public class StudentCommonCourseViewModel
     {
-        [Display(Name = "Name")] public string StudentName { get; set; }
-        [Display(Name = "Email")] public string Email { get; set; }
+        public string Id { get; set; }
+
+        [Display(Name = "Name")] 
+        public string StudentName { get; set; }
+
+
+        [Display(Name = "Email")] 
+        public string Email { get; set; }
     }
 }

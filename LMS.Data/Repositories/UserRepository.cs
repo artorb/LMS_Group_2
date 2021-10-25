@@ -19,11 +19,13 @@ namespace Lms.Data.Repositories
             _context = context;
         }
 
+
         public async Task<ApplicationUser> FirstOrDefaultAsync(string id)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
         
+
         public async Task<ApplicationUser> GetIncludeTest(string id, Func<IQueryable<ApplicationUser>, IIncludableQueryable<ApplicationUser, object>> includes = null)
         {
             IQueryable<ApplicationUser> queryable = _context.Set<ApplicationUser>();
@@ -34,10 +36,7 @@ namespace Lms.Data.Repositories
             }
 
             return await queryable.FirstOrDefaultAsync(x => x.Id == id);
-        }
-
-
-    
+        }    
 
 
         public async Task<bool> AnyAsync(string? id)

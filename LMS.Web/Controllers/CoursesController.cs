@@ -63,11 +63,15 @@ namespace Lms.Web.Controllers
             return PartialView("~/Views/Students/_CourseDetailsPartial.cshtml", model);
         }
 
+
+
+
         // GET: Courses/Create
         public IActionResult Create()
         {
             return View();
         }
+
 
         // POST: Courses/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -85,6 +89,8 @@ namespace Lms.Web.Controllers
 
             return View(course);
         }
+
+
 
         // GET: Courses/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -140,6 +146,9 @@ namespace Lms.Web.Controllers
             return View(course);
         }
 
+
+
+
         // GET: Courses/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -178,6 +187,8 @@ namespace Lms.Web.Controllers
             await _unitOfWork.CompleteAsync();
             return RedirectToAction(nameof(Index));
         }
+
+
 
         private async Task<bool> CourseExists(int id)
         {

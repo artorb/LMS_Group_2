@@ -10,51 +10,115 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control"/>
+                <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control"/>
+                <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control"/>
+                <input asp-for="StartDate" class="form-control" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control"/>
+                <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
             <br>
-            <div id="savedModule">
-                @* @foreach (var module in Model.Modules) *@
-                @* { *@
-                @*     if (module != null) *@
-                @*     { *@
-                @*         <div> *@
-                @*             <label class="control-label">@module.Name</label> *@
-                @*         </div> *@
-                @*     } *@
-                @* } *@
+            <div id="savedModule"></div>
+
+
+
+            @* @foreach (var module in Model.Modules) *@
+            @* { *@
+            @*     if (module != null) *@
+            @*     { *@
+            @*         <div> *@
+            @*             <label class="control-label">@module.Name</label> *@
+            @*         </div> *@
+            @*     } *@
+            @* } *@
+            @*</div>
+         <a href="#createModule" class="btn btn-success" data-toggle="modal"><i class="fa fa-cog" aria-hidden="true"></i>Update</a>
+        <br>*@
+
+
+
+            @*<a type="submit" value="Create" class="btn btn-primary" data-toggle="popover" data-trigger="focus"
+               asp-controller="Modules" asp-action="Create"
+               data-ajax="true"
+               data-ajax-method="GET"
+               data-ajax-update="#savedModule"
+               data-ajax-mode="replace">
+        Create
+        </a>*@
+
+
+
+
+
+
+
+            <!--<div id="createModule" class="modal">
+    <div class="form-group">-->
+            @*<input type="submit" value="Create" class="btn btn-primary"/>*@
+            <!--<a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Modules" asp-action="Create"
+               data-ajax="true"
+               data-ajax-method="GET"
+               data-ajax-update="#savedModule"
+               data-ajax-mode="replace">
+                Create
+            </a>
+        </div>
+    </div>-->
+        <div id="authorFormGroup">
+            <label asp-for="Modules" class="text-info"></label>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+
+                <label asp-for="Modules.ElementAt(0).Name" class="control-label"></label>
+                <input asp-for="Modules.ElementAt(0).Name" class="form-control" />
+                @*<span asp-validation-for="Name" class="text-danger"></span>*@
             </div>
-             <a href="#createModule" class="btn btn-success" data-toggle="modal"><i class="fa fa-cog" aria-hidden="true"></i>Update</a>
-            <br>
-            <div id="createModule" class="modal">
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary"/>
-                    <a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Modules" asp-action="Create"
-                       data-ajax="true"
-                       data-ajax-method="GET"
-                       data-ajax-update="#savedModule"
-                       data-ajax-mode="replace">
-                        Create
-                    </a>
-                </div>
+            <div class="form-group">
+
+                <label asp-for="Modules.ElementAt(0).Description" class="control-label"></label>
+                <input asp-for="Modules.ElementAt(0).Description" class="form-control" />
+                @*<span asp-validation-for="Description" class="text-danger"></span>*@
             </div>
-        </form>
+            <div class="form-group">
+
+                <label asp-for="Modules.ElementAt(0).StartDate" class="control-label"></label>
+                <input asp-for="Modules.ElementAt(0).StartDate" class="form-control" />
+                @*<span asp-validation-for="StartDate" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+
+                <label asp-for="Modules.ElementAt(0).EndDate" class="control-label"></label>
+                <input asp-for="Modules.ElementAt(0).EndDate" class="form-control" />
+                @*<span asp-validation-for="EndDate" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn" id="addRowBtn"><span class="text-success"><i class="fa fa-plus-circle"></i></span></button>
+            </div>
+        </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+
+
+
+
+
+
+
+
+</form>
     </div>
 </div>
 

@@ -1,4 +1,5 @@
 ﻿using Lms.Core.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace Lms.Core.Models.ViewModels
 {
   public class ApplicationUserViewModel
     {
+      
         public string Name { get; set; }
 
         public string Email { get; set; }

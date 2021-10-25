@@ -18,13 +18,13 @@
                 @foreach (var item in Model)
                 {
                 <tr>
-                    <td><span>@i. </span>  @Html.DisplayFor(modelItem => item.StudentName)               </td>
+                    <td><span>@i. </span>  @Html.DisplayFor(modelItem => item.StudentName)  </td>
                     <td> @Html.DisplayFor(modelItem => item.Email)               </td>
                     @if (User.IsInRole("Teacher"))
                     {
-                        <td> <a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="Edit" asp-route-Id="@ViewData["Id"]">Edit</a></td>
+                        <td> <a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="Edit" asp-route-Id = "@item.Id">Edit</a></td>
                         <td> <a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="Delete" asp-route-Id="@ViewData["Id"]">Delete</a></td>
-                        <td> <a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="Details" asp-route-Id="@ViewData["Id"]">Details</a></td>
+                        @*<td> <a class="btn btn-sm btn-primary" asp-controller="Students" asp-action="Details" asp-route-Id="@ViewData["Id"]">Details</a></td>*@
                     }
                 </tr>
                     {

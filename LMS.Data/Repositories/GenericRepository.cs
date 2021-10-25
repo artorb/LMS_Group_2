@@ -23,6 +23,7 @@ namespace Lms.Data.Repositories
             table = db.Set<T>();
         }
 
+
         public async Task<T> GetWithIncludesAsyncTest(int id,
             params Func<IQueryable<T>, IIncludableQueryable<T, object>>[] includes)
         {
@@ -35,6 +36,7 @@ namespace Lms.Data.Repositories
             return await queryable.FirstOrDefaultAsync(a => a.Id == id);
         }
 
+
         public async Task<IEnumerable<T>> GetWithIncludesAsync(
             Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
         {
@@ -44,29 +46,33 @@ namespace Lms.Data.Repositories
             {
                 queryable = includes(queryable);
             }
-
             return await queryable.ToListAsync();
         }
+
 
         public void Add(T obj)
         {
             db.Add(obj);
         }
 
+
         public async Task<bool> AnyAsync(int? id)
         {
             return await table.AnyAsync(g => g.Id == id);
         }
+
 
         public async Task<T> FindAsync(int? id)
         {
             return await table.FindAsync(id);
         }
 
+
         public async Task<T> GetAsync(int id)
         {
             return await table.FirstOrDefaultAsync(p => p.Id == id);
         }
+
 
         public async Task<T> GetWithIncludesIdAsync(int id, params Expression<Func<T, object>>[] includeProperties)
         {
@@ -78,6 +84,7 @@ namespace Lms.Data.Repositories
 
             return await query.FirstOrDefaultAsync(p => p.Id == id);
         }
+
 
         public async Task<IEnumerable<T>> GetAllWithIncludesAsync(
             params Expression<Func<T, object>>[] includeProperties)
@@ -92,15 +99,18 @@ namespace Lms.Data.Repositories
             return await query.ToListAsync();
         }
 
+
         public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await table.ToListAsync();
         }
 
+
         public void Remove(T obj)
         {
             table.Remove(obj);
         }
+
 
         public void Update(T obj)
         {

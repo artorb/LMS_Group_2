@@ -117,12 +117,14 @@ namespace Lms.Web.Controllers
             }
 
             return View(module);
+            //return PartialView(module);
         }
 
         // GET: Modules/Create
         public IActionResult Create()
         {
-            return View();
+            //return View();
+            return PartialView();
         }
 
         // POST: Modules/Create
@@ -139,7 +141,8 @@ namespace Lms.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(module);
+            //return View(module);
+            return PartialView(module);
         }
 
         // GET: Modules/Edit/5
