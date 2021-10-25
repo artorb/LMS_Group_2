@@ -1,15 +1,11 @@
-﻿using Lms.Core.Entities;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Lms.Core.Entities;
 
 namespace Lms.Core.Models.ViewModels
 {
-   public class TeacherLoginViewModel
+   public class TeacherTableViewModel
     {
-    
         public Course Course { get; set; }
         public string ActiveModuleName { get; set; }
         public string NextModuleName { get; set; }

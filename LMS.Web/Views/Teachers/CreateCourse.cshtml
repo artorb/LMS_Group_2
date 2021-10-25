@@ -1,5 +1,6 @@
 ﻿@* @model Lms.Core.Models.ViewModels.NewCourseViewModel *@
-@model Lms.Core.Entities.Course
+@* @model Lms.Core.Entities.Course *@
+@model Lms.Core.Models.ViewModels.TeacherCreateCourseViewModel
 
 
 <h4 class="card-title text-center">Add course</h4>
@@ -7,35 +8,37 @@
     <!-- 2 column grid layout with text inputs for the first and last names -->
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-outline mb-4">
-        <label asp-for="Name" class="form-label"></label>
-        <input asp-for="Name" class="form-control"/>
-        <span asp-validation-for="Name" class="text-danger"></span>
+        <label asp-for="CourseName" class="form-label"></label>
+        <input asp-for="CourseName" class="form-control"/>
+        <span asp-validation-for="CourseName" class="text-danger"></span>
     </div>
 
     <div class="row mb-4">
         <div class="col">
             <div class="form-outline">
-                <label asp-for="StartDate" class="form-label"></label>
-                <input asp-for="StartDate" class="form-control"/>
-                <span asp-validation-for="StartDate" class="text-danger"></span>
+                <label asp-for="CourseStartDate" class="form-label"></label>
+                <input asp-for="CourseStartDate" class="form-control"/>
+                <span asp-validation-for="CourseStartDate" class="text-danger"></span>
             </div>
         </div>
         <div class="col">
             <div class="form-outline">
-                <label asp-for="EndDate" class="form-label"></label>
-                <input asp-for="EndDate" class="form-control"/>
-                <span asp-validation-for="EndDate" class="text-danger"></span>
+                <label asp-for="CourseEndDate" class="form-label"></label>
+                <input asp-for="CourseEndDate" class="form-control"/>
+                <span asp-validation-for="CourseEndDate" class="text-danger"></span>
             </div>
         </div>
     </div>
     <!-- Message input -->
     <div class="form-outline mb-4">
         <label class="form-label" for="form6Example7">Description</label>
-        <textarea asp-for="Description" class="form-control" id="form6Example7" rows="4"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
+        <textarea asp-for="CourseDescription" class="form-control" id="form6Example3" rows="4"></textarea>
+        <span asp-validation-for="CourseDescription" class="text-danger"></span>
     </div>
-</form>
-
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+@* *@
 <div class="card">
     <div class="card-body">
         <h4 class="card-title text-center">Add module</h4>
@@ -43,77 +46,125 @@
         <div id="addModule" class="table-responsive">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-outline mb-4">
-                <label asp-for="Name" class="form-label"></label>
-                <input asp-for="Name" class="form-control"/>
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="ModuleName" class="form-label"></label>
+                <input asp-for="ModuleName" class="form-control"/>
+                <span asp-validation-for="ModuleName" class="text-danger"></span>
             </div>
 
             <div class="row mb-4">
                 <div class="col">
                     <div class="form-outline">
-                        <label asp-for="StartDate" class="form-label"></label>
-                        <input asp-for="StartDate" class="form-control"/>
-                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                        <label asp-for="ModuleStartDate" class="form-label"></label>
+                        <input asp-for="ModuleStartDate" class="form-control"/>
+                        <span asp-validation-for="ModuleStartDate" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-outline">
-                        <label asp-for="EndDate" class="form-label"></label>
-                        <input asp-for="EndDate" class="form-control"/>
-                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                        <label asp-for="ModuleEndDate" class="form-label"></label>
+                        <input asp-for="ModuleEndDate" class="form-control"/>
+                        <span asp-validation-for="ModuleEndDate" class="text-danger"></span>
                     </div>
                 </div>
             </div>
             <!-- Message input -->
             <div class="form-outline mb-4">
                 <label class="form-label" for="form6Example7">Description</label>
-                <textarea asp-for="Description" class="form-control" id="form6Example7" rows="4"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <textarea asp-for="ModuleDescription" class="form-control" id="form6Example7" rows="4"></textarea>
+                <span asp-validation-for="ModuleDescription" class="text-danger"></span>
             </div>
         </div>
         <div class="text-center">
-            <button onclick="addfaqs();" class="badge badge-success"><i class="fa fa-plus"></i> ADD NEW</button>
+            <button onclick="addfaqs();" class="badge badge-success"><i class="fa fa-plus"></i> Add module</button>
         </div>
     </div>
 </div>
 
-<hr/>
+<br>
 
-<div class="card">
-    <div class="card-body">
-        <h4 class="card-title text-center">Add activity</h4>
-        <hr>
-        <div class="table-responsive">
-            <table id="faqs" class="table table-hover">
-                <thead>
-                <tr>
-                    <th>User</th>
-                    <th>Product</th>
-                    <th>Sale</th>
-                    <th>Status</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
-                        <input type="text" class="form-control" placeholder="User name">
-                    </td>
-                    <td>
-                        <input type="text" placeholder="Product name" class="form-control">
-                    </td>
-                    <td class="text-warning mt-10"> 18.76% <i class="fa fa-arrow-up"></i></td>
-                    <td class="mt-10">
-                        <button class="badge badge-danger"><i class="fa fa-trash"></i> Delete</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+
+<div id="accordionexample" class="accordion shadow">
+    <div class="card">
+        <div id="headingone" class="card-header bg-white shadow-sm border-0">
+            <h6 class="mb-0 font-weight-bold">
+                <a href="#" data-toggle="collapse" data-target="#collapseone" aria-expanded="true" aria-controls="collapseone" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">Add activity</a>
+            </h6>
         </div>
-        <div class="text-center">
-            <button onclick="addfaqs();" class="badge badge-success"><i class="fa fa-plus"></i> ADD NEW</button>
+        <div id="collapseone" aria-labelledby="headingone" data-parent="#accordionexample" class="collapse show">
+            <div class="card-body">
+                <h4 class="card-title text-center">Add activity</h4>
+                <hr>
+                <div id="addActivity" class="table-responsive">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-outline mb-4">
+                        <label asp-for="ActivityName" class="form-label"></label>
+                        <input asp-for="ActivityName" class="form-control"/>
+                        <span asp-validation-for="ActivityName" class="text-danger"></span>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col">
+                            <div class="form-outline">
+                                <label asp-for="ActivityStartDate" class="form-label"></label>
+                                <input asp-for="ActivityStartDate" class="form-control"/>
+                                <span asp-validation-for="ActivityStartDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-outline">
+                                <label asp-for="ActivityEndDate" class="form-label"></label>
+                                <input asp-for="ActivityEndDate" class="form-control"/>
+                                <span asp-validation-for="ActivityEndDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-outline">
+                                <label asp-for="ActivityDeadline" class="form-label"></label>
+                                <input asp-for="ActivityDeadline" class="form-control"/>
+                                <span asp-validation-for="ActivityDeadline" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <label asp-for="ActivityType" class="form-label"></label>
+                        @* <input asp-for="ActivityType" class="form-control"/> *@
+                        <select asp-for="ActivityType" asp-items="Model.ActivityType" class="form-control">
+                            <option selected="selected" value="">Please select</option>
+                        </select>
+                        <span asp-validation-for="ActivityType" class="text-danger"></span>
+                    </div>
+                    <!-- Message input -->
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form6Example7">Description</label>
+                        <textarea asp-for="ActivityDescription" class="form-control" id="form6Example7" rows="4"></textarea>
+                        <span asp-validation-for="ActivityDescription" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button onclick="addfaqs();" class="badge badge-success"><i class="fa fa-plus"></i> Add activity </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+</form>
+
+@* <div class="container"> *@
+@*     <div id="accordionexample" class="accordion shadow"> *@
+@*         <div class="card"> *@
+@*             <div id="headingone" class="card-header bg-white shadow-sm border-0"> *@
+@*                 <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#collapseone" aria-expanded="true" aria-controls="collapseone" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">collapsible group item #1</a></h6> *@
+@*             </div> *@
+@*             <div id="collapseone" aria-labelledby="headingone" data-parent="#accordionexample" class="collapse show"> *@
+@*                 <div class="card-body p-5"> *@
+@*                     <p class="font-weight-light m-0">anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. food truck quinoa nesciunt laborum eiusmod. brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.</p> *@
+@*                 </div> *@
+@*             </div> *@
+@*         </div> *@
+@*     </div> *@
+@* </div> *@
+
 
 @* <div class="row"> *@
 @*     <div class="col-md-4"> *@
@@ -174,6 +225,6 @@
     <a asp-action="Index" asp-controller="Teachers"> Back to List</a>
 </div>
 
-@* @section Scripts { *@
-@*     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); } *@
-@* } *@
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
