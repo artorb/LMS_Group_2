@@ -1,0 +1,50 @@
+﻿@model Lms.Core.Models.ViewModels.TeacherLoginViewModel
+@using Lms.Web.Extensions
+
+
+<div class="card-deck">
+    <div class="card border-0">
+
+    </div>
+</div>
+
+
+<div class="delete">
+    @if (User.IsInRole("Teacher"))
+    {
+        <a class="btn btn-sm btn-primary" asp-controller="Courses" asp-action="Edit" asp-route-id="@ViewData["CourseId"]">Edit</a>
+        <a class="btn btn-sm btn-primary" asp-controller="Courses" asp-action="Delete" asp-route-id="@ViewData["CourseId"]">Delete</a>
+    }
+    </div>
+
+
+
+<div>
+    @if (User.IsInRole("Teacher"))
+    {
+        @using (Html.BeginFormActivity("TeacherUploadFilesForCourse", "Upload", new { courseId = Model.Course }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="form-horizontal">
+
+                <div class="form-group uploadButtonGroup">
+                    <div class="uploadButtonContainer">
+                        <input type="file" class="upload-box" multiple name="files" id="Files" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Upload" class="btn btn-sm btn-primary submitButton" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10 text-success">
+                        @ViewBag.UploadStatus
+                    </div>
+                </div>
+
+            </div>
+        }
+    }
+</div>
