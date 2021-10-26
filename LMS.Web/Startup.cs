@@ -58,7 +58,7 @@ namespace Lms.Web
             services.AddScoped<IPdfSeedToUploadRepository, PdfSeedToUploadRepository>();
 
             // API > IHttpClientFactory using named client
-            services.AddHttpClient("LiteratureClient", client =>
+            services.AddHttpClient("BaseClient", client =>
             {
                 client.BaseAddress = new Uri("https://localhost:5001/api/");
                 client.DefaultRequestHeaders.Clear();

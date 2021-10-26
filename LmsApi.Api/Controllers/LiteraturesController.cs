@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LmsApi.Api.Controllers
@@ -24,6 +25,29 @@ namespace LmsApi.Api.Controllers
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        // GET: api/literatures/filter
+        [HttpGet("filter")]
+        public async Task<ActionResult<IEnumerable<LiteratureDto>>> GetFiltredAll([FromQuery]string searchQuery = "", int selectId = 0)
+        {
+            try
+            {
+                var result =
+                    await unitOfWork.LiteraturesRepo.GetAllAsync(filter: l => (string.IsNullOrWhiteSpace(searchQuery) || l.Title.ToLower().Contains(searchQuery.ToLower())) || 
+                                                                              (string.IsNullOrEmpty(searchQuery) || l.Authors.Any(a => a.FirstName.ToLower().Contains(searchQuery.ToLower())) || l.Authors.Any(a => a.LastName.ToLower().Contains(searchQuery.ToLower()))) &&
+                                                                              (l.SubjectId == selectId || selectId == 0), 
+                                                                 include: l => l.Include(l => l.Category)
+                                                                                .Include(l => l.Subject)
+                                                                                .Include(l => l.Level)
+                                                                                .Include(l => l.Authors));
+
+                return Ok(mapper.Map<IEnumerable<LiteratureDto>>(result));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure...");
+            }
+        }
+
         // GET: api/literatures
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LiteratureDto>>> GetAll(bool include = false)
@@ -31,10 +55,10 @@ namespace LmsApi.Api.Controllers
             try
             {
                 var result = include ?
-                    await unitOfWork.LiteraturesRepo.GetAllWithIncludeAsync(includes: l => l.Include(l => l.Category)
-                                                                                            .Include(l => l.Subject)
-                                                                                            .Include(l => l.Level)
-                                                                                            .Include(l => l.Authors)) : 
+                    await unitOfWork.LiteraturesRepo.GetAllAsync(include: l => l.Include(l => l.Category)
+                                                                                .Include(l => l.Subject)
+                                                                                .Include(l => l.Level)
+                                                                                .Include(l => l.Authors)) : 
                     await unitOfWork.LiteraturesRepo.GetAllAsync();
 
                 return Ok(mapper.Map<IEnumerable<LiteratureDto>>(result));
@@ -52,8 +76,8 @@ namespace LmsApi.Api.Controllers
             try
             {
                 var result = include ?
-                    await unitOfWork.LiteraturesRepo.GetWithIncludeAsync(id, 
-                                    includes: src => src.Include(l => l.Category).Include(l => l.Subject).Include(l => l.Level).Include(a => a.Authors)) :
+                    await unitOfWork.LiteraturesRepo.GetAsync(id, 
+                                    include: src => src.Include(l => l.Category).Include(l => l.Subject).Include(l => l.Level).Include(a => a.Authors)) :
                     await unitOfWork.LiteraturesRepo.GetAsync(id);
 
                 if (result == null) return NotFound();
@@ -67,16 +91,16 @@ namespace LmsApi.Api.Controllers
         }
 
         //api/authors/Stephen/literauters/Rymden
-
         [HttpPost]
-        public async Task<ActionResult<LiteratureDto>> Post(LiteratureForCreateUpdateDto dto)
+        public async Task<ActionResult<LiteratureDto>> Post(LiteratureForCreateDto dto)
         {
             try
             {
-                /*if (await unitOfWork.LiteraturesRepo.GetAsync(dto.) != null)
+                var literatures = await unitOfWork.LiteraturesRepo.GetAllAsync();
+                if (literatures.Any(l => l.Title == dto.Title))
                 {
                     return BadRequest("Literature with the specified title already exists.");
-                }*/
+                }
 
                 var literature = mapper.Map<Literature>(dto);
                 unitOfWork.LiteraturesRepo.Add(literature);
@@ -94,14 +118,15 @@ namespace LmsApi.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<LiteratureDto>> Put(int id, LiteratureForCreateUpdateDto dto)
+        public async Task<ActionResult<LiteratureDto>> Put(int id, LiteratureForUpdateDto dto)
         {
             try
             {
                 var existingLiterature = await unitOfWork.LiteraturesRepo.FindAsync(id);
-                if (existingLiterature == null) return NotFound($"Could not find the literature with id: {id}.");
+                if (existingLiterature == null) return NotFound($"Couldn't find the literature with id: {id}.");
                 if (existingLiterature.Title == dto.Title) return BadRequest("Literature with the specified title already exists.");
 
+                
                 mapper.Map(dto, existingLiterature);
 
                 if (await unitOfWork.CompleteAsync())
@@ -111,7 +136,7 @@ namespace LmsApi.Api.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure...");
             }
             return BadRequest(); // E.g. if the CompleteAsync fails...
         }

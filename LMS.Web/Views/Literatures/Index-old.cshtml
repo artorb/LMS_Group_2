@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Lms.Core.Models.ViewModels.LiteratureViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+} 
+
+<div class="bg-light rounded p-4">
+    <h1>Literatures</h1>
+
+    <div id="DetailsView" class="bg-success rounded p-2 invisible"></div>
+
+    <div id="ListView" class="bg-secondary rounded p-2 visible">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Category)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Level)
+                    </th>
+                    <th>
+                        <a asp-action="Create" data-ajax="true" data-ajax-method="get" data-ajax-update="#DetailsView" data-ajax-mode="replace" data-ajax-success="ShowDetails()" class="btn btn-primary btn-sm">Create New</a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <partial name="_LiteraturePartial" model="@item" />
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function ShowDetails() {
+            $('#DetailsView').addClass("visible");
+            $('#DetailsView').removeClass("invisible");
+
+            $('#ListView').addClass("invisible");
+            $('#ListView').removeClass("visible");
+            return;
+        }
+
+        function CloseDetails() {
+            $('#DetailsView').addClass("invisible");
+            $('#DetailsView').removeClass("visible");
+
+            $('#ListView').addClass("visible");
+            $('#ListView').removeClass("invisible");
+            return;
+        }
+
+        //$('#CloseDetailsBtn').click(function () {
+        //    console.log('clicked');
+        //    CloseDetails();
+        //});
+
+        function DeleteLiteratureItem(form) {
+            let removeLiteratureEl = $(form);
+            removeLiteratureEl.closest('tr').remove();
+        }
+    </script>
+}

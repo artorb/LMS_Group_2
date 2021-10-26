@@ -19,11 +19,35 @@ namespace Lms.Web.Controllers
             clientFactory = httpClientFactory;
         }
 
+        public async Task<IActionResult> Filter(string searchQuery, int selectId)
+        {
+            IEnumerable<LiteratureViewModel> literatures = null;
+
+            var client = clientFactory.CreateClient("BaseClient"); // The name is definied in Startup.cs
+
+            var requestMsg = new HttpRequestMessage(HttpMethod.Get, $"literatures/filter?include=true&searchQuery={searchQuery}&selectId={selectId}");
+
+            var responseMsg = await client.SendAsync(requestMsg);
+            if (responseMsg.IsSuccessStatusCode)
+            {
+                using (var responseStream = await responseMsg.Content.ReadAsStreamAsync())
+                {
+                    literatures = await DeserializeAsync<IEnumerable<LiteratureViewModel>>(responseStream);
+                }
+            }
+            else
+            {
+                literatures = Enumerable.Empty<LiteratureViewModel>();
+                ModelState.AddModelError(string.Empty, $"A server error occured at {nameof(Filter)} with status code {responseMsg.StatusCode}.");
+            }
+            return View(nameof(Index), literatures);
+        }
+
         public async Task<IActionResult> Index()
         {
             IEnumerable<LiteratureViewModel> literatures = null;
 
-            var client = clientFactory.CreateClient("LiteratureClient"); // The name is definied in Startup.cs
+            var client = clientFactory.CreateClient("BaseClient"); // The name is definied in Startup.cs
             
             var requestMsg = new HttpRequestMessage(HttpMethod.Get, "literatures?include=true");
 
@@ -38,8 +62,7 @@ namespace Lms.Web.Controllers
             else
             {
                 literatures = Enumerable.Empty<LiteratureViewModel>();
-
-                ModelState.AddModelError(string.Empty, $"Server error at {nameof(Index)}. Status code: {responseMsg.StatusCode}.");
+                ModelState.AddModelError(string.Empty, $"A server error occured at {nameof(Index)} with status code {responseMsg.StatusCode}.");
             }
             return View(literatures);
         }
@@ -50,7 +73,7 @@ namespace Lms.Web.Controllers
 
             LiteratureViewModel literature = null;
 
-            var client = clientFactory.CreateClient("LiteratureClient");
+            var client = clientFactory.CreateClient("BaseClient");
 
             var requestMsg = new HttpRequestMessage(HttpMethod.Get, $"literatures/{id}?include=true");
 
@@ -61,6 +84,11 @@ namespace Lms.Web.Controllers
                 {
                     literature = await DeserializeAsync<LiteratureViewModel>(responseStream);
                 }
+            }
+            else
+            {
+                literature = null;
+                ModelState.AddModelError(string.Empty, $"A server error occured at {nameof(Details)} with status code {responseMsg.StatusCode}.");
             }
             return View(literature);
         }
@@ -74,30 +102,121 @@ namespace Lms.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(LiteratureCreateViewModel viewModel)
         {
-            if (viewModel.Authors.Count > 0 && viewModel.Authors[0].FirstName == null)
+            if (ModelState.IsValid)
             {
-                viewModel.Authors.Clear();
+                var client = clientFactory.CreateClient("BaseClient");
+
+                var requestMsg = new HttpRequestMessage(HttpMethod.Post, "literatures");
+                requestMsg.Content = JsonContent.Create(viewModel);
+
+                var responseMsg = await client.SendAsync(requestMsg);
+                if (responseMsg.IsSuccessStatusCode)
+                {
+                    TempData["LocationUri"] = responseMsg.Headers.Location.AbsoluteUri; // used to store the received location uri
+                    return RedirectToAction("Create", "Authors");
+                }
+                else
+                {
+                    ModelState.AddModelError("CreateResponseError", $"A server error occured at {nameof(Create)} with status code {responseMsg.StatusCode}.");
+                }
             }
-            ViewBag.AuthorsCount = viewModel.Authors.Count();
-            
-            var client = clientFactory.CreateClient("LiteratureClient");
+            return View();
+        }
 
-            var requestMsg = new HttpRequestMessage(HttpMethod.Post, "literatures");
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null) return NotFound();
 
-            requestMsg.Content = JsonContent.Create(viewModel);
+            LiteratureEditViewModel literature = null;
+
+            var client = clientFactory.CreateClient("BaseClient");
+
+            var requestMsg = new HttpRequestMessage(HttpMethod.Get, $"literatures/{id}?include=true");
 
             var responseMsg = await client.SendAsync(requestMsg);
             if (responseMsg.IsSuccessStatusCode)
             {
-                //ModelState.AddModelError(string.Empty, $"{responseMsg.Content}");
-                return RedirectToAction(nameof(Index));
+                using (var responseStream = await responseMsg.Content.ReadAsStreamAsync())
+                {
+                    literature = await DeserializeAsync<LiteratureEditViewModel>(responseStream);
+                }
             }
             else
             {
-                ModelState.AddModelError(string.Empty, $"Server error at {nameof(Create)}. Status code: {responseMsg.StatusCode}.");
+                literature = null;
+                ModelState.AddModelError(string.Empty, $"A server error occured at {nameof(Edit)} with status code {responseMsg.StatusCode}.");
+            }
+            
+            return View(literature);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, LiteratureEditViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var client = clientFactory.CreateClient("BaseClient");
+
+                var requestMsg = new HttpRequestMessage(HttpMethod.Put, $"literatures/{id}");
+                requestMsg.Content = JsonContent.Create(viewModel);
+
+                var responseMsg = await client.SendAsync(requestMsg);
+                if (responseMsg.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ModelState.AddModelError("EditResponseError", $"A server error occured at {nameof(Edit)} with status code {responseMsg.StatusCode}.");
+                }
             }
             return View(viewModel);
         }
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null) return NotFound();
+
+            LiteratureViewModel literature = null;
+
+            var client = clientFactory.CreateClient("BaseClient");
+
+            var requestMsg = new HttpRequestMessage(HttpMethod.Get, $"literatures/{id}?include=true");
+
+            var responseMsg = await client.SendAsync(requestMsg);
+            if (responseMsg.IsSuccessStatusCode)
+            {
+                using (var responseStream = await responseMsg.Content.ReadAsStreamAsync())
+                {
+                    literature = await DeserializeAsync<LiteratureViewModel>(responseStream);
+                }
+            }
+            else
+            {
+                literature = null;
+                ModelState.AddModelError(string.Empty, $"A server error occured at {nameof(Delete)} with status code {responseMsg.StatusCode}.");
+            }
+            return View(literature);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id, LiteratureViewModel viewModel)
+        {
+            var client = clientFactory.CreateClient("BaseClient");
+
+            var requestMsg = new HttpRequestMessage(HttpMethod.Delete, $"literatures/{id}");
+            requestMsg.Content = JsonContent.Create(viewModel);
+
+            var responseMsg = await client.SendAsync(requestMsg);
+            if (!responseMsg.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError(string.Empty, $"A server error occured at {nameof(Delete)} with status code {responseMsg.StatusCode}.");
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
 
         // Source: https://newbedev.com/can-json-net-serialize-deserialize-to-from-a-stream
         public static async Task<T> DeserializeAsync<T>(Stream stream)

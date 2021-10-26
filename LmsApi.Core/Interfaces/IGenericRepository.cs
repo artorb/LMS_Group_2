@@ -10,14 +10,14 @@ namespace LmsApi.Core.Interfaces
 {
     public interface IGenericRepository<T> where T : BaseEntity
     {
-        Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null);
-        Task<IEnumerable<T>> GetAllWithIncludeAsync(Expression<Func<T, bool>> filter = null, 
-                                                    Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null);
-        Task<T> GetAsync(int id, Expression<Func<T, bool>> filter = null);
-        Task<T> GetWithIncludeAsync(int id, Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null);
+        Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, 
+                                                Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
+        Task<T> GetAsync(int id, Expression<Func<T, bool>> filter = null, 
+                                                Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
         Task<T> FindAsync(int id);
         Task<bool> ExistsAsync(int id);
         void Add(T entity);
+        void AddRange(IEnumerable<T> entities);
         void Update(T entity);
         void Delete(T entity);
     }

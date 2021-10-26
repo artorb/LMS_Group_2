@@ -1,53 +1,72 @@
 ﻿@model IEnumerable<Lms.Core.Models.ViewModels.LiteratureViewModel>
+@inject Lms.Web.Service.LitteratureSelectListService service
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<div class="bg-light rounded p-4">
-    <h1>Index</h1>
+<h1>Index</h1>
 
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
 
-    <div class="bg-secondary rounded p-2">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Title)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Category)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Level)
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Title)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Category)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Level)
-                        </td>
-                        <td>
-                            @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
-                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                            @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+<form asp-action="Filter" method="get">
+    <div class="input-group mb-2">
+        <div class="input-group-prepend col-md-6">
+            <input type="text" name="searchQuery" class="form-control" placeholder="Search on title or author...">
+        </div>
+        <div class="input-group col-md-4">
+            <select asp-items="@await service.GetSubjectsToSelectListItem()" name="selectId" class="form-control">
+                <option selected="selected" value="">No Subject Selected</option>
+            </select>
+        </div>
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-outline-secondary">Filter</button>
+        </div>
     </div>
-</div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subject)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Level)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subject)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Level)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

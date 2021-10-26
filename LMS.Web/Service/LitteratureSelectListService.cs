@@ -22,7 +22,7 @@ namespace Lms.Web.Service
         {
             IEnumerable<SelectListItem> selectListItems = null;
 
-            var client = clientFactory.CreateClient("LiteratureClient");
+            var client = clientFactory.CreateClient("BaseClient");
 
             var requestMsg = new HttpRequestMessage(HttpMethod.Get, "categories");
 
@@ -48,7 +48,7 @@ namespace Lms.Web.Service
         {
             IEnumerable<SelectListItem> selectListItems = null;
 
-            var client = clientFactory.CreateClient("LiteratureClient");
+            var client = clientFactory.CreateClient("BaseClient");
 
             var requestMsg = new HttpRequestMessage(HttpMethod.Get, "subjects");
 
@@ -74,7 +74,7 @@ namespace Lms.Web.Service
         {
             IEnumerable<SelectListItem> selectListItems = null;
 
-            var client = clientFactory.CreateClient("LiteratureClient");
+            var client = clientFactory.CreateClient("BaseClient");
 
             var requestMsg = new HttpRequestMessage(HttpMethod.Get, "levels");
 

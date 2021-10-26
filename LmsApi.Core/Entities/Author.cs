@@ -13,5 +13,10 @@ namespace LmsApi.Core.Entities
 
         // NAV PROPERTIES
         public ICollection<Literature> Literatures { get; set; }
+
+        public Author()
+        {
+            Literatures = new List<Literature>();
+        }
     }
 }

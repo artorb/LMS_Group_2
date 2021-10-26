@@ -12,16 +12,18 @@ namespace Lms.Core.Models.ViewModels
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+
+        [Display(Name = "Publish Date")]
         public DateTime PublishDate { get; set; }
         public string Url { get; set; }
         public string Category { get; set; }
         public string Subject { get; set; }
         public string Level { get; set; }
-        public ICollection<LiteratureAuthorViewModel> Authors { get; set; }
+        public ICollection<AuthorViewModel> Authors { get; set; }
 
         public LiteratureViewModel()
         {
-            Authors = new List<LiteratureAuthorViewModel>();
+            Authors = new List<AuthorViewModel>();
         }
     }
 }

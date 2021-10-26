@@ -1,16 +1,16 @@
-﻿@model Lms.Core.Models.ViewModels.LiteratureCreateViewModel
+﻿@model Lms.Core.Models.ViewModels.LiteratureEditViewModel
 @inject Lms.Web.Service.LitteratureSelectListService service
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
-<h4>Create</h4>
+<h4>Edit</h4>
 <hr />
 <div class="row">
     <div class="col-md-12">
-        @Html.ValidationMessage("CreateResponseError")
-        <form asp-action="Create">
+        @Html.ValidationMessage("EditResponseError")
+        <form asp-action="Edit">
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary btn-block" />
+                <input type="submit" value="Update" class="btn btn-primary btn-block" />
             </div>
         </form>
     </div>
