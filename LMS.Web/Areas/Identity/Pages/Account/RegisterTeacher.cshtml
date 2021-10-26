@@ -1,36 +1,36 @@
 ﻿@page
 @using System.Reflection;
-@model RegisterStudentModel
+@model RegisterTeacherModel
 @{
-    ViewData["Title"] = "Register Student";
+    ViewData["Title"] = "Register Teacher";
 }
-
 <h1>@ViewData["Title"]</h1>
 
-@if (TempData["UserNameAndCourse"] != null)
+@if (TempData["UserName"] != null)
 {
-    var message = (string[])TempData["UserNameAndCourse"];
+    var message = (string)TempData["UserName"];
     <div class="alert alert-success" id="sucess-alert">
         <strong>Sucess!</strong>
         <div>
             <p>
-                The student account for <b>@message[0]</b> was succesfully created, and added to the <b>@message[1]</b> course!
-            </p> 
+                The teacher account for <b>@message</b> was succesfully created!
+            </p>
         </div>
     </div>
 }
 
 <div class="row">
     <div class="col-lg-4">
-        <form asp-route-returnUrl="@Model.ReturnUrl" method="post" id="register-student-form">
-            <h4>Create a new Student account.</h4>
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post" id="form1">
+            <h4>Create a new Teacher account.</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Input.FirstName"></label>
                 <input asp-for="Input.FirstName" class="form-control" />
                 <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-            </div>            <div class="form-group">
+            </div>
+            <div class="form-group">
                 <label asp-for="Input.LastName"></label>
                 <input asp-for="Input.LastName" class="form-control" />
                 <span asp-validation-for="Input.LastName" class="text-danger"></span>
@@ -40,18 +40,24 @@
                 <input asp-for="Input.Email" class="form-control" />
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Input.CourseId">Select a course</label>
-                <select asp-for="Input.CourseId" class="form-control">
-                    @foreach (var Course in RegisterStudentModel.Courses)
-                    {
-                        <option value="@Course.Id">@Course.Name</option>
-                    }
-                </select>
-            </div>
-            <button name="btn-student-register" type="submit" class="btn btn-primary">Register</button>
-
+            <button name="btn-techer-register" type="submit" class="btn btn-primary">Register</button>
         </form>
+        <div id="confirm-techer-creation" class="modal hide fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title">Register a new Teacher</h2>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to create this Teacher?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="confirm" type="button" class="btn btn-danger">Yes, Register</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <br />
         <p>
             <a asp-controller="Home" asp-action="Index">
@@ -65,7 +71,7 @@
         </section>
     </div>
 </div>
-
+</script>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

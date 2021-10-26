@@ -20,7 +20,7 @@ using Lms.Core.Repositories;
 namespace Lms.Web.Areas.Identity.Pages.Account
 {
     [Authorize(Roles = Core.Entities.UserRoles.Teacher)]
-    public class RegisterStudentModel : PageModel
+    public class RegisterTeacherModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -28,7 +28,7 @@ namespace Lms.Web.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly IUnitOfWork _unitOfWork;
 
-        public RegisterStudentModel(IUnitOfWork unitOfWork,
+        public RegisterTeacherModel(IUnitOfWork unitOfWork,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
@@ -78,11 +78,7 @@ namespace Lms.Web.Areas.Identity.Pages.Account
 
             //Used to assign the role upon creation of the user
             [Required]
-            public string Role { get { return UserRoles.Student; } }
-
-            //Used to assign a course to the user
-            [Required]
-            public int CourseId { get; set; }
+            public string Role { get { return UserRoles.Teacher; } }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -93,20 +89,19 @@ namespace Lms.Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/Identity/Account/Register" + UserRoles.Student);
+            returnUrl ??= Url.Content("~/Identity/Account/Register" + UserRoles.Teacher);
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, Name = Input.Name, CourseId = Input.CourseId };
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, Name = Input.Name };
                 var result1 = await _userManager.CreateAsync(user, Input.Password);
                 var result2 = await _userManager.AddToRoleAsync(user, Input.Role);//Tries to assign the role in "Input.Role" to "user"
 
                 if (result1.Succeeded && result2.Succeeded)
                 {
-                    var courseName = Courses.FirstOrDefault(c => c.Id == Input.CourseId).Name;
                     _logger.LogInformation("User created a new account with password.");
-                    TempData["UserNameAndCourse"] = new List<string>() { Input.Name, courseName };
-                    ModelState.Clear();
+                    TempData["UserName"] = Input.Name;
                     return LocalRedirect(returnUrl);
+
                 }
                 foreach (var error in result1.Errors)
                 {
