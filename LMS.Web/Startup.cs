@@ -58,12 +58,14 @@ namespace Lms.Web
           
 
             // API > IHttpClientFactory using named client
-            services.AddHttpClient("LiteratureClient", client =>
+            services.AddHttpClient("BaseClient", client =>
             {
                 client.BaseAddress = new Uri("https://localhost:5001/api/");
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             });
+
+            services.AddScoped<LitteratureSelectListService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

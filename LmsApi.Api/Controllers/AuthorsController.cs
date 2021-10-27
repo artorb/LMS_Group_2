@@ -24,12 +24,42 @@ namespace LmsApi.Api.Controllers
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        //api/literatures/{literatureId}/authors/collection
+        [HttpPost("collection")]
+        public async Task<ActionResult<IEnumerable<AuthorDto>>> PostCollection([FromRoute]int literatureId, [FromBody]IEnumerable<AuthorForCreateUpdateDto> dto)
+        {
+            try
+            {
+                var literature = await unitOfWork.LiteraturesRepo.GetAsync(literatureId);
+                if (literature == null) return BadRequest("Literature does not exist");
+
+                var author = mapper.Map<IEnumerable<Author>>(dto);
+                foreach (var item in author)
+                {
+                    item.Literatures.Add(literature);
+                    unitOfWork.AuthorsRepo.Add(item);
+                }
+
+                if (await unitOfWork.CompleteAsync())
+                {
+                    return Ok();
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure...");
+            }
+            return BadRequest("Failed to save new author");
+        }
+
+
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AuthorDto>>> GetAll(int literatureId)
         {
             try
             {
-                var result = 
+                var result =
                     await unitOfWork.AuthorsRepo.GetAllAsync(filter: a => a.Literatures.FirstOrDefault().Id == literatureId);
 
                 return Ok(mapper.Map<IEnumerable<AuthorDto>>(result));
@@ -38,6 +68,30 @@ namespace LmsApi.Api.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure...");
             }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<AuthorDto>> Post([FromRoute]int literatureId, [FromBody]AuthorForCreateUpdateDto dto)
+        {
+            try
+            {
+                var literature = await unitOfWork.LiteraturesRepo.GetAsync(literatureId);
+                if (literature == null) return BadRequest("Literature does not exist");
+
+                var author = mapper.Map<Author>(dto);
+                author.Literatures.Add(literature);
+                unitOfWork.AuthorsRepo.Add(author);
+
+                if (await unitOfWork.CompleteAsync())
+                {
+                    return CreatedAtAction(nameof(Get), new { literatureId = literature.Id, id = author.Id }, mapper.Map<AuthorDto>(author));
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure...");
+            }
+            return BadRequest("Failed to save new author");
         }
 
         [HttpGet("{id:int}")]
@@ -58,29 +112,10 @@ namespace LmsApi.Api.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<ActionResult<AuthorDto>> Post(int literatureId, AuthorForCreateUpdateDto dto)
-        {
-            try
-            {
-                var literatur = await unitOfWork.LiteraturesRepo.GetAsync(literatureId);
-                if (literatur == null) return BadRequest("Literature does not exist");
+        
 
-                var author = mapper.Map<Author>(dto);
-                //author.Literatures.Add(literatur);
-                unitOfWork.AuthorsRepo.Add(author);
+        
 
-                if (await unitOfWork.CompleteAsync())
-                {
-                    return CreatedAtAction(nameof(Get), new { id = author.Id }, mapper.Map<AuthorDto>(author));
-                }
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure...");
-            }
-            return BadRequest("Failed to save new author");
-        }
 
         [HttpPut("{id:int}")]
         public async Task<ActionResult<AuthorDto>> Put(int literatureId, int id, AuthorForCreateUpdateDto dto)

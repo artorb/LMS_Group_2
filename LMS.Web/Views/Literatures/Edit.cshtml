@@ -1,0 +1,77 @@
+﻿@model Lms.Core.Models.ViewModels.LiteratureEditViewModel
+@inject Lms.Web.Service.LitteratureSelectListService service
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h4>Edit</h4>
+<hr />
+<div class="row bg-secondary rounded p-4 mb-2">
+    <div class="row w-100">
+        <div class="col-md-12">
+            @Html.ValidationMessage("EditResponseError")
+            <form asp-action="Edit">
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label asp-for="PublishDate" class="control-label"></label>
+                        <input asp-for="PublishDate" class="form-control" />
+                        <span asp-validation-for="PublishDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label asp-for="Url" class="control-label"></label>
+                        <input asp-for="Url" class="form-control" />
+                        <span asp-validation-for="Url" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label asp-for="SubjectId" class="control-label"></label>
+                        <select asp-for="SubjectId" asp-items="@await service.GetSubjectsToSelectListItem()" class="form-control">
+                            <option selected="selected" value="">Please Select</option>
+                        </select>
+                        <span asp-validation-for="SubjectId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="CategoryId" class="control-label"></label>
+                        <select asp-for="CategoryId" asp-items="@await service.GetCategoriesToSelectListItem()" class="form-control">
+                            <option selected="selected" value="">Please Select</option>
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="LevelId" class="control-label"></label>
+                        <select asp-for="LevelId" asp-items="@await service.GetLevelsToSelectListItem()" class="form-control">
+                            <option selected="selected" value="">Please Select</option>
+                        </select>
+                        <span asp-validation-for="LevelId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Update Literature" class="btn btn-success btn-block" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <div>
+        <a asp-controller="Authors" asp-action="Create" class="btn btn-primary">Add Author to Literature</a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fa fa-home" aria-hidden="true"></i> Back to Library
+        </a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
