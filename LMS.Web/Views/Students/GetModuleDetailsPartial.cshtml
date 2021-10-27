@@ -6,177 +6,178 @@
 <h4 id="StudentModuleViewTitle"> @Html.DisplayFor(model => model.ModuleName) </h4>
 
 <hr />
+@if (User.IsInRole("Teacher"))
+{
+    <th> <a class="btn btn-sm btn-success float-right" asp-controller="Activities" asp-action="Create" asp-route-Id="@Model.Id">Add new activity</a></th>
+}
+    <section class="container">
+        <section class="row">
 
-<th> <a class="btn btn-sm btn-success float-right" asp-controller="Activities" asp-action="Create" asp-route-Id="@Model.Id">Add new activity</a></th>
-
-<section class="container">
-    <section class="row">
-
-        <div class="moduleDetailsForStudent">
-            <div>
-                <strong> @Html.DisplayNameFor(model => model.ModuleStartDate) </strong>
+            <div class="moduleDetailsForStudent">
+                <div>
+                    <strong> @Html.DisplayNameFor(model => model.ModuleStartDate) </strong>
+                </div>
+                <div> @Html.DisplayFor(model => model.ModuleStartDate) </div>
+                <div>
+                    <strong> @Html.DisplayNameFor(model => model.ModuleEndDate) </strong>
+                </div>
+                <div> @Html.DisplayFor(model => model.ModuleEndDate) </div>
             </div>
-            <div> @Html.DisplayFor(model => model.ModuleStartDate) </div>
-            <div>
-                <strong> @Html.DisplayNameFor(model => model.ModuleEndDate) </strong>
+
+
+
+            <div class="moduleDetailsForStudent">
+                <div>
+                    <strong> @Html.DisplayNameFor(model => model.ModuleDescription) </strong>
+                </div>
+                <div> @Html.DisplayFor(model => model.ModuleDescription) </div>
+
+
             </div>
-            <div> @Html.DisplayFor(model => model.ModuleEndDate) </div>
-        </div>
 
 
 
-        <div class="moduleDetailsForStudent">
-            <div>
-                <strong> @Html.DisplayNameFor(model => model.ModuleDescription) </strong>
-            </div>
-            <div> @Html.DisplayFor(model => model.ModuleDescription) </div>
-
-
-        </div>
-
-
-
-        <div style="float:none">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>@Html.DisplayNameFor(model => model.Documents)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Documents.Where(a => a.ActivityId == null && a.ModuleId != null))
-                    {
+            <div style="float:none">
+                <table class="table">
+                    <thead>
                         <tr>
-                            <td>
-                                @if (item.ApplicationUserId == null)
-                                {
-                                    @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
-                                }
-                            </td>
+                            <th>@Html.DisplayNameFor(model => model.Documents)</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </section>
-</section>
-
-
-
-<div class="delete">
-    @if (User.IsInRole("Teacher"))
-    {
-        <a class="btn btn-sm btn-success" asp-controller="Modules" asp-action="Edit" asp-route-id="@ViewData["ModuleId"]">Edit</a>
-        <a class="btn btn-sm btn-danger" asp-controller="Modules" asp-action="Delete" asp-route-id="@ViewData["ModuleId"]">Delete</a>
-    }
-</div>
-<br />
-
-
-
-<div class="moduleDetailsForStudent">
-    <table class="table">
-        <thead>
-            <tr>
-                <th> @Html.DisplayNameFor(model => model.Activities) </th>
-                <th> @Html.DisplayNameFor(model => model.ModuleStartDate) </th>
-                <th> @Html.DisplayNameFor(model => model.ModuleEndDate) </th>    
-
-
-                <th> </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Activities)
-            {
-                <tr>
-                    <td>
-                        <a asp-controller="Activities" asp-action="ActivityDetail" asp-route-id="@item.Id"
-                           data-ajax="true"
-                           data-ajax-method="GET"
-                           data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
-                           data-ajax-mode="replace">
-                            @Html.DisplayFor(modelItem => item.ActivityType.TypeName)
-                        </a>
-                    </td>
-                    <td> @Convert.ToDateTime(item.StartDate).ToString("yyyy/MM/dd HH:mm") </td>
-                    <td> @Convert.ToDateTime(item.EndDate).ToString("yyyy/MM/dd HH:mm") </td>
-
-
-
-                    @{
-                        var status = service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier)?.Value).Result;
-                    }
-
-                    @if (User.IsInRole("Student"))
-                    {
-                        @if (status == "Uploaded" && item.ActivityType.TypeName == "Assignment")
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Documents.Where(a => a.ActivityId == null && a.ModuleId != null))
                         {
-                            <td>
-                                <span class="badge badge-success">Uploaded</span>
-                            </td>
+                            <tr>
+                                <td>
+                                    @if (item.ApplicationUserId == null)
+                                    {
+                                        @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
+                                    }
+                                </td>
+                            </tr>
                         }
-                        else if (status == "Delayed" && item.ActivityType.TypeName == "Assignment")
-                        {
-                            <td>
-                                <span class="badge badge-warning">Past due date</span>
-                            </td>
-                        }
-                        else if (status == "Not uploaded" && item.ActivityType.TypeName == "Assignment")
-                        {
-                            <td>
-                                <span class="badge badge-danger">Not Uploaded</span>
-                            </td>
-                        }
-                    }
-
-                    @if (item.ActivityType.TypeName == "Assignment")
-                    {
-                        <td>Deadline: @Convert.ToDateTime(item.Deadline).ToString("yyyy/MM/dd HH:mm") </td>
-                    }
-                    else
-                    {
-
-                    }
-
-
-
-
-                    <td></td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
-
-
-<div>
-    @if (User.IsInRole("Teacher"))
-    {
-        @using (Html.BeginFormActivity("TeacherUploadFilesForModule", "Upload", new { moduleId = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            <div class="form-horizontal">
-
-                <div class="form-group uploadButtonGroup">
-                    <div class="uploadButtonContainer">
-                        <input type="file" class="upload-box" multiple name="files" id="Files" />
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Upload" class="btn btn-sm btn-primary submitButton" />
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10 text-success">
-                        @ViewBag.UploadStatus
-                    </div>
-                </div>
-
+                    </tbody>
+                </table>
             </div>
+        </section>
+    </section>
+
+
+
+    <div class="delete">
+        @if (User.IsInRole("Teacher"))
+        {
+            <a class="btn btn-sm btn-success" asp-controller="Modules" asp-action="Edit" asp-route-id="@ViewData["ModuleId"]">Edit</a>
+            <a class="btn btn-sm btn-danger" asp-controller="Modules" asp-action="Delete" asp-route-id="@ViewData["ModuleId"]">Delete</a>
         }
-    }
-</div>
+    </div>
+    <br />
+
+
+
+    <div class="moduleDetailsForStudent">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th> @Html.DisplayNameFor(model => model.Activities) </th>
+                    <th> @Html.DisplayNameFor(model => model.ModuleStartDate) </th>
+                    <th> @Html.DisplayNameFor(model => model.ModuleEndDate) </th>
+
+
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Activities)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Activities" asp-action="ActivityDetail" asp-route-id="@item.Id"
+                               data-ajax="true"
+                               data-ajax-method="GET"
+                               data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
+                               data-ajax-mode="replace">
+                                @Html.DisplayFor(modelItem => item.ActivityType.TypeName)
+                            </a>
+                        </td>
+                        <td> @Convert.ToDateTime(item.StartDate).ToString("yyyy/MM/dd HH:mm") </td>
+                        <td> @Convert.ToDateTime(item.EndDate).ToString("yyyy/MM/dd HH:mm") </td>
+
+
+
+                        @{
+                            var status = service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier)?.Value).Result;
+                        }
+
+                        @if (User.IsInRole("Student"))
+                        {
+                            @if (status == "Uploaded" && item.ActivityType.TypeName == "Assignment")
+                            {
+                                <td>
+                                    <span class="badge badge-success">Uploaded</span>
+                                </td>
+                            }
+                            else if (status == "Delayed" && item.ActivityType.TypeName == "Assignment")
+                            {
+                                <td>
+                                    <span class="badge badge-warning">Past due date</span>
+                                </td>
+                            }
+                            else if (status == "Not uploaded" && item.ActivityType.TypeName == "Assignment")
+                            {
+                                <td>
+                                    <span class="badge badge-danger">Not Uploaded</span>
+                                </td>
+                            }
+                        }
+
+                        @if (item.ActivityType.TypeName == "Assignment")
+                        {
+                            <td>Deadline: @Convert.ToDateTime(item.Deadline).ToString("yyyy/MM/dd HH:mm") </td>
+                        }
+                        else
+                        {
+
+                        }
+
+
+
+
+                        <td></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+    <div>
+        @if (User.IsInRole("Teacher"))
+        {
+            @using (Html.BeginFormActivity("TeacherUploadFilesForModule", "Upload", new { moduleId = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="form-horizontal">
+
+                    <div class="form-group uploadButtonGroup">
+                        <div class="uploadButtonContainer">
+                            <input type="file" class="upload-box" multiple name="files" id="Files" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Upload" class="btn btn-sm btn-primary submitButton" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10 text-success">
+                            @ViewBag.UploadStatus
+                        </div>
+                    </div>
+
+                </div>
+            }
+        }
+    </div>
 

@@ -18,11 +18,14 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </a>
         }
-        <hr />
-        <a class="btn btn-success" asp-controller="Modules" asp-action="Create" asp-route-id="@Model.FirstOrDefault().CourseId">Add new module</a>
 
+        @if (User.IsInRole("Teacher"))
+        {
+            <hr />
+            <a class="btn btn-success" asp-controller="Modules" asp-action="Create" asp-route-id="@Model.FirstOrDefault().CourseId">Add new module</a>
+        }
 
-    </div>
+        </div>
 
     <div class="card border-0">
         <div id="getModuleDetailOrActivityDetailsWithAjax"></div>           
