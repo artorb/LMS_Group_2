@@ -10,7 +10,22 @@ namespace Lms.Core.Models.ViewModels
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        [Display(Name = "Birthday")]
-        public DateTime BirthDay { get; set; }
+        [Display(Name = "Birthdate")]
+        public DateTime? BirthDate { get; set; }
+
+        public int Age
+        {
+            get 
+            {
+                if (BirthDate == null) return 0;
+
+                //var age = (DateTime.Now.Year - BirthDate.Value.Year);
+                //if (DateTime.Now.Year - age < BirthDate.Value.Year) return age + 1;
+                var age = (DateTime.Now.Year - BirthDate.Value.Year);
+                if (DateTime.Now.AddYears(-age) < BirthDate.Value) return age - 1;
+                return age;
+            }
+        }
+
     }
 }

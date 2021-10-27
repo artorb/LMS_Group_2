@@ -6,55 +6,54 @@
 $(document).ready(function () {
 
     //******** Dynamically no of Authors for creation ********
-    let container = $('#authorFormGroup');
-    let count = 0;
-    console.log('Before Literature Create method: ' + count);
-
-    let authorsCount = $('#addRowBtn').data('authorscount');
-    
-    console.log('Current Author Count: ' + authorsCount);
-    function AddAuthorRowOnForm(e) {
+    let authorFormContainer = $('#authorFormContainer');
+    let addAuthorJsFuncCount = 0;
+    //console.log('Before Literature Create method: ' + addAuthorJsFuncCount);
+    //let currentAuthorRowCount = parseInt($('#addAuthorRowBtn').data('currentAuthorRowCount'));
+    let currentAuthorRowCount = 0;
+    //console.log('Current Author Count: ' + currentAuthorRowCount);
+    function AddRowsOnAuthorCreateForm(e) {
         e.preventDefault();
         
-        let maxNoOfRows = 9;
-        if (count < maxNoOfRows) {
-            authorsCount++;
-            console.log('Modified (next) Author Count: ' + authorsCount);
+        let maxNoOfRows = 7;
+        if (addAuthorJsFuncCount < maxNoOfRows) {
+            currentAuthorRowCount++;
+            //console.log('Modified (next) Author Count: ' + currentAuthorRowCount);
 
-            $(container).append('<div class="form-row border border-light pt-1 mb-2">' +
+            $(authorFormContainer).append('<div class="form-row border border-light pt-1 mb-2">' +
                 '<div class= "form-group col-md-4">' +
-                   '<label for="Authors_' + authorsCount + '__FirstName" class="control-label">First name</label>' +
-                   '<input id="Authors_' + authorsCount + '__FirstName" name="Authors[' + authorsCount + '].FirstName" class="form-control">' +
+                    '<label for="Authors_' + currentAuthorRowCount + '__FirstName" class="control-label">First name</label>' +
+                    '<input id="Authors_' + currentAuthorRowCount + '__FirstName" name="Authors[' + currentAuthorRowCount + '].FirstName" class="form-control">' +
                 '</div>' +
                 '<div class= "form-group col-md-4" > ' +
-                   '<label for="Authors_' + authorsCount + '__LastName" class="control-label">Last name</label>' +
-                   '<input id="Authors_' + authorsCount + '__LastName" name="Authors[' + authorsCount + '].LastName" class="form-control">' +
+                    '<label for="Authors_' + currentAuthorRowCount + '__LastName" class="control-label">Last name</label>' +
+                    '<input id="Authors_' + currentAuthorRowCount + '__LastName" name="Authors[' + currentAuthorRowCount + '].LastName" class="form-control">' +
                 '</div>' +
                 '<div class="form-group col-md-3">' +
-                   '<label for="Authors_' + authorsCount + '__BirthDay" class="control-label">Birthday</label>' +
-                '<input type="date" id="Authors_' + authorsCount + '__BirthDay" name="Authors[' + authorsCount + '].BirthDay" class="form-control">' +
+                    '<label for="Authors_' + currentAuthorRowCount + '__BirthDate" class="control-label">Birthdate</label>' +
+                    '<input type="date" id="Authors_' + currentAuthorRowCount + '__BirthDate" name="Authors[' + currentAuthorRowCount + '].BirthDate" class="form-control">' +
                 '</div>' +
                 '<div class="form-group">' +
-                    '<button type="button" class="btn" id="removeRowBtn"><span class="text-danger"><i class="fa fa-minus-circle"></i></span></button >' +
+                    '<button type="button" class="btn" id="removeAuthorRowBtn"><span class="text-danger"><i class="fa fa-minus-circle fa-lg"></i></span></button >' +
                 '</div>' +
                 '</div>');
             
-            count++;
-            console.log('Add: ' + count);
+            addAuthorJsFuncCount++;
+            //console.log('Add: ' + addAuthorJsFuncCount);
         }
         else {
             alert('Limit for adding authors has been reached!');
         }
     }
-    $('#addRowBtn').click(AddAuthorRowOnForm);
+    $('#addAuthorRowBtn').click(AddRowsOnAuthorCreateForm);
 
-    $(container).on('click', '#removeRowBtn', function (e) {
+    $(authorFormContainer).on('click', '#removeAuthorRowBtn', function (e) {
         e.preventDefault();
         e.target.closest('.form-row').remove();
 
-        authorsCount--;
-        count--;
-        console.log('Remove: ' + count);
+        currentAuthorRowCount--;
+        addAuthorJsFuncCount--;
+        //console.log('Remove: ' + addAuthorJsFuncCount);
     });
     //******** end Dynamically no of Authors for creation ********
 

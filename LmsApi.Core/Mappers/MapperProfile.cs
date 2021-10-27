@@ -14,6 +14,11 @@ namespace LmsApi.Core.Mappers
                 .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => src.Subject.Name))
                 .ForMember(dest => dest.Level, opt => opt.MapFrom(src => src.Level.Name));
 
+            CreateMap<Literature, LiteratureAllDto>()
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.Name))
+                .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => src.Subject.Name))
+                .ForMember(dest => dest.Level, opt => opt.MapFrom(src => src.Level.Name));
+
             CreateMap<LiteratureForCreateDto, Literature>()
                 .ForPath(dest => dest.Category.Id, opt => opt.MapFrom(src => src.CategoryId))
                 .ForPath(dest => dest.Subject.Id, opt => opt.MapFrom(src => src.SubjectId))

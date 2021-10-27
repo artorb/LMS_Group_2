@@ -5,68 +5,83 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div id="literatur-index-header" class="row jumbotron">
+    <h1 class="display-1 text-center text-white">LMS Library</h1>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
-<form asp-action="Filter" method="get">
-    <div class="input-group mb-2">
-        <div class="input-group-prepend col-md-6">
-            <input type="text" name="searchQuery" class="form-control" placeholder="Search on title or author...">
-        </div>
-        <div class="input-group col-md-4">
-            <select asp-items="@await service.GetSubjectsToSelectListItem()" name="selectId" class="form-control">
-                <option selected="selected" value="">No Subject Selected</option>
-            </select>
-        </div>
-        <div class="input-group-append">
-            <button type="submit" class="btn btn-outline-secondary">Filter</button>
-        </div>
+<div class="row bg-secondary rounded p-4 mb-2">
+    <div class="bg-light rounded w-100 px-4 pt-2 mb-2">
+        <form asp-action="Filter" method="get">
+            <div class="input-group mb-2">
+                <div class="input-group-prepend col-md-6">
+                    <input type="text" name="searchQuery" class="form-control" placeholder="Search on title or author...">
+                </div>
+                <div class="input-group col-md-4">
+                    <select asp-items="@await service.GetSubjectsToSelectListItem()" name="selectId" class="form-control">
+                        <option selected="selected" value="">No Subject Selected</option>
+                    </select>
+                </div>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-outline-secondary">
+                        <i class="fa fa-search" aria-hidden="true"></i> Filter
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
-</form>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Subject)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Level)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Subject)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Level)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="bg-light rounded w-100 p-2">
+        <table class="table" data-classes="table table-hover table-condensed" data-toggle="table" data-striped="true" data-pagination="true" data-page-list="[15, 30, 50, ALL]" data-page-size="10">
+            <thead>
+                <tr>
+                    <th data-sortable="true">
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th data-sortable="true">
+                        @Html.DisplayNameFor(model => model.Subject)
+                    </th>
+                    <th data-sortable="true">
+                        @Html.DisplayNameFor(model => model.Category)
+                    </th>
+                    <th data-sortable="true">
+                        @Html.DisplayNameFor(model => model.Level)
+                    </th>
+                    <th>
+                        <a asp-action="Create" class="btn btn-primary btn-sm rounded"><i class="fa fa-book" aria-hidden="true"></i> Create Literature</a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Subject)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Level)
+                        </td>
+                        <td>
+                            <div class="d-block">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm rounded-circle mt-1" title="Details">
+                                    <i class="fa fa-question" aria-hidden="true"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm rounded-circle mt-1" title="Edit">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm rounded-circle mt-1" title="Delete">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

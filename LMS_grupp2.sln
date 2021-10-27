@@ -9,11 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lms.Core", "LMS.Core\Lms.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lms.Data", "LMS.Data\Lms.Data.csproj", "{23851288-97D4-4D6D-9EF3-8BFB7C356BB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LmsApi.Api", "LmsApi.Api\LmsApi.Api.csproj", "{86383B93-A04F-49C6-97E3-C9EF8950B3DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LmsApi.Api", "LmsApi.Api\LmsApi.Api.csproj", "{86383B93-A04F-49C6-97E3-C9EF8950B3DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LmsApi.Core", "LmsApi.Core\LmsApi.Core.csproj", "{FAA6E078-FA0F-4930-A87E-5BD8B93D358F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LmsApi.Core", "LmsApi.Core\LmsApi.Core.csproj", "{FAA6E078-FA0F-4930-A87E-5BD8B93D358F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LmsApi.Data", "LmsApi.Data\LmsApi.Data.csproj", "{4333AD80-2563-4AD4-ABC3-36CB6D1408A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LmsApi.Data", "LmsApi.Data\LmsApi.Data.csproj", "{4333AD80-2563-4AD4-ABC3-36CB6D1408A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -29,42 +29,52 @@ namespace Lms.Web.Controllers
         public async Task<IActionResult> Create(AuthorListVM viewModel)
         {
             var locationUri = "";
-            if (TempData.ContainsKey("LocationUri"))
-                locationUri = TempData["LocationUri"].ToString();
-            TempData.Keep("LocationUri"); // Marks the specified key in the TempData for retention.
-
-            var client = clientFactory.CreateClient("BaseClient");
-            client.BaseAddress = new Uri(locationUri + "/");
-
-            var requestMsg = new HttpRequestMessage(HttpMethod.Post, "authors/collection");
-
-            var res = new List<AuthorForCreateUpdateDto>();
-            foreach (var author in viewModel.Authors)
+            if (TempData.ContainsKey("LocationUriFromLiteratureCreate"))
             {
-                var temp = new AuthorForCreateUpdateDto
-                {
-                    BirthDate = author.BirthDay,
-                    FirstName = author.FirstName,
-                    LastName = author.LastName
-
-                };
-                res.Add(temp);
-            }
-
-            var x = JsonConvert.SerializeObject(res);
-
-            requestMsg.Content = new StringContent(x, Encoding.UTF8, "application/json");      
-
-            var responseMsg = await client.SendAsync(requestMsg);
-            if (responseMsg.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index", "Literatures");
+                locationUri = TempData["LocationUriFromLiteratureCreate"].ToString();
+                TempData.Keep("LocationUriFromLiteratureCreate"); // Marks the specified key in the TempData for retention.
             }
             else
             {
-                ModelState.AddModelError("CreateAuthorResponseError", $"A server error occured at {nameof(Create)} with status code {responseMsg.StatusCode}.");
+                locationUri = TempData["RequestUriFromLiteratureEdit"].ToString();
+                TempData.Keep("LocationUriFromLiteratureCreate"); // Marks the specified key in the TempData for retention.
             }
-            return View();
+
+            if (ModelState.IsValid)
+            {
+                var client = clientFactory.CreateClient("BaseClient");
+                client.BaseAddress = new Uri(locationUri + "/");
+
+                var requestMsg = new HttpRequestMessage(HttpMethod.Post, "authors/collection");
+
+                var tempList = new List<AuthorForCreateUpdateDto>();
+                foreach (var author in viewModel.Authors)
+                {
+                    var tempObj = new AuthorForCreateUpdateDto
+                    {
+                        BirthDate = author.BirthDate,
+                        FirstName = author.FirstName,
+                        LastName = author.LastName
+                    };
+                    tempList.Add(tempObj);
+                }
+                var data = JsonConvert.SerializeObject(tempList);
+
+                requestMsg.Content = new StringContent(data, Encoding.UTF8, "application/json");      
+
+                var responseMsg = await client.SendAsync(requestMsg);
+                if (responseMsg.IsSuccessStatusCode)
+                {
+                    TempData.Remove("LocationUriFromLiteratureCreate");
+                    TempData.Remove("RequestUriFromLiteratureEdit");
+                    return RedirectToAction("Index", "Literatures");
+                }
+                else
+                {
+                    ModelState.AddModelError("CreateAuthorResponseError", $"A server error occured at {nameof(Create)} with status code {responseMsg.StatusCode}.");
+                }
+            }
+            return View(viewModel);
         }
     }
 }

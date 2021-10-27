@@ -27,20 +27,20 @@ namespace LmsApi.Api.Controllers
 
         // GET: api/literatures/filter
         [HttpGet("filter")]
-        public async Task<ActionResult<IEnumerable<LiteratureDto>>> GetFiltredAll([FromQuery]string searchQuery = "", int selectId = 0)
+        public async Task<ActionResult<IEnumerable<LiteratureAllDto>>> GetFiltredAll([FromQuery]string searchQuery = "", int selectId = 0)
         {
             try
             {
                 var result =
-                    await unitOfWork.LiteraturesRepo.GetAllAsync(filter: l => (string.IsNullOrWhiteSpace(searchQuery) || l.Title.ToLower().Contains(searchQuery.ToLower())) || 
-                                                                              (string.IsNullOrEmpty(searchQuery) || l.Authors.Any(a => a.FirstName.ToLower().Contains(searchQuery.ToLower())) || l.Authors.Any(a => a.LastName.ToLower().Contains(searchQuery.ToLower()))) &&
-                                                                              (l.SubjectId == selectId || selectId == 0), 
+                    await unitOfWork.LiteraturesRepo.GetAllAsync(filter: l => ((string.IsNullOrWhiteSpace(searchQuery) || l.Title.ToLower().Contains(searchQuery.ToLower())) || 
+                                                                              ((string.IsNullOrEmpty(searchQuery) || l.Authors.Any(a => a.FirstName.ToLower().Contains(searchQuery.ToLower())) || l.Authors.Any(a => a.LastName.ToLower().Contains(searchQuery.ToLower()))))) &&
+                                                                              (selectId == 0 || l.SubjectId == selectId), 
                                                                  include: l => l.Include(l => l.Category)
                                                                                 .Include(l => l.Subject)
                                                                                 .Include(l => l.Level)
                                                                                 .Include(l => l.Authors));
 
-                return Ok(mapper.Map<IEnumerable<LiteratureDto>>(result));
+                return Ok(mapper.Map<IEnumerable<LiteratureAllDto>>(result));
             }
             catch (Exception)
             {
@@ -50,7 +50,7 @@ namespace LmsApi.Api.Controllers
 
         // GET: api/literatures
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<LiteratureDto>>> GetAll(bool include = false)
+        public async Task<ActionResult<IEnumerable<LiteratureAllDto>>> GetAll(bool include = false)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace LmsApi.Api.Controllers
                                                                                 .Include(l => l.Authors)) : 
                     await unitOfWork.LiteraturesRepo.GetAllAsync();
 
-                return Ok(mapper.Map<IEnumerable<LiteratureDto>>(result));
+                return Ok(mapper.Map<IEnumerable<LiteratureAllDto>>(result));
             }
             catch(Exception)
             {

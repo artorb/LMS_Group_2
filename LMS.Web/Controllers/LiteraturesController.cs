@@ -112,7 +112,7 @@ namespace Lms.Web.Controllers
                 var responseMsg = await client.SendAsync(requestMsg);
                 if (responseMsg.IsSuccessStatusCode)
                 {
-                    TempData["LocationUri"] = responseMsg.Headers.Location.AbsoluteUri; // used to store the received location uri
+                    TempData["LocationUriFromLiteratureCreate"] = responseMsg.Headers.Location.AbsoluteUri; // used to store the received location uri
                     return RedirectToAction("Create", "Authors");
                 }
                 else
@@ -140,6 +140,9 @@ namespace Lms.Web.Controllers
                 {
                     literature = await DeserializeAsync<LiteratureEditViewModel>(responseStream);
                 }
+
+                var absoluteUri = responseMsg.RequestMessage.RequestUri.AbsoluteUri.ToString().Split('?')[0];
+                TempData["RequestUriFromLiteratureEdit"] = absoluteUri;
             }
             else
             {

@@ -3,13 +3,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Lms.Core.Models.ViewModels
 {
-    public class LiteratureAuthorCreateVM
+    public class AuthorCreateVM
     {
+        [Required]
+        [Display(Name = "First name")]
         public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last name")]
         public string LastName { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime? BirthDay { get; set; }
+        [Display(Name = "Birthdate")]
+        public DateTime? BirthDate { get; set; }
     }
 }

@@ -43,7 +43,6 @@ namespace LmsApi.Api.Controllers
                 if (await unitOfWork.CompleteAsync())
                 {
                     return Ok();
-                    //return CreatedAtAction(nameof(GetAll), new { literatureId = literature.Id }, mapper.Map<IEnumerable<AuthorDto>>(author));
                 }
             }
             catch (Exception)

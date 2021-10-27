@@ -31,10 +31,10 @@ namespace Lms.Web.Service
             {
                 using (var responseStream = await responseMsg.Content.ReadAsStreamAsync())
                 {
-                    var subjects = await DeserializeAsync<IEnumerable<LiteratureSelectListItemVM>>(responseStream);
+                    var categories = await DeserializeAsync<IEnumerable<LiteratureSelectListItemVM>>(responseStream);
 
-                    selectListItems = subjects.OrderBy(s => s.Text).Select(s =>
-                                            new SelectListItem(s.Text, s.Value.ToString()));
+                    selectListItems = categories.OrderBy(c => c.Text).Select(c =>
+                                            new SelectListItem(c.Text, c.Value.ToString()));
                 }
             }
             else

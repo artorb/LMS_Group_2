@@ -9,7 +9,7 @@
 <hr />
 @Html.ValidationMessage("CreateAuthorResponseError")
 <form asp-controller="Authors" asp-action="Create">
-    <div id="authorFormGroup">
+    <div id="authorFormContainer">
         <div class="form-row border border-light pt-1 mb-2">
             <div class="form-group col-md-4">
                 <label asp-for="Authors[index].FirstName" class="control-label"></label>
@@ -20,21 +20,23 @@
                 <input asp-for="Authors[index].LastName" class="form-control">
             </div>
             <div class="form-group col-md-3">
-                <label asp-for="Authors[index].BirthDay" class="control-label"></label>
-                <input asp-for="Authors[index].BirthDay" class="form-control">
+                <label asp-for="Authors[index].BirthDate" class="control-label"></label>
+                <input asp-for="Authors[index].BirthDate" class="form-control">
             </div>
             <div class="form-group">
-                <button type="button" class="btn" id="addRowBtn" data-authorscount="@index"><span class="text-success"><i class="fa fa-plus-circle"></i></span></button>
+                <button type="button" class="btn" id="addAuthorRowBtn" data-currentAuthorRowCount="@index"><span class="text-success"><i class="fa fa-plus-circle fa-lg"></i></span></button>
             </div>
         </div>
     </div>
     <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
+        <input type="submit" value="Create Author" class="btn btn-success btn-block" />
     </div>
 </form>
 
 <div>
-    <a asp-controller="Literatures" asp-action="Index">Back to Literatures</a>
+    <a asp-controller="Literatures"  asp-action="Index" class="btn btn-secondary">
+        <i class="fa fa-home" aria-hidden="true"></i> Back to Library
+    </a>
 </div>
 
 @section Scripts {
