@@ -15,12 +15,14 @@ namespace Lms.Web.Controllers
 {
     public class TeachersController : Controller
     {
+        private readonly LmsDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
         private readonly LmsDbContext db;
         private readonly UserManager<ApplicationUser> userManager;
 
         public TeachersController(IUnitOfWork unitOfWork, LmsDbContext context, UserManager<ApplicationUser> userManager)
         {
+            _context = context;
             _unitOfWork = unitOfWork;
             db = context;
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));

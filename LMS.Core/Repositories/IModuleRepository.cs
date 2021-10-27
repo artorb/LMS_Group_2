@@ -9,5 +9,6 @@ namespace Lms.Core.Repositories
 {
     public interface IModuleRepository : IGenericRepository<Module>
     {
+        Task<IEnumerable<Activity>> GetSortedListOfWeeklyActivitiesAsync(int courseId);
     }
 }
