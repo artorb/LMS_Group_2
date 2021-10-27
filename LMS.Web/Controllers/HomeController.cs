@@ -26,7 +26,7 @@ namespace Lms.Web.Controllers
 
         public static bool UserLoggedIn { get; private set; }
 
-        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
             _logger = logger;
@@ -77,7 +77,7 @@ namespace Lms.Web.Controllers
             {
                 if (role != UserRoles.Student)
                 {
-                    personnalList = (List<ApplicationUser>)await _userManager.GetUsersInRoleAsync(role);
+                    personnalList.AddRange((List<ApplicationUser>)await _userManager.GetUsersInRoleAsync(role));
                 }
             }
             List<PersonnalListViewModel> personnalView = new();
