@@ -58,7 +58,7 @@ namespace Lms.Web.Controllers
                     ModuleStartDate = module.StartDate,
                     ModuleEndDate = module.EndDate,
                     Documents = module.Documents,
-                    Activities = module.Activities,                    
+                    Activities = module.Activities,
                     Status = _activityService.GetStatusForStudentModule(module, userId).Result
                 };
                 return PartialView("~/Views/Students/GetModuleDetailsPartial.cshtml", model);
@@ -98,6 +98,9 @@ namespace Lms.Web.Controllers
 
 
             var modulesToCourse = course.Modules;
+
+            ViewData["ModuleCourseId"] = course.Id;
+
             return PartialView("~/Views/Students/GetModuleListPartial.cshtml", modulesToCourse);
         }
 
@@ -131,21 +134,36 @@ namespace Lms.Web.Controllers
         }
 
 
-
-        public IActionResult Create()
+        public IActionResult Create(int id)
         {
+            ViewData["ModuleCourseId"] = id;
             return View();
         }
-
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ModuleListViewModel viewModel, int id)
-        {    
+        {
+            var course = _unitOfWork.CourseRepository.GetAsync(id).Result;
+            var returnUrl = Url.Content("/Teachers/IndexCourseForTeacher/" + id);
             var res = new List<Module>();
             foreach (var item in viewModel.Modules)
             {
+                if (item.ModuleStartDate <= course.StartDate || item.ModuleEndDate >= course.EndDate)
+                {
+                    if (item.ModuleStartDate <= course.StartDate)
+                    {
+                        TempData["ModuleStartDateCreationError"] = $"The module was not created. The Start Date you used was before the start of the course start date! Try again!";
+                    }
+
+                    if (item.ModuleEndDate >= course.EndDate)
+                    {
+                        TempData["ModuleEndDateCreationError"] = "The module was not created. The End Date you used was later then the course end date! Try again!";
+                    }
+                    return RedirectToAction("Create", id);
+                }
+
                 var temp = new Module
                 {
                     Name = item.ModuleName,
@@ -163,7 +181,8 @@ namespace Lms.Web.Controllers
 
                 //return RedirectToAction("Create", "Activities", new { @id = idForActivity });
             }
-            return RedirectToAction("Index", "Teachers");
+            return LocalRedirect(returnUrl);
+            //return RedirectToAction("Index", "Teachers");
             //return View();
         }
 
@@ -193,7 +212,7 @@ namespace Lms.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,StartDate,EndDate,CourseId")] Module module)
-        {            
+        {
             if (id != module.Id)
             {
                 return NotFound();
@@ -209,7 +228,7 @@ namespace Lms.Web.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (! await ModuleExists(module.Id))
+                    if (!await ModuleExists(module.Id))
                     {
                         return NotFound();
                     }
@@ -250,7 +269,7 @@ namespace Lms.Web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
 
-            var module = await _unitOfWork.ModuleRepository.GetWithIncludesAsyncTest(id, query => query.Include(d => d.Documents),      
+            var module = await _unitOfWork.ModuleRepository.GetWithIncludesAsyncTest(id, query => query.Include(d => d.Documents),
               query => query.Include(a => a.Activities).ThenInclude(d => d.Documents));
 
             TempData["DeleteModule"] = $"The {module.Name} has been deleted!";

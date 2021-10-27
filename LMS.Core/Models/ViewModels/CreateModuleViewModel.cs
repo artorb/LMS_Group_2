@@ -1,4 +1,6 @@
 ﻿using Lms.Core.Entities;
+using Lms.Core.Validations;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Lms.Core.Models.ViewModels
 {
-  public class CreateModuleViewModel
+    public class CreateModuleViewModel
     {
         [Required(ErrorMessage = "Please enter name!")]
         [MinLength(2, ErrorMessage = "Minimum length: 2 character!")]
@@ -24,9 +26,10 @@ namespace Lms.Core.Models.ViewModels
 
         [Required(ErrorMessage = "Please enter start date!")]
         [Display(Name = "Start date")]
-        // [ModuleStartTimeCheck]      
+        //[ModuleStartTimeCheck]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
+        //[Remote(action: "ModuleStartTimeCheck", controller: "Validations", AdditionalFields = nameof(CourseId))]
         public DateTime ModuleStartDate { get; set; }
 
 
@@ -37,7 +40,7 @@ namespace Lms.Core.Models.ViewModels
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         public DateTime ModuleEndDate { get; set; }
 
-       
+
 
         public int CourseId { get; set; }
         public Course Course { get; set; }

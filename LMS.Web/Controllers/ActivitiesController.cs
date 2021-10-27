@@ -60,8 +60,8 @@ namespace Lms.Web.Controllers
 
 
         // GET: Activities
-        public async Task<IActionResult> Index()       
-        {   
+        public async Task<IActionResult> Index()
+        {
             var activity = await _unitOfWork.ActivityRepository.GetWithIncludesAsync
                 (a => a.Include(act => act.ActivityType).Include(activity => activity.Module));
             return View(activity.ToList());
@@ -102,18 +102,35 @@ namespace Lms.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ActivityListViewModel viewModel, int Id)
-        {         
-
+        {
+            var returnUrl = Url.Content("/Teachers/IndexCourseForTeacher/" + Id);
+            var module = _unitOfWork.ModuleRepository.GetAsync(Id).Result;
             var res = new List<Activity>();
             foreach (var item in viewModel.Activities)
             {
+                if (item.ActivityStartDate <= module.StartDate || item.ActivityEndDate >= module.EndDate)
+                {
+                    if (item.ActivityStartDate <= module.StartDate)
+                    {
+                        TempData["ActivityStartDateCreationError"] = $"The activity was not created. The Start Date you used was before the start of the module start date! Try again!";
+                    }
+
+                    if (item.ActivityEndDate >= module.EndDate)
+                    {
+                        TempData["ActivityEndDateCreationError"] = "The activity was not created. The End Date you used was later then the module end date! Try again!";
+                    }
+                    return RedirectToAction("Create", Id);
+                }
+
+
+
                 var temp = new Activity
                 {
                     Name = item.ActivityName,
                     Description = item.ActivityDescription,
                     StartDate = item.ActivityStartDate,
                     EndDate = item.ActivityEndDate,
-                    Deadline = item.ActivityDeadline,                   
+                    Deadline = item.ActivityDeadline,
                     ActivityTypeId = item.ActivityTypeId,
                     ModuleId = Id,
                     Module = item.Module
@@ -123,10 +140,11 @@ namespace Lms.Web.Controllers
                 _unitOfWork.ActivityRepository.Add(temp);
                 await _unitOfWork.CompleteAsync();
 
-                return RedirectToAction("Index", "Courses");
+                //return RedirectToAction("Index", "Teachers");
             }
-            return View();
-        }  
+            return LocalRedirect(returnUrl);
+            //return View();
+        }
 
 
 
@@ -138,7 +156,7 @@ namespace Lms.Web.Controllers
                 Value = act.Id.ToString(),
             }).ToListAsync();
         }
-        
+
 
 
         // GET: Activities/Edit/5
@@ -148,7 +166,7 @@ namespace Lms.Web.Controllers
             {
                 return NotFound();
             }
-         
+
             var activity = await _unitOfWork.ActivityRepository.FindAsync(id);
             var model = new ChangeActivityViewModel
             {
@@ -206,7 +224,7 @@ namespace Lms.Web.Controllers
             }
             return View(activity);
         }
-        
+
 
 
         // GET: Activities/Delete/5
@@ -226,7 +244,7 @@ namespace Lms.Web.Controllers
 
             return View(activity);
         }
-    
+
 
         // POST: Activities/Delete/5
         [HttpPost, ActionName("Delete")]

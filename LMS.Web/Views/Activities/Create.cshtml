@@ -10,6 +10,8 @@
 @*@Html.ValidationMessage("CreateAuthorResponseError")*@
 
 <form asp-controller="Activities" asp-action="Create">
+    <p style="text-align:center" class="text-danger"><strong>@TempData["ActivityStartDateCreationError"]</strong></p>
+    <p style="text-align:center" class="text-danger"><strong>@TempData["ActivityEndDateCreationError"]</strong></p>
     <div id="activityFormGroup">
         <div class="form-row border border-light pt-1 mb-2">
             <div class="form-group col-md-12">
@@ -46,7 +48,7 @@
                 <label asp-for="Activities[indexActivity].ActivityTypeId" class="control-label"></label>
                 <select asp-for="Activities[indexActivity].ActivityTypeId" asp-items="ActivitiesController.activityTypes.Result" class="form-control">
                     <option selected="selected" value="">Please select</option>
-                </select>    
+                </select>
             </div>
 
 
@@ -57,7 +59,7 @@
     </div>
     <div class="form-group">
         <input type="submit" value="Create" class="btn btn-success" />
-        <a class="btn btn-primary" asp-controller="Courses" asp-action="Index">Back to courses list</a>    
+        <a class="btn btn-primary" asp-controller="Courses" asp-action="Index">Back to courses list</a>
     </div>
 </form>
 
