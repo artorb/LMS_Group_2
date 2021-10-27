@@ -1,6 +1,9 @@
-﻿using Lms.Core.Models;
+﻿using Lms.Core.Entities;
+using Lms.Core.Models;
+using Lms.Core.Models.ViewModels;
 using Lms.Core.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -19,9 +22,11 @@ namespace Lms.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _logger = logger;
             _unitOfWork = unitOfWork;
         }
@@ -31,7 +36,7 @@ namespace Lms.Web.Controllers
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
-            if (UserLoggedIn==null)//Checks that the user is logged in as someone from the database.
+            if (UserLoggedIn == null)//Checks that the user is logged in as someone from the database.
             {
                 return Redirect("~/Identity/Account/Login");
             }
@@ -55,12 +60,42 @@ namespace Lms.Web.Controllers
             return View();
         }
 
+        public async Task<IActionResult> PersonnalList()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
+            if (UserLoggedIn == null)//Checks that the user is logged in as someone from the database.
+            {
+                return Redirect("~/Identity/Account/Login");
+            }
+
+            List<ApplicationUser> personnalList = new();
+            foreach (var role in UserRoles.RolesList)
+            {
+                if (role != UserRoles.Student)
+                {
+                    personnalList = (List<ApplicationUser>)await _userManager.GetUsersInRoleAsync(role);
+                }
+            }
+            List<PersonnalListViewModel> personnalView = new();
+            foreach (var personnal in personnalList)
+            {
+                personnalView.Add(new PersonnalListViewModel()
+                {
+                    Id = personnal.Id,
+                    Name = personnal.Name,
+                    Email = personnal.Email,
+                    RoleName = (List<string>)await _userManager.GetRolesAsync(personnal)
+                });
+            }
+            return View(personnalView);
+        }
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorViewModel { RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
 

@@ -108,17 +108,18 @@ namespace Lms.Web.Controllers
             {
                 return NotFound();
             }
-            var userInDatabase = await db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == Id);          
-         
+            var userInDatabase = await db.Users.FirstOrDefaultAsync(u => u.Id == Id);          
+ 
             if (ModelState.IsValid)
                 {
                     try
                     {
 
                     userInDatabase.Email = applicationUsermodel.Email;
+                    userInDatabase.NormalizedEmail = applicationUsermodel.Email.ToUpper();
                     userInDatabase.Name = applicationUsermodel.Name;
                     userInDatabase.UserName = applicationUsermodel.Name;
-                    userInDatabase.NormalizedUserName = applicationUsermodel.Name;
+                    userInDatabase.NormalizedUserName = applicationUsermodel.Name.ToUpper();
   
 
                     _unitOfWork.UserRepository.Update(userInDatabase);
