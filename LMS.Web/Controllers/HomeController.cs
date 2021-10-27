@@ -20,6 +20,8 @@ namespace Lms.Web.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
 
+        public static bool UserLoggedIn { get; private set; }
+
         public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
@@ -30,8 +32,9 @@ namespace Lms.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
-            if (UserLoggedIn==null)//Checks that the user is logged in as someone from the database.
+            UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId) != null;
+
+            if (UserLoggedIn == false)//Checks that the user is logged in as someone from the database.
             {
                 return Redirect("~/Identity/Account/Login");
             }

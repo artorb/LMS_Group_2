@@ -147,11 +147,17 @@ namespace Lms.Web.Controllers
         private static List<string> GetCurrentModules(Course course)
         {
             var activeModule = course.Modules
-                .Where(m => m.StartDate < DateTime.Today && m.EndDate >= DateTime.Today)
-                .FirstOrDefault();
-            var nextModule = course.Modules
-                .Where(m => m.StartDate.Date >= activeModule.EndDate.Date)
-                .FirstOrDefault();
+                .FirstOrDefault(m => m.StartDate < DateTime.Today && m.EndDate >= DateTime.Today);
+            Module nextModule = new();
+            if (activeModule != null)
+            {
+                nextModule = course.Modules
+                    .FirstOrDefault(m => m.StartDate.Date >= activeModule.EndDate.Date);
+            }
+            else
+            {
+                nextModule = null;
+            }
 
             var activeModuleName = activeModule != null ? activeModule.Name : "No more Modules";
             var nextModuleName = nextModule != null ? nextModule.Name : "No more Modules";
