@@ -135,10 +135,11 @@ namespace Lms.Web.Controllers
 
 
                     userInDatabase.Email = applicationUsermodel.Email;
+                    userInDatabase.NormalizedEmail = applicationUsermodel.Email.ToUpper();
                     userInDatabase.Name = applicationUsermodel.Name;
                     userInDatabase.UserName = applicationUsermodel.Name;
-                    userInDatabase.NormalizedUserName = applicationUsermodel.Name;
-
+                    userInDatabase.NormalizedUserName = applicationUsermodel.Name.ToUpper();
+  
 
                     _unitOfWork.UserRepository.Update(userInDatabase);
                     await _unitOfWork.CompleteAsync();
