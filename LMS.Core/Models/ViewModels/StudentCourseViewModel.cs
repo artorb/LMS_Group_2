@@ -19,9 +19,13 @@ namespace Lms.Core.Models.ViewModels
         public string CourseDescription { get; set; }
         
         [Display(Name = "Start date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         public DateTime CourseStartDate { get; set; }
 
         [Display(Name = "End date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         public DateTime CourseEndDate { get; set; }   
 
         [Display(Name = "Documents")]

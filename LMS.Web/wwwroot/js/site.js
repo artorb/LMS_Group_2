@@ -10,152 +10,122 @@ function goBack() {
     window.history.back();
 }
 
-function addMore() {
-    $('#dynamictable').append('<form asp-action="Create">< div asp-validation-summary="ModelOnly" class= "text-danger" >' +
-        '</div ><div class="form-group"><label asp-for="Name" class="control-label"></label><input asp-for="Name" class="form-control" />' +
-        '<span asp-validation-for="Name" class="text-danger"></span></div ><div class="form-group"><label asp-for="Description" class="control-label">' +
-        '</label ><input asp-for="Description" class="form-control" /><span asp-validation-for="Description" class="text-danger"></span></div >' +
-        '<div class="form-group"><label asp-for="StartDate" class="control-label"></label><input asp-for="StartDate" class="form-control" />' +
-        '<span asp-validation-for="StartDate" class="text-danger"></span></div ><div class="form-group"><label asp-for="EndDate" class="control-label"></label>' +
-        '<input asp-for="EndDate" class="form-control" /><span asp-validation-for="EndDate" class="text-danger"></span></div >' +
-        '<div class="form-group"><input type="submit" value="Create" class="btn btn-primary" /></div></form > ');
-}
-
-
-
 
 $(document).ready(function () {
-    let container = $('#authorFormGroup');
+
+    //******** Dynamically module creation ********
+    let container = $('#moduleFormGroup');
+    let containerActivity = $('#activityFormGroup');
     let count = 0;
-    console.log('Before Literature Create method: ' + count);
-    function AddAuthorRowOnForm(e) {
+    console.log('Before Course Create method: ' + count);
+
+    let authorsCount = $('#addRowBtn').data('authorscount');  
+
+    console.log('Current Module Count: ' + authorsCount);
+
+        function AddModuleRowOnForm(e) {
         e.preventDefault();
 
         let maxNoOfRows = 9;
         if (count < maxNoOfRows) {
-            $(container).append(
-                '<div class="form-group">' +
-                '<label asp-for="Name" class="control-label"></label>' +
-                '<input asp-for="Name" class="form-control" />' +
+            authorsCount++;
+            console.log('Modified (next) Modules Count: ' + authorsCount);
+
+            $(container).append('<div class="form-row border border-light pt-1 mb-2">' +
+                '<div class= "form-group col-md-12">' +
+                '<label for="Modules_' + authorsCount + '__ModuleName" class="control-label">Module name</label>' +
+                '<input id="Modules_' + authorsCount + '__ModuleName" name="Modules[' + authorsCount + '].ModuleName" class="form-control">' +
                 '</div>' +
-                '<div class="form-group">' +
-                '<label asp-for="Description" class="control-label"></label>' +
-                '<input asp-for="Description" class="form-control" />' +
+                '<div class= "form-group col-md-12" > ' +
+                '<label for="Modules_' + authorsCount + '__ModuleDescription" class="control-label">Description</label>' +
+                '<input id="Modules_' + authorsCount + '__ModuleDescription" name="Modules[' + authorsCount + '].ModuleDescription" class="form-control">' +
                 '</div>' +
-                '<div class="form-group">' +
-                '<label asp-for="StartDate" class="control-label"></label>' +
-                '<input asp-for="StartDate" class="form-control" />' +
+                '<div class="form-group col-md-4">' +
+                '<label for="Modules_' + authorsCount + '__ModuleStartDate" class="control-label">Start date</label>' +
+                '<input type="date" id="Modules_' + authorsCount + '__ModuleStartDate" name="Modules[' + authorsCount + '].ModuleStartDate" class="form-control">' +
                 '</div>' +
+                '<div class="form-group col-md-4">' +
+                '<label for="Modules_' + authorsCount + '__ModuleEndDate" class="control-label">End date</label>' +
+                '<input type="date" id="Modules_' + authorsCount + '__ModuleEndDate" name="Modules[' + authorsCount + '].ModuleEndDate" class="form-control">' +
+                '</div>' +       
                 '<div class="form-group">' +
-                '<label asp-for="EndDate" class="control-label"></label>' +
-                '<input asp-for="EndDate" class="form-control" />' +
-                '</div>'
-            );
+                '<button type="button" class="btn" id="removeRowBtn"><span class="text-danger"><i class="fa fa-minus-circle"></i></span></button >' +
+                '</div>' +
+                '</div>');
+
             count++;
             console.log('Add: ' + count);
         }
         else {
-            alert('Limit for adding authors has been reached!');
+            alert('Limit for adding modules has been reached!');
         }
     }
-    $('#addRowBtn').click(AddAuthorRowOnForm);
+    $('#addRowBtn').click(AddModuleRowOnForm);
+
+
+
+
+    let activityCount = $('#addActivityRowBtn').data('authorscount');
+  
+    function AddActivityRowOnForm(e) {
+        console.log('Modified (first) Activity Count: ' + activityCount);
+        e.preventDefault();
+
+        let maxNoOfRows = 9;
+        if (count < maxNoOfRows) {
+            activityCount++;
+            console.log('Modified (next) Activity Count: ' + activityCount);
+
+            $(containerActivity).append('<div class="form-row border border-light pt-1 mb-2">' +
+                '<div class= "form-group col-md-12">' +
+                '<label for="Activities_' + activityCount + '__ActivityName" class="control-label">Activity name</label>' +
+                '<input id="Activities_' + activityCount + '__ActivityName" name="Activities[' + activityCount + '].ActivityName" class="form-control">' +
+                '</div>' +
+                '<div class= "form-group col-md-12" > ' +
+                '<label for="Activities_' + activityCount + '__ActivityDescription" class="control-label">Description</label>' +
+                '<input id="Activities_' + activityCount + '__ActivityDescription" name="Activities[' + activityCount + '].ActivityDescription" class="form-control">' +
+                '</div>' +       
+                '<div class="form-group col-md-4">' +
+                '<label for="Activities_' + activityCount + '__ActivityStartDate" class="control-label">Start date</label>' +
+                '<input type="date" id="Activities_' + activityCount + '__ActivityStartDate" name="Activities[' + activityCount + '].ActivityStartDate" class="form-control">' +
+                '</div>' +
+                '<div class="form-group col-md-4">' +
+                '<label for="Activities_' + activityCount + '__ActivityEndDate" class="control-label">End date</label>' +
+                '<input type="date" id="Activities_' + activityCount + '__ActivityEndDate" name="Activities[' + activityCount + '].ActivityEndDate" class="form-control">' +
+                '</div>' +
+                '<div class="form-group col-md-4">' +
+                '<label for="Activities_' + activityCount + '__ActivityDeadline" class="control-label">Deadline</label>' +
+                '<input type="date" id="Activities_' + activityCount + '__ActivityDeadline" name="Activities[' + activityCount + '].ActivityDeadline" class="form-control">' +
+                '</div>' +
+                '<div class="form-group col-md-4">' +
+                '<label for="Activities_' + activityCount + '__ActivityTypeId" class="control-label">Type Id date</label>' +
+                '<input type="number" id="Activities_' + activityCount + '__ActivityTypeId" name="Activities[' + activityCount + '].ActivityTypeId" class="form-control">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<button type="button" class="btn" id="removeRowBtn"><span class="text-danger"><i class="fa fa-minus-circle"></i></span></button >' +
+                '</div>' +
+                '</div>');
+
+            count++;
+            console.log('Add: ' + count);
+        }
+        else {
+            alert('Limit for adding activities has been reached!');
+        }
+    }
+    $('#addActivityRowBtn').click(AddActivityRowOnForm);
+
+
+
 
     $(container).on('click', '#removeRowBtn', function (e) {
         e.preventDefault();
         e.target.closest('.form-row').remove();
 
+        authorsCount--;
         count--;
         console.log('Remove: ' + count);
     });
+    //******** end Dynamically modules creation ********
 
 }); // end doc ready
-
-
-
-
-
-                    '<div class="form-group">'+             
-                    '<label asp-for="Name" class="control-label"></label>' +
-                    '<input asp-for="Name" class="form-control" />'+                  
-                    '</div>'+
-                    '<div class="form-group">'+          
-                    '<label asp-for="Description" class="control-label"></label>'+
-                    '<input asp-for="Description" class="form-control" />'+                  
-                    '</div>' +
-                    '<div class="form-group">' +           
-                    '<label asp-for="StartDate" class="control-label"></label>' +
-                    '<input asp-for="StartDate" class="form-control" />' +                  
-                    '</div>' +
-                    '<div class="form-group">' +      
-                    '<label asp-for="EndDate" class="control-label"></label>' +
-                    '<input asp-for="EndDate" class="form-control" />' +
-                    '</div>' 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//$(document).ready(function () {
-//    var maxFields = 5;
-//    var wrapper = $(".addInputFields");
-//    var addButton = $("addInputFieldsButton");
-//    var x = 1;
-//    $(addButton).click(function (e) {
-//        e.preventDefault();
-//        if (x < maxFields) {
-//            x++;
-//            $(wrapper).append('<form asp-action="Create">< div asp-validation-summary="ModelOnly" class= "text-danger" ></div ><div class="form-group"><label asp-for="Name" class="control-label"></label><input asp-for="Name" class="form-control" /><span asp-validation-for="Name" class="text-danger"></span></div><div class="form-group"><label asp-for="Description" class="control-label"></label><input asp-for="Description" class="form-control" /><span asp-validation-for="Description" class="text-danger"></span></div><div class="form-group"><label asp-for="StartDate" class="control-label"></label><input asp-for="StartDate" class="form-control" /><span asp-validation-for="StartDate" class="text-danger"></span></div><div class="form-group"><label asp-for="EndDate" class="control-label"></label><input asp-for="EndDate" class="form-control" /><span asp-validation-for="EndDate" class="text-danger"></span></div><div class="form-group"><input type="submit" value="Create" class="btn btn-primary" /></div></form ><a href="#" class="removeField"><i class="fa fa-times"></i></a>')
-//        }
-//    });
-
-//    $(wrapper).on("click", ".removeField", function (e) {
-//        e.preventDefault();
-//        $(this).parent('div').remove();
-//        x--;
-//    });
-//};
-
-//$(document).ready(function () {
-//    var i = 1;
-//    $('#add').click(function () {
-//        i++;
-//        $('#dynamictable').append('<form asp-action="Create" id="row' + i +'">< div asp-validation-summary="ModelOnly" class= "text-danger" ></div ><div class="form-group"><label asp-for="Name" class="control-label"></label><input asp-for="Name" class="form-control" /><span asp-validation-for="Name" class="text-danger"></span></div><div class="form-group"><label asp-for="Description" class="control-label"></label><input asp-for="Description" class="form-control" /><span asp-validation-for="Description" class="text-danger"></span></div><div class="form-group"><label asp-for="StartDate" class="control-label"></label><input asp-for="StartDate" class="form-control" /><span asp-validation-for="StartDate" class="text-danger"></span></div><div class="form-group"><label asp-for="EndDate" class="control-label"></label><input asp-for="EndDate" class="form-control" /><span asp-validation-for="EndDate" class="text-danger"></span></div><div class="form-group"><input type="submit" value="Create" class="btn btn-primary" /></div></form > <button name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button>')
-//    });
-
-//    $(document).on('click', '.btn_remove', function () {
-//        var button_id = $(this).attr("id");
-//        $("#row" + button_id + "").remove();
-//    });
-
-//    $('#submit').click(function () {
-//        $.ajax({
-//            url: "name.create",
-//            method: "POST",
-//            data: $('#add_name').serialize(),
-//            success: function (data) {
-//                alert(data);
-//                $('#add_name')[0].reset(),
-//            }
-//        });
-
-//    });
-
-//});
-
-
-
-
-

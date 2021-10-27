@@ -22,17 +22,21 @@ namespace Lms.Core.Models.ViewModels
         [Required(ErrorMessage = "Please enter start date!")]
         [Display(Name = "Start date")]
         // [CourseStartTimeCheck]      
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd H:mm}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         public DateTime CourseStartDate { get; set; }
 
 
         [Required(ErrorMessage = "Please enter end date!")]
         [Display(Name = "End date")]
         // [CourseEndTimeCheck]       
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd H:mm}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         public DateTime CourseEndDate { get; set; }
         
-        
+        /*
+         * 
+         * 
         [Required(ErrorMessage = "Please enter name!")]
         [MinLength(2, ErrorMessage = "Minimum length: 2 character!")]
         [MaxLength(40, ErrorMessage = "Maximum length: 40 character!")]
@@ -48,14 +52,16 @@ namespace Lms.Core.Models.ViewModels
         [Required(ErrorMessage = "Please enter start date!")]
         [Display(Name = "Start date")]
         // [ModuleStartTimeCheck]      
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd H:mm}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         public DateTime ModuleStartDate { get; set; }
         
         
         [Required(ErrorMessage = "Please enter end date!")]
         [Display(Name = "End date")]
         // [ModuleEndTimeCheck]       
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd H:mm}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         public DateTime ModuleEndDate { get; set; }
         
         
@@ -96,20 +102,23 @@ namespace Lms.Core.Models.ViewModels
 
         [Required(ErrorMessage = "Please enter start date!")]
         [Display(Name = "Start date")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd H:mm}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         // [AcitivtyStartTimeCheck]
         public DateTime ActivityStartDate { get; set; }
         
         
         [Required(ErrorMessage = "Please enter end date!")]
         [Display(Name = "End date")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd H:mm}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         // [ActivityEndTimeCheck]
         public DateTime ActivityEndDate { get; set; }
         
         [Required(ErrorMessage = "Please enter end date!")]
         [Display(Name = "Activity Deadline")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd H:mm}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         public DateTime ActivityDeadline { get; set; }
         // [ActivityEndTimeCheck]
         // [NotNull]
@@ -130,5 +139,8 @@ namespace Lms.Core.Models.ViewModels
         //         }
         //     }
         // }
+
+
+        */
     }
 }

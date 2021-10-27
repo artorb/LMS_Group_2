@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Lms.Web.Controllers
 {
     public class DownloadController : Controller
-    {
-
-     
+    {     
         public DownloadController()
         {
          

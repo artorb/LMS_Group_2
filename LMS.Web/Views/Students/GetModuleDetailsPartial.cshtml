@@ -7,6 +7,8 @@
 
 <hr />
 
+<th> <a class="btn btn-sm btn-success float-right" asp-controller="Activities" asp-action="Create" asp-route-Id="@Model.Id">Add new activity</a></th>
+
 <section class="container">
     <section class="row">
 
@@ -67,7 +69,7 @@
         <a class="btn btn-sm btn-success" asp-controller="Modules" asp-action="Edit" asp-route-id="@ViewData["ModuleId"]">Edit</a>
         <a class="btn btn-sm btn-danger" asp-controller="Modules" asp-action="Delete" asp-route-id="@ViewData["ModuleId"]">Delete</a>
     }
-    </div>
+</div>
 <br />
 
 
@@ -78,15 +80,8 @@
             <tr>
                 <th> @Html.DisplayNameFor(model => model.Activities) </th>
                 <th> @Html.DisplayNameFor(model => model.ModuleStartDate) </th>
-                <th> @Html.DisplayNameFor(model => model.ModuleEndDate) </th>
+                <th> @Html.DisplayNameFor(model => model.ModuleEndDate) </th>    
 
-
-
-                @*@if (User.IsInRole("Student"))
-                {
-                    <th> @Html.DisplayNameFor(model => model.Status) </th>
-                }*@
-           
 
                 <th> </th>
             </tr>
@@ -94,61 +89,61 @@
         <tbody>
             @foreach (var item in Model.Activities)
             {
-            <tr>
-                <td>
-                    <a asp-controller="Activities" asp-action="ActivityDetail" asp-route-id="@item.Id"
-                       data-ajax="true"
-                       data-ajax-method="GET"
-                       data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
-                       data-ajax-mode="replace">
-                        @Html.DisplayFor(modelItem => item.ActivityType.TypeName)
-                    </a>
-                </td>
-                <td> @Convert.ToDateTime(item.StartDate).ToString("yyyy/MM/dd HH:mm") </td>
-                <td> @Convert.ToDateTime(item.EndDate).ToString("yyyy/MM/dd HH:mm") </td>
+                <tr>
+                    <td>
+                        <a asp-controller="Activities" asp-action="ActivityDetail" asp-route-id="@item.Id"
+                           data-ajax="true"
+                           data-ajax-method="GET"
+                           data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
+                           data-ajax-mode="replace">
+                            @Html.DisplayFor(modelItem => item.ActivityType.TypeName)
+                        </a>
+                    </td>
+                    <td> @Convert.ToDateTime(item.StartDate).ToString("yyyy/MM/dd HH:mm") </td>
+                    <td> @Convert.ToDateTime(item.EndDate).ToString("yyyy/MM/dd HH:mm") </td>
 
 
 
-                @{
-                    var status = service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier)?.Value).Result;
-                }
-
-                @if (User.IsInRole("Student"))
-                {
-                    @if (status == "Uploaded" && item.ActivityType.TypeName == "Assignment")
-                    {
-                        <td>
-                           <span class="badge badge-success">Uploaded</span>
-                        </td>
+                    @{
+                        var status = service.GetStatusForStudentActivity(item, User.FindFirst(ClaimTypes.NameIdentifier)?.Value).Result;
                     }
-                    else if (status == "Delayed" && item.ActivityType.TypeName == "Assignment")
+
+                    @if (User.IsInRole("Student"))
                     {
-                        <td>
-                           <span class="badge badge-warning">Past due date</span>
-                        </td>
+                        @if (status == "Uploaded" && item.ActivityType.TypeName == "Assignment")
+                        {
+                            <td>
+                                <span class="badge badge-success">Uploaded</span>
+                            </td>
+                        }
+                        else if (status == "Delayed" && item.ActivityType.TypeName == "Assignment")
+                        {
+                            <td>
+                                <span class="badge badge-warning">Past due date</span>
+                            </td>
+                        }
+                        else if (status == "Not uploaded" && item.ActivityType.TypeName == "Assignment")
+                        {
+                            <td>
+                                <span class="badge badge-danger">Not Uploaded</span>
+                            </td>
+                        }
                     }
-                    else if (status == "Not uploaded" && item.ActivityType.TypeName == "Assignment")
+
+                    @if (item.ActivityType.TypeName == "Assignment")
                     {
-                        <td>
-                            <span class="badge badge-danger">Not Uploaded</span>
-                        </td>
+                        <td>Deadline: @Convert.ToDateTime(item.Deadline).ToString("yyyy/MM/dd HH:mm") </td>
                     }
-                }
+                    else
+                    {
 
-                @if (item.ActivityType.TypeName == "Assignment")
-                {
-                    <td>Deadline: @Convert.ToDateTime(item.Deadline).ToString("yyyy/MM/dd HH:mm") </td>
-                }
-                else
-                {
-                    
-                }
+                    }
 
 
 
 
-                <td></td>
-            </tr>
+                    <td></td>
+                </tr>
             }
         </tbody>
     </table>
@@ -157,31 +152,31 @@
 
 <div>
     @if (User.IsInRole("Teacher"))
-        {
-    @using (Html.BeginFormActivity("TeacherUploadFilesForModule", "Upload", new { moduleId = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
-        <div class="form-horizontal">
+        @using (Html.BeginFormActivity("TeacherUploadFilesForModule", "Upload", new { moduleId = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="form-horizontal">
 
-            <div class="form-group uploadButtonGroup">
-                <div class="uploadButtonContainer">
-                    <input type="file" class="upload-box" multiple name="files" id="Files" />
+                <div class="form-group uploadButtonGroup">
+                    <div class="uploadButtonContainer">
+                        <input type="file" class="upload-box" multiple name="files" id="Files" />
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Upload" class="btn btn-sm btn-primary submitButton" />
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Upload" class="btn btn-sm btn-primary submitButton" />
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10 text-success">
-                    @ViewBag.UploadStatus
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10 text-success">
+                        @ViewBag.UploadStatus
+                    </div>
                 </div>
-            </div>
 
-        </div>
-    }
+            </div>
+        }
     }
 </div>
 

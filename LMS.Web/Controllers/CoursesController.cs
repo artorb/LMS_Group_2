@@ -17,19 +17,18 @@ namespace Lms.Web.Controllers
 {
     public class CoursesController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;     
 
         public CoursesController(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;      
         }
 
         // GET: Courses
         public async Task<IActionResult> Index()
         {
             /*GetAll with params example */
-            var allCourses =
-                await _unitOfWork.CourseRepository.GetAllWithIncludesAsync(course => course.Modules);
+            var allCourses = await _unitOfWork.CourseRepository.GetAllWithIncludesAsync(course => course.Modules);
 
             var activityTest = _unitOfWork.ActivityRepository.GetAllWithIncludesAsync(x => x.ActivityType).Result;
 
@@ -44,6 +43,7 @@ namespace Lms.Web.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
             var courseId = UserLoggedIn.CourseId;
+
             var course = (idFromCourse == null)
                 ? await _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)courseId,
                     d => d.Documents.Where(m => m.ApplicationUser == null))
@@ -65,29 +65,32 @@ namespace Lms.Web.Controllers
 
 
 
-
-        // GET: Courses/Create
         public IActionResult Create()
         {
             return View();
         }
 
-
-        // POST: Courses/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,StartDate,EndDate")] Course course)
+        public async Task<IActionResult> Create(CourseCreateViewModel viewModel)
         {
             if (ModelState.IsValid)
-            {
-                _unitOfWork.CourseRepository.Add(course);
-                await _unitOfWork.CompleteAsync();
-                return RedirectToAction(nameof(Index));
-            }
+            {   
+                var temp = new Course
+                {
+                    Name = viewModel.Name,
+                    Description = viewModel.Description,
+                    StartDate = viewModel.StartDate,
+                    EndDate = viewModel.EndDate
+                };
 
-            return View(course);
+                _unitOfWork.CourseRepository.Add(temp);        
+                await _unitOfWork.CompleteAsync();
+                var id = temp.Id;           
+     
+                return RedirectToAction("Create", "Modules", new { @id = id });
+            }
+            return View();
         }
 
 
@@ -108,6 +111,8 @@ namespace Lms.Web.Controllers
 
             return View(course);
         }
+
+
 
         // POST: Courses/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -140,7 +145,6 @@ namespace Lms.Web.Controllers
                         throw;
                     }
                 }
-
                 return RedirectToAction("Index", "Teachers");
             }
             return View(course);
@@ -167,6 +171,8 @@ namespace Lms.Web.Controllers
             return View(course);
         }
 
+
+
         // POST: Courses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -178,7 +184,7 @@ namespace Lms.Web.Controllers
 
             var courseWillBeDeleted = await _unitOfWork.CourseRepository.GetAsync(id);
 
-            var moduleToCourse = _unitOfWork.ModuleRepository.GetAllAsync().Result.Where(u => u.CourseId == id);
+            var moduleToCourse = _unitOfWork.ModuleRepository.GetAllAsync().Result.Where(u => u.CourseId==id);
             foreach(var item in moduleToCourse)
             {
                 _unitOfWork.ModuleRepository.Remove(item);

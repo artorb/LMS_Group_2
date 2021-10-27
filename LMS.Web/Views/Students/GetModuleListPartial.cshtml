@@ -1,6 +1,8 @@
 ﻿@model IEnumerable<Lms.Core.Entities.Module>
 
 <br/>
+
+
 <div class="card-deck">
     <div class="card border-0">
 
@@ -8,7 +10,7 @@
 
         @foreach (var item in Model)
         {
-            <a class ="btn btn-primary" id="moduleListForStudent"  asp-controller="Modules" asp-action="ModuleDetail" asp-route-id="@item.Id"
+            <a class="btn btn-primary" id="moduleListForStudent" asp-controller="Modules" asp-action="ModuleDetail" asp-route-id="@item.Id"
                data-ajax="true"
                data-ajax-method="GET"
                data-ajax-update="#getModuleDetailOrActivityDetailsWithAjax"
@@ -16,10 +18,14 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </a>
         }
+        <hr />
+        <a class="btn btn-success" asp-controller="Modules" asp-action="Create" asp-route-id="@Model.FirstOrDefault().CourseId">Add new module</a>
+
+
     </div>
 
     <div class="card border-0">
-        <div id="getModuleDetailOrActivityDetailsWithAjax"></div>       
+        <div id="getModuleDetailOrActivityDetailsWithAjax"></div>           
     </div>
 </div>
 

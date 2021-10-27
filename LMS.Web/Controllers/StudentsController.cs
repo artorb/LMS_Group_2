@@ -81,6 +81,7 @@ namespace Lms.Web.Controllers
 
             var UserClicked = await _unitOfWork.UserRepository.FirstOrDefaultAsync(Id);
 
+
             if (UserClicked == null)
             {
                 return NotFound();
@@ -108,12 +109,20 @@ namespace Lms.Web.Controllers
             {
                 return NotFound();
             }
-            var userInDatabase = await db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == Id);          
-         
+
+            var userOriginal = await _unitOfWork.UserRepository.FirstOrDefaultAsync(Id);
+            var userInDatabase = userOriginal;
+
             if (ModelState.IsValid)
                 {
                     try
                     {
+                    if ((!userOriginal.Name.Equals(applicationUsermodel.Name)
+                            || (!userOriginal.Email.Equals(applicationUsermodel.Email))))
+                    {
+                        TempData["ChangedParticipant"] = $"The {userInDatabase.Name} has been changed!";
+                    }
+
 
                     userInDatabase.Email = applicationUsermodel.Email;
                     userInDatabase.Name = applicationUsermodel.Name;
@@ -122,9 +131,11 @@ namespace Lms.Web.Controllers
   
 
                     _unitOfWork.UserRepository.Update(userInDatabase);
-                    await _unitOfWork.CompleteAsync();               
-                    }
-                    catch (DbUpdateConcurrencyException)
+                    await _unitOfWork.CompleteAsync();
+
+           
+                }
+                catch (DbUpdateConcurrencyException)
                     {
                         if (!ApplicationUserExists(applicationUsermodel.Id).Result)
                         {

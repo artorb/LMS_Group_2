@@ -11,6 +11,7 @@ using Lms.Core.Models.ViewModels;
 using Lms.Core.Repositories;
 using Lms.Data.Data;
 using Lms.Web.Service;
+using Newtonsoft.Json;
 
 namespace Lms.Web.Controllers
 {
@@ -18,12 +19,17 @@ namespace Lms.Web.Controllers
     {
         private readonly IActivityService _activityService;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly LmsDbContext _context;
 
-        public ModulesController(IUnitOfWork unitOfWork, IActivityService activityService)
+
+        public ModulesController(IUnitOfWork unitOfWork, IActivityService activityService, LmsDbContext context)
         {
             _unitOfWork = unitOfWork;
             _activityService = activityService;
+            _context = context;
         }
+
+
 
         public async Task<IActionResult> ModuleDetail(int Id)
         {
@@ -57,7 +63,6 @@ namespace Lms.Web.Controllers
                 };
                 return PartialView("~/Views/Students/GetModuleDetailsPartial.cshtml", model);
             }
-
             else
             {
                 var model = new StudentModuleViewModel()
@@ -74,6 +79,7 @@ namespace Lms.Web.Controllers
                 return PartialView("~/Views/Students/GetModuleDetailsPartial.cshtml", model);
             }
         }
+
 
 
         public async Task<IActionResult> ModuleList(int? idFromCourse)
@@ -95,11 +101,15 @@ namespace Lms.Web.Controllers
             return PartialView("~/Views/Students/GetModuleListPartial.cshtml", modulesToCourse);
         }
 
+
+
         // GET: Modules
         public async Task<IActionResult> Index()
         {
             return View(await _unitOfWork.ModuleRepository.GetAllAsync());
         }
+
+
 
         // GET: Modules/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -120,30 +130,43 @@ namespace Lms.Web.Controllers
             //return PartialView(module);
         }
 
-        // GET: Modules/Create
+
+
         public IActionResult Create()
         {
-            //return View();
-            return PartialView();
+            return View();
         }
 
-        // POST: Modules/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,StartDate,EndDate")] Module @module)
-        {
-            if (ModelState.IsValid)
+        public async Task<IActionResult> Create(ModuleListViewModel viewModel, int id)
+        {    
+            var res = new List<Module>();
+            foreach (var item in viewModel.Modules)
             {
-                _unitOfWork.ModuleRepository.Add(module);
-                await _unitOfWork.CompleteAsync();
-                return RedirectToAction(nameof(Index));
-            }
+                var temp = new Module
+                {
+                    Name = item.ModuleName,
+                    Description = item.ModuleDescription,
+                    StartDate = item.ModuleStartDate,
+                    EndDate = item.ModuleEndDate,
+                    CourseId = id,
+                    Course = item.Course
+                };
 
-            //return View(module);
-            return PartialView(module);
+                res.Add(temp);
+                _unitOfWork.ModuleRepository.Add(temp);
+                await _unitOfWork.CompleteAsync();
+                var idForActivity = temp.Id;
+
+                //return RedirectToAction("Create", "Activities", new { @id = idForActivity });
+            }
+            return RedirectToAction("Index", "Teachers");
+            //return View();
         }
+
 
         // GET: Modules/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -161,6 +184,8 @@ namespace Lms.Web.Controllers
 
             return View(module);
         }
+
+
 
         // POST: Modules/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -193,12 +218,12 @@ namespace Lms.Web.Controllers
                         throw;
                     }
                 }
-
                 return RedirectToAction("Index", "Teachers");
             }
-
             return View(module);
         }
+
+
 
         // GET: Modules/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -234,6 +259,7 @@ namespace Lms.Web.Controllers
 
             return RedirectToAction("Index", "Teachers");
         }
+
 
         private async Task<bool> ModuleExists(int id)
         {

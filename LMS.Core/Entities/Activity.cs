@@ -23,19 +23,22 @@ namespace Lms.Core.Entities
         [Required(ErrorMessage = "Please enter start date!")]
         [Display(Name = "Start date")]
         [AcitivtyStartTimeCheck]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd H:mm}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         public DateTime StartDate { get; set; }
 
 
         [Required(ErrorMessage = "Please enter end date!")]
         [Display(Name = "End date")]
         [ActivityEndTimeCheck]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd H:mm}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         public DateTime EndDate { get; set; }
 
 
         [ActivityEndTimeCheck]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd H:mm}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         public DateTime? Deadline { get; set; }       
 
 

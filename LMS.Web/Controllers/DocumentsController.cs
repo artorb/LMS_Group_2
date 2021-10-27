@@ -26,6 +26,8 @@ namespace Lms.Web.Controllers
             return View(await lmsDbContext.ToListAsync());
         }
 
+
+
         // GET: Documents/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -48,6 +50,8 @@ namespace Lms.Web.Controllers
             return View(document);
         }
 
+
+
         // GET: Documents/Create
         public IActionResult Create()
         {
@@ -57,6 +61,8 @@ namespace Lms.Web.Controllers
             ViewData["ModuleId"] = new SelectList(_context.Modules, "Id", "Id");
             return View();
         }
+
+
 
         // POST: Documents/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -78,6 +84,8 @@ namespace Lms.Web.Controllers
             return View(document);
         }
 
+
+
         // GET: Documents/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -97,6 +105,8 @@ namespace Lms.Web.Controllers
             ViewData["ModuleId"] = new SelectList(_context.Modules, "Id", "Id", document.ModuleId);
             return View(document);
         }
+
+
 
         // POST: Documents/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -137,6 +147,8 @@ namespace Lms.Web.Controllers
             return View(document);
         }
 
+
+
         // GET: Documents/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -159,6 +171,8 @@ namespace Lms.Web.Controllers
             return View(document);
         }
 
+
+
         // POST: Documents/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -169,6 +183,8 @@ namespace Lms.Web.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+
 
         private bool DocumentExists(int id)
         {

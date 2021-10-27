@@ -2,6 +2,7 @@
 using Lms.Core.Models.ViewModels;
 using Lms.Core.Repositories;
 using Lms.Data.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,11 +17,13 @@ namespace Lms.Web.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly LmsDbContext db;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public TeachersController(IUnitOfWork unitOfWork, LmsDbContext context)
+        public TeachersController(IUnitOfWork unitOfWork, LmsDbContext context, UserManager<ApplicationUser> userManager)
         {
             _unitOfWork = unitOfWork;
             db = context;
+            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
         [HttpGet]
@@ -39,113 +42,107 @@ namespace Lms.Web.Controllers
             }).ToListAsync();
         }
 
+        private Activity _activity { get; set; }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateCourse(TeacherCreateCourseViewModel model)
+        public async Task<Activity> CreateActivity(CreateActivityViewModel activityModel)
         {
             if (ModelState.IsValid)
             {
                 var activity = new Activity
                 {
-                    Name = model.ActivityName,
-                    Description = model.ActivityDescription,
-                    StartDate = model.ActivityStartDate,
-                    EndDate = model.ActivityEndDate,
-                    Deadline = model.ActivityDeadline,
+                    Name = activityModel.ActivityName,
+                    Description = activityModel.ActivityDescription,
+                    StartDate = activityModel.ActivityStartDate,
+                    EndDate = activityModel.ActivityEndDate,
+                    Deadline = activityModel.ActivityDeadline,
                     ActivityType = new ActivityType
                     {
                         TypeName = "Laboratory"
                     }
                     //ActivityType = (ActivityType)await GetAllActivityTypesAsync()
                 };
-                
+                _activity = activity;
+                return activity;
+            }
+            return null;
+        }
+
+        private Module _module { get; set; }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<Module> CreateModule(CreateModuleViewModel moduleModel)
+        {
+            if (ModelState.IsValid)
+            {
                 var module = new Module
                 {
-                    Name = model.ModuleName,
-                    Description = model.ModuleDescription,
-                    StartDate = model.ModuleStartDate,
-                    EndDate = model.ModuleEndDate,
-                    Activities = new List<Activity> { activity }
-                    // Activities = new List<Activity>()
+                    Name = moduleModel.ModuleName,
+                    Description = moduleModel.ModuleDescription,
+                    StartDate = moduleModel.ModuleStartDate,
+                    EndDate = moduleModel.ModuleEndDate,
+                    Activities = new List<Activity> { _activity }
+                    //Activities = new List<Activity>()
                 };
+                _module = module;
+                return module;
+            }
+            return null;
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateCourse(TeacherCreateCourseViewModel courseModel)
+        {
+            if (ModelState.IsValid)
+            {
                 var course = new Course
                 {
-                    Name = model.CourseName,
-                    Description = model.CourseDescription,
-                    StartDate = model.CourseStartDate,
-                    EndDate = model.CourseEndDate,
-                    Modules = new List<Module> { module }
+                    Name = courseModel.CourseName,
+                    Description = courseModel.CourseDescription,
+                    StartDate = courseModel.CourseStartDate,
+                    EndDate = courseModel.CourseEndDate,
+                    Modules = new List<Module> { _module }
                 };
 
-                // activity.ActivityType = new ActivityType
-                // {
-                //     TypeName = "Laboratory"
-                // };
-                //
-                // activity.Module = module;
-                // module.Course = course;
-
-                // _unitOfWork.ModuleRepository.Add(module);
-                // _unitOfWork.ActivityRepository.Add(activity);
+                
                 _unitOfWork.CourseRepository.Add(course);
                 await _unitOfWork.CompleteAsync();
             }
-
             return RedirectToAction(nameof(Index));
         }
 
 
-        public async Task<IActionResult> Index()
-        {
-            /*
-                ViewData["ActivityTypeId"] = new SelectList(_unitOfWork.ActivityTypes, "Id", "Id");
-                ViewData["ModuleId"] = new SelectList(_unitOfWork.Modules, "Id", "Id");
-             * Test with ViewData["CourseId"] instead of StudentAndTeacherViewModel
-             */
-            var courses = await _unitOfWork.CourseRepository.GetAllWithIncludesAsync(m => m.Modules, m => m.Users);
+        
+                public async Task<IActionResult> Index()
+                {                  
+        
+                    var courses = await _unitOfWork.CourseRepository.GetAllWithIncludesAsync(m => m.Modules, m => m.Users);
 
-            var teacherTable = courses.Select(course => new TeacherTableViewModel
-                {
-                    Course = course,
-                    ActiveModuleName =
-                        course.Modules.ElementAt(0).Name, //Fix to use StartDate and EndDate, and add null-handler
-                    NextModuleName =
-                        course.Modules.ElementAt(1).Name, //Fix to use StartDate and EndDate, and add null-handler
-                    NumberOfParticipants = course.Users.Count
-                })
-                .ToList();
+                    var teacherTable = courses.Select(course => new TeacherTableViewModel
+                        {
+                            Course = course,
+                            ActiveModuleName =
+                                course.Modules.ElementAt(0).Name, //Fix to use StartDate and EndDate, and add null-handler
+                            NextModuleName =
+                                course.Modules.ElementAt(1).Name, //Fix to use StartDate and EndDate, and add null-handler
+                            NumberOfParticipants = course.Users.Count
+                        })
+                        .ToList();
 
-            var indexVM = new TeacherIndexViewModel
-            {
-                CourseToCreate = new TeacherCreateCourseViewModel(),
-                TeacherTables = teacherTable
-            };
+                    var indexVM = new TeacherIndexViewModel
+                    {
+                        CourseToCreate = new TeacherCreateCourseViewModel(),
+                        TeacherTables = teacherTable
+                    };
 
-            // return View(viewModels);
-            return View(indexVM);
-        }
-        // public async Task<IActionResult> Search(string courseName)
-        // {
-        //     var foundCourses = await _unitOfWork.CourseRepository.FindByNameAsync(courseName);
-        //
-        //     var viewModels = new List<TeacherTableViewModel>();
-        //
-        //     foreach (var course in foundCourses)
-        //     {
-        //         var viewModel = new TeacherTableViewModel()
-        //         {
-        //             Course = course,
-        //             ActiveModuleName = course.Modules.ElementAt(0).Name,
-        //             NextModuleName = course.Modules.ElementAt(1).Name,
-        //             NumberOfParticipants = course.Users.Count
-        //         };
-        //         viewModels.Add(viewModel);
-        //     }
-        //
-        //     return View(nameof(Index), viewModels);
-        // }
-
+                    // return View(viewModels);
+                    return View(indexVM);
+                }
+               
+                
 
         public async Task<IActionResult> IndexCourseForTeacher(int id)
         {
@@ -162,6 +159,6 @@ namespace Lms.Web.Controllers
         {
             ViewBag.Message = "Example Data from Server"; //Using ViewBag Just for example, use ViewModel Instead
             return PartialView("~/Views/Teachers/CreateCourse.cshtml");
-        }
+        }     
     }
 }

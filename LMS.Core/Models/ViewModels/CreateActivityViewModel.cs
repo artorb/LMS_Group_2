@@ -1,5 +1,5 @@
 ﻿using Lms.Core.Entities;
-using Lms.Core.Validations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,52 +9,48 @@ using System.Threading.Tasks;
 
 namespace Lms.Core.Models.ViewModels
 {
-   public class StudentActivityViewModel
+   public class CreateActivityViewModel
     {
-        public int Id { get; set; }
-
-        public string UserId { get; set; }
-
         [Required(ErrorMessage = "Please enter name!")]
         [MinLength(2, ErrorMessage = "Minimum length: 2 character!")]
         [MaxLength(40, ErrorMessage = "Maximum length: 40 character!")]
-        [Display(Name = "Activity name")]
         public string ActivityName { get; set; }
+
 
         [Required(ErrorMessage = "Please enter description!")]
         [MinLength(5, ErrorMessage = "Minimum length: 5 character!")]
         [MaxLength(500, ErrorMessage = "Maximum length: 500 character!")]
-        [Display(Name = "Description")]
         public string ActivityDescription { get; set; }
+        
 
-        [Required(ErrorMessage = "Please enter start date!")]   
-        [AcitivtyStartTimeCheck]
+        [Required(ErrorMessage = "Please enter start date!")]
         [Display(Name = "Start date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
+        // [AcitivtyStartTimeCheck]
         public DateTime ActivityStartDate { get; set; }
 
+
         [Required(ErrorMessage = "Please enter end date!")]
-        [ActivityEndTimeCheck]
         [Display(Name = "End date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
+        // [ActivityEndTimeCheck]
         public DateTime ActivityEndDate { get; set; }
 
-        [ActivityEndTimeCheck]
-        [Display(Name = "Deadline")]
+
+        [Required(ErrorMessage = "Please enter end date!")]
+        [Display(Name = "Activity Deadline")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
-        public DateTime? ActivityDeadline { get; set; }
+        public DateTime ActivityDeadline { get; set; }
 
 
-        public string Status { get; set; }
-    
-
-        [Display(Name = "Activity documents")]
-        public IEnumerable<Document> Documents { get; set; }
-
+        [Required(ErrorMessage = "Please enter the type!")]
         public int ActivityTypeId { get; set; }
-        public ActivityType ActivityTypes { get; set; }
+        public IEnumerable<SelectListItem> ActivityType { get; set; }
+
+        public int ModuleId { get; set; }
+        public Module Module { get; set; }
     }
 }

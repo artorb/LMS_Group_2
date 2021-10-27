@@ -21,21 +21,25 @@ namespace Lms.Core.Entities
 
         [Required(ErrorMessage = "Please enter start date!")]
         [Display(Name = "Start date")]
-        [CourseStartTimeCheck]      
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd H:mm}", ApplyFormatInEditMode = true)]
+        //[CourseStartTimeCheck]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
 
 
         [Required(ErrorMessage = "Please enter end date!")]
         [Display(Name = "End date")]
-        [CourseEndTimeCheck]       
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd H:mm}", ApplyFormatInEditMode = true)]
+        //[CourseEndTimeCheck]
+        [DataType(DataType.Date)]       
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
 
 
         public ICollection<Document> Documents { get; set; }
         public ICollection<ApplicationUser> Users { get; set; }
-        public ICollection<Module> Modules { get; set; }
+        //public ICollection<Module> Modules { get; set; }
+
+        public List<Module> Modules { get; set; }
 
     }
 }

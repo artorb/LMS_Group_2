@@ -12,11 +12,13 @@
         <div>
             <strong> @Html.DisplayNameFor(model => model.CourseStartDate) </strong>
         </div>
-        <div> @Convert.ToDateTime(Model.CourseStartDate).ToString("yyyy/MM/dd HH:mm") </div>
+        @*<div> @Convert.ToDateTime(Model.CourseStartDate).ToString("yyyy/MM/dd HH:mm") </div>*@
+        <div> @Html.DisplayFor(model => model.CourseStartDate) </div>
         <div>
             <strong> @Html.DisplayNameFor(model => model.CourseEndDate) </strong>
         </div>
-        <div> @Convert.ToDateTime(Model.CourseEndDate).ToString("yyyy/MM/dd HH:mm") </div>
+        @*<div> @Convert.ToDateTime(Model.CourseEndDate).ToString("yyyy/MM/dd HH:mm") </div>*@
+        <div> @Html.DisplayFor(model => model.CourseEndDate) </div>
     </div>
 
     <div class="card border-0">

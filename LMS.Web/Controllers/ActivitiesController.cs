@@ -21,6 +21,7 @@ namespace Lms.Web.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IActivityService _activityService;
         private readonly LmsDbContext db;
+        public static Task<IEnumerable<SelectListItem>> activityTypes { get; private set; }
 
         public ActivitiesController(IUnitOfWork unitOfWork, IActivityService activityService, LmsDbContext context)
         {
@@ -59,10 +60,8 @@ namespace Lms.Web.Controllers
 
 
         // GET: Activities
-        public async Task<IActionResult> Index()
-        {
-            //var activities = await _unitOfWork.ActivityRepository.GetAllAsync();
-
+        public async Task<IActionResult> Index()       
+        {   
             var activity = await _unitOfWork.ActivityRepository.GetWithIncludesAsync
                 (a => a.Include(act => act.ActivityType).Include(activity => activity.Module));
             return View(activity.ToList());
@@ -92,28 +91,42 @@ namespace Lms.Web.Controllers
 
 
 
-        // GET: Activities/Create
         public IActionResult Create()
         {
+            activityTypes = GetAllActivityTypesAsync();
             return View();
         }
 
-        // POST: Activities/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-            [Bind("Id,Name,Description,StartDate,EndDate,Deadline,ModuleId,ActivityTypeId")] Activity activity)
-        {
-            if (ModelState.IsValid)
+        public async Task<IActionResult> Create(ActivityListViewModel viewModel, int Id)
+        {         
+
+            var res = new List<Activity>();
+            foreach (var item in viewModel.Activities)
             {
-                _unitOfWork.ActivityRepository.Add(activity);
+                var temp = new Activity
+                {
+                    Name = item.ActivityName,
+                    Description = item.ActivityDescription,
+                    StartDate = item.ActivityStartDate,
+                    EndDate = item.ActivityEndDate,
+                    Deadline = item.ActivityDeadline,                   
+                    ActivityTypeId = item.ActivityTypeId,
+                    ModuleId = Id,
+                    Module = item.Module
+                };
+
+                res.Add(temp);
+                _unitOfWork.ActivityRepository.Add(temp);
                 await _unitOfWork.CompleteAsync();
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction("Index", "Courses");
             }
-            return View(activity);
-        }
+            return View();
+        }  
 
 
 
