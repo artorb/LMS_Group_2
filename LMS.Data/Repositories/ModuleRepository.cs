@@ -27,8 +27,7 @@ namespace Lms.Data.Repositories
                .Where(m => m.CourseId == courseId && m.EndDate > DateTime.Today && m.StartDate <= DateTime.Today.AddDays(7))
                .ForEachAsync(m => activities.AddRange(m.Activities.Where(a => a.EndDate > DateTime.Today && a.StartDate <= DateTime.Today.AddDays(7)).ToList()));
 
-            return activities = activities.OrderBy(a => a.StartDate).ToList();
+            return activities.OrderBy(a => a.StartDate).ToList();
         }
-
     }
 }
