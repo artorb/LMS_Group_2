@@ -2,12 +2,11 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Lms.Core.Entities;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Lms.Core.Models.ViewModels;
-using Lms.Core.Repositories;
-using Lms.Data.Data;
 using Lms.Web.Service;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lms.Web.Controllers
@@ -16,18 +15,17 @@ namespace Lms.Web.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IActivityService _activityService;
-        private readonly LmsDbContext db;
 
-        public StudentsController(IUnitOfWork unitOfWork, IActivityService activityService, LmsDbContext context)
+        public StudentsController(IUnitOfWork unitOfWork, IActivityService activityService)
         {
             _unitOfWork = unitOfWork;
             _activityService = activityService;
-            db = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View();
+            var schema = await WeekSchema();
+            return View(schema);
         }
 
         public async Task<IActionResult> CourseStudentsDetails(int? idFromCourse)
@@ -55,9 +53,11 @@ namespace Lms.Web.Controllers
         // GET: Students/Details/5
         public async Task<IActionResult> Details(string? Id)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);         
-            ViewData["Id"] = userId;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var UserLoggedIn =
+                await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
+            var courseId =
+                UserLoggedIn.CourseId; 
 
             var model = new ApplicationUserViewModel()
             {
@@ -188,6 +188,11 @@ namespace Lms.Web.Controllers
 
             //if student uploaded something : problem with documents. ApplicationUserId should be NULL
             var documentsForUserWillBeDeleted = _unitOfWork.DocumentRepository.GetAllAsync().Result.Where(u=>u.ApplicationUserId == id);
+            var activity = _unitOfWork.ActivityRepository
+                .GetWithIncludesIdAsync((int)Id, d => d.Documents, a => a.ActivityType).Result;
+            if (activity == null) return NotFound();
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
 
             foreach (var item in documentsForUserWillBeDeleted)
@@ -201,5 +206,77 @@ namespace Lms.Web.Controllers
             return RedirectToAction("Index", "Teachers");
         }
         
+
+        public async Task<List<DaySchemaViewModel>> WeekSchema()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
+            var courseId = UserLoggedIn.CourseId;
+
+            var activities = await _unitOfWork.ModuleRepository.GetSortedListOfWeeklyActivitiesAsync((int)courseId);
+
+            List<DaySchemaViewModel> weekSchema = await CreateWeeklySchema(UserLoggedIn, activities);
+
+            return weekSchema;
+        }
+
+        private async Task<List<DaySchemaViewModel>> CreateWeeklySchema(ApplicationUser UserLoggedIn, IEnumerable<Activity> activities)
+        {
+            List<DaySchemaViewModel> weekSchema = new();
+            for (int i = 0; i < 7; i++)
+            {
+                var date = DateTime.Today.AddDays(i);
+
+                if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday) continue;
+
+                var daySchema = new DaySchemaViewModel()
+                {
+                    WeekDay = date.DayOfWeek.ToString(),
+                    ActivitySchemas = new List<ActivitySchemaViewModel>()
+                };
+
+                TestActivityToSchema(date, daySchema);//Enbart för att testa HTML koden
+
+                foreach (var activity in activities)
+                {
+                    if (activity.StartDate <= date && activity.EndDate >= date)
+                    {
+                        var activitySchema = new ActivitySchemaViewModel()
+                        {
+                            Name = activity.Name,
+                            ActivityTypeName = activity.ActivityType.TypeName,
+                            DeadLine = activity.Deadline == date
+                        };
+
+                        if (activitySchema.DeadLine)
+                        {
+                            activitySchema.Submitted = await _unitOfWork.DocumentRepository.HasUserSubmittedAssignment(UserLoggedIn, activity);
+                        }
+
+                        daySchema.ActivitySchemas.Add(activitySchema);
+                    }
+                }
+                weekSchema.Add(daySchema);
+            }
+
+            return weekSchema;
+        }
+
+        private static void TestActivityToSchema(DateTime date, DaySchemaViewModel daySchema)
+        {
+            //Test för Dealine hantering
+            if (date.DayOfWeek.ToString() == "Friday")
+            {
+                var activitySchema = new ActivitySchemaViewModel()
+                {
+                    Name = "TeST",
+                    ActivityTypeName = "Lecture",
+                    DeadLine = true,
+                    Submitted = true
+                };
+
+                daySchema.ActivitySchemas.Add(activitySchema);
+            }
+        }
     }
 }

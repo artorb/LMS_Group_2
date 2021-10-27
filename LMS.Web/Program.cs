@@ -29,7 +29,7 @@ namespace Lms.Web
 
                 context.Database.EnsureDeleted();
                 context.Database.Migrate();
-                SeedData.InitAsync(context, services).Wait();            
+                SeedData2.InitAsync(context, services).Wait();            
             }
             host.Run();
         }

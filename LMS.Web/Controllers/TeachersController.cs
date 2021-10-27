@@ -2,9 +2,7 @@
 using Lms.Core.Models.ViewModels;
 using Lms.Core.Repositories;
 using Lms.Data.Data;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -115,11 +113,10 @@ namespace Lms.Web.Controllers
         }
 
 
-        
-                public async Task<IActionResult> Index()
-                {                  
-        
-                    var courses = await _unitOfWork.CourseRepository.GetAllWithIncludesAsync(m => m.Modules, m => m.Users);
+
+        public async Task<IActionResult> Index()
+        {
+            var courses = await _unitOfWork.CourseRepository.GetAllWithIncludesAsync(m => m.Modules, m => m.Users);
 
                     var teacherTable = courses.Select(course => new TeacherTableViewModel
                         {
@@ -137,12 +134,48 @@ namespace Lms.Web.Controllers
                         CourseToCreate = new TeacherCreateCourseViewModel(),
                         TeacherTables = teacherTable
                     };
+            var viewModels = new List<TeacherLoginViewModel>();
+
+            foreach (var course in courses)
+            {
+                (string activeModuleName, string nextModuleName) = GetCurrentModules(course);
+                var viewModel = new TeacherLoginViewModel()
+                {
+                    CourseName = course.Name,
+                    ActiveModuleName = activeModuleName,
+                    NextModuleName = nextModuleName,
+                    NumberOfParticipants = course.Users.Count
+                };
+                viewModels.Add(viewModel);
+            }
+            return View(viewModels);
+        }
 
                     // return View(viewModels);
                     return View(indexVM);
                 }
                
                 
+        private static (string activeModuleName, string nextModuleName) GetCurrentModules(Course course)
+        {
+            var activeModule = course.Modules
+                .Where(m => m.StartDate < DateTime.Today && m.EndDate >= DateTime.Today)
+                .FirstOrDefault();
+            var nextModule = course.Modules
+                .Where(m => m.StartDate.Date >= activeModule.EndDate.Date)
+                .FirstOrDefault();
+
+            var activeModuleName = activeModule != null ? activeModule.Name : "No more Modules";
+            var nextModuleName = nextModule != null ? nextModule.Name : "No more Modules";
+            return (activeModuleName, nextModuleName);
+        }
+
+        public async Task<IActionResult> Search(string courseName)
+        {
+
+            var foundCourses = await _unitOfWork.CourseRepository.FindByNameAsync(courseName);
+
+            var viewModels = new List<TeacherLoginViewModel>();
 
         public async Task<IActionResult> IndexCourseForTeacher(int id)
         {

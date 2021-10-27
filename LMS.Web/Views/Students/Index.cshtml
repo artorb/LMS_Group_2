@@ -3,6 +3,15 @@
 }
 
 <h1>Welcome Student!</h1>
+<br />
+<br />
+<div>
+    @{
+        await Html.RenderPartialAsync("WeekSchema");
+    }
+</div>
+<br />
+<br />
 
 
     <a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Courses" asp-action="CourseDetails"
@@ -63,7 +72,7 @@
     @*<a class="btn btn-sm btn-primary" asp-controller="Download" asp-action="DownloadFile">Download File</a>*@
 
 
-    <br />
+    @*<br />
     <br />
     <div class="card-deck">
         <div class="card">
@@ -106,4 +115,4 @@
                 <p class="card-text">Start time: </p>
             </div>
         </div>
-    </div>
+    </div>*@

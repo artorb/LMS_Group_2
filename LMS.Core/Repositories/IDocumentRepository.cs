@@ -9,5 +9,7 @@ namespace Lms.Core.Repositories
 {
     public interface IDocumentRepository : IGenericRepository<Document>
     {
+        Task<bool> HasUserSubmittedAssignment(ApplicationUser user, Activity activity);
     }
+
 }
