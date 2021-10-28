@@ -1,13 +1,20 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+/********** Literature **********/
+#literatur-index-header {
+    background-image: url(../img/literature-library-header.jpg) !important;
+    background-position: center top;
+    background-size: cover;
+}
+/********** end Literature **********/
+
 /*a.navbar-brand {
     white-space: normal;
     text-align: center;
     word-break: break-all;
     color: black;
 }*/
-
 /* Provide sufficient contrast against white background */
 /*a {*/
 /*color: #0366d6;*/
@@ -27,7 +34,6 @@ border-color: #1861ac;
 background-color: #1b6ec2;
 border-color: #1861ac;
 }*/
-
 /* Sticky footer styles
 -------------------------------------------------- */
 /*html {
@@ -61,7 +67,6 @@ button.accept-policy {
     font-size: 1rem;
     line-height: inherit;
 }*/
-
 /* Sticky footer styles
 -------------------------------------------------- */
 /*html {
@@ -99,7 +104,6 @@ overflow-x: hidden;*/
 .footer {
 position: fixed;
 bottom: 0px;*/
-
 /*position: absolute;*/
 /*bottom: 0;*/
 /*width: 100%;
@@ -174,10 +178,14 @@ html {
 
 body {
     /* Margin bottom by footer height */
-    margin-bottom: 60px;
-       /*/ background-size: cover;
+    /*        margin-bottom: 60px;
+     background-size: cover;
         background-repeat: no-repeat;
-        background-image: url('/img/gray-abstract-wireframe-technology-background.jpg');*/
+        background-image: url('/img/gray-abstract-wireframe-technology-background.jpg');*/  
+    margin-bottom: 60px;
+/*    height: 100vh;
+    overflow-x: hidden;
+    color: #fff;*/
 }
 
 
@@ -259,7 +267,7 @@ label {
 }
 
 #activityDetailsTypeAndStatusForStudent {
-    margin-left: 25px
+ 
 }
 
 
@@ -298,7 +306,7 @@ label {
 }
 
 .dataTables_length > label {
-    color: #6f42c1;
+    color: black;
 }
 
 .dataTables_length > select > option {
@@ -310,8 +318,8 @@ label {
     margin-top: 20px;
     position: absolute;
     right: 0px
-
 }
+
 
 .uploadButtonContainer {
     transform: translate(-50%, -50%);
@@ -324,7 +332,6 @@ label {
     box-shadow: 3px 3px lightgrey;
     width: 200px;
     outline: none;
-
 }
 
 ::-webkit-file-upload-button {
@@ -349,3 +356,8 @@ label {
 .submitButton:hover {
     background: #1861ac;
 }
+
+#TeacherTitle{
+    text-align:center
+}
+

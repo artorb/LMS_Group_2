@@ -1,0 +1,77 @@
+﻿@page
+@using System.Reflection;
+@model RegisterTeacherModel
+@{
+    ViewData["Title"] = "Register Teacher";
+}
+<h1>@ViewData["Title"]</h1>
+
+@if (TempData["UserName"] != null)
+{
+    var message = (string)TempData["UserName"];
+    <div class="alert alert-success" id="sucess-alert">
+        <strong>Sucess!</strong>
+        <div>
+            <p>
+                The teacher account for <b>@message</b> was succesfully created!
+            </p>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-lg-4">
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post" id="form1">
+            <h4>Create a new Teacher account.</h4>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Input.FirstName"></label>
+                <input asp-for="Input.FirstName" class="form-control" />
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.LastName"></label>
+                <input asp-for="Input.LastName" class="form-control" />
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" class="form-control" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <button name="btn-techer-register" type="submit" class="btn btn-primary">Register</button>
+        </form>
+        <div id="confirm-techer-creation" class="modal hide fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title">Register a new Teacher</h2>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to create this Teacher?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="confirm" type="button" class="btn btn-danger">Yes, Register</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <p>
+            <a asp-controller="Home" asp-action="Index">
+                <input type="button" class="btn" value="Home" />
+            </a>
+        </p>
+    </div>
+    <div class="col-lg-6 offset-lg-2">
+        <section>
+            <img src="https://media.istockphoto.com/vectors/pen-drawing-a-pile-of-books-vector-id483447982" style="display: block; width: 100%; height: auto;" />
+        </section>
+    </div>
+</div>
+</script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

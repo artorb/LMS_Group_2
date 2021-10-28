@@ -10,43 +10,48 @@
 @*@Html.ValidationMessage("CreateAuthorResponseError")*@
 
 <form asp-controller="Activities" asp-action="Create">
+
+    <p style="text-align:center" class="text-danger"><strong>@TempData["ActivityStartDateCreationError"]</strong></p>
+    <p style="text-align:center" class="text-danger"><strong>@TempData["ActivityEndDateCreationError"]</strong></p>    
+
     <div id="activityFormGroup">
         <div class="form-row border border-light pt-1 mb-2">
             <div class="form-group col-md-12">
                 <label asp-for="Activities[indexActivity].ActivityName" class="control-label"></label>
                 <input asp-for="Activities[indexActivity].ActivityName" class="form-control" />
-                @*<span asp-validation-for="Activities[index].ActivityName" class="text-danger"></span>*@
+                <span asp-validation-for="Activities[indexActivity].ActivityName" class="text-danger"></span>
             </div>
 
             <div class="form-group col-md-12">
                 <label asp-for="Activities[indexActivity].ActivityDescription" class="control-label"></label>
                 <input asp-for="Activities[indexActivity].ActivityDescription" class="form-control" />
-                @*<span asp-validation-for="Activities[index].ActivityDescription" class="text-danger"></span>*@
+                <span asp-validation-for="Activities[indexActivity].ActivityDescription" class="text-danger"></span>
             </div>
 
             <div class="form-group col-md-4">
                 <label asp-for="Activities[indexActivity].ActivityStartDate" class="control-label"></label>
                 <input asp-for="Activities[indexActivity].ActivityStartDate" class="form-control" />
-                @*<span asp-validation-for="Activities[index].ActivityStartDate" class="text-danger"></span>*@
+                <span asp-validation-for="Activities[indexActivity].ActivityStartDate" class="text-danger"></span>
             </div>
 
             <div class="form-group col-md-4">
                 <label asp-for="Activities[indexActivity].ActivityEndDate" class="control-label"></label>
                 <input asp-for="Activities[indexActivity].ActivityEndDate" class="form-control" />
-                @*<span asp-validation-for="Activities[index].ActivityEndDate" class="text-danger"></span>*@
+                <span asp-validation-for="Activities[indexActivity].ActivityEndDate" class="text-danger"></span>
             </div>
 
             <div class="form-group col-md-4">
                 <label asp-for="Activities[indexActivity].ActivityDeadline" class="control-label"></label>
                 <input asp-for="Activities[indexActivity].ActivityDeadline" class="form-control" />
-                @*<span asp-validation-for="Activities[index].ActivityDeadline" class="text-danger"></span>*@
+                <span asp-validation-for="Activities[indexActivity].ActivityDeadline" class="text-danger"></span>
             </div>
 
             <div class="form-group col-md-4">
                 <label asp-for="Activities[indexActivity].ActivityTypeId" class="control-label"></label>
                 <select asp-for="Activities[indexActivity].ActivityTypeId" asp-items="ActivitiesController.activityTypes.Result" class="form-control">
                     <option selected="selected" value="">Please select</option>
-                </select>    
+                </select>
+                <span asp-validation-for="Activities[indexActivity].ActivityTypeId" class="text-danger"></span>
             </div>
 
 
@@ -57,7 +62,7 @@
     </div>
     <div class="form-group">
         <input type="submit" value="Create" class="btn btn-success" />
-        <a class="btn btn-primary" asp-controller="Courses" asp-action="Index">Back to courses list</a>    
+        <a class="btn btn-primary" asp-controller="Teachers" asp-action="Index">Back to courses list</a>
     </div>
 </form>
 

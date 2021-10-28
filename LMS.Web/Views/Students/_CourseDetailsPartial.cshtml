@@ -1,7 +1,6 @@
 ﻿@model Lms.Core.Models.ViewModels.StudentCourseViewModel
 @using Lms.Web.Extensions
 
-
 <br />
 <h4>@Html.DisplayFor(model => model.CourseName)</h4>
 <hr />
@@ -35,7 +34,7 @@
         </div>
         <table class="table">
             <tbody>
-                @foreach (var item in Model.Documents.Where(a=>a.ActivityId == null && a.ModuleId == null && a.CourseId != null))
+                @foreach (var item in Model.Documents.Where(a => a.ActivityId == null && a.ModuleId == null && a.CourseId != null))
                 {
                     <tr>
                         @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null)
@@ -54,7 +53,7 @@
         <a class="btn btn-sm btn-success" asp-controller="Courses" asp-action="Edit" asp-route-id="@ViewData["CourseId"]">Edit</a>
         <a class="btn btn-sm btn-danger" asp-controller="Courses" asp-action="Delete" asp-route-id="@ViewData["CourseId"]">Delete</a>
     }
-    </div>
+</div>
 
 
 

@@ -22,7 +22,7 @@
         @if (User.IsInRole("Teacher"))
         {
             <hr />
-            <a class="btn btn-success" asp-controller="Modules" asp-action="Create" asp-route-id="@Model.FirstOrDefault().CourseId">Add new module</a>
+            <a class="btn btn-success" asp-controller="Modules" asp-action="Create" asp-route-id="@ViewData["ModuleCourseId"]">Add new module</a>
         }
 
         </div>

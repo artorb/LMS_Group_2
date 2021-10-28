@@ -28,8 +28,8 @@ namespace LmsApi.Data.Repositories
             table = context.Set<T>();
         }
 
-        public async Task<IEnumerable<T>> GetAllWithIncludeAsync(Expression<Func<T, bool>> filter = null,
-                                                                 Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null,
+                                                        Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             var entity = table.AsQueryable();
 
@@ -38,41 +38,25 @@ namespace LmsApi.Data.Repositories
                 entity = entity.Where(filter);
             }
 
-            if (includes != null)
+            if (include != null)
             {
-                entity = includes(entity);
+                entity = include(entity);
             }
 
             return await entity.ToListAsync();
         }
 
-        public virtual async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null)
+        public async Task<T> GetAsync(int id, Expression<Func<T, bool>> filter = null, 
+                                                    Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             var entity = table.AsQueryable();
 
-            if (filter != null)
+            if (include != null)
             {
-                entity = entity.Where(filter);
-            }
-
-            return await entity.ToListAsync();
-        }
-
-        public async Task<T> GetWithIncludeAsync(int id, Func<IQueryable<T>, IIncludableQueryable<T, object>> includes = null)
-        {
-            var entity = table.AsQueryable();
-
-            if (includes != null)
-            {
-                entity = includes(entity);
+                entity = include(entity);
             }
 
             return await entity.FirstOrDefaultAsync(t => t.Id == id);
-        }
-
-        public async Task<T> GetAsync(int id, Expression<Func<T, bool>> filter = null)
-        {
-            return await table.FirstOrDefaultAsync(t => t.Id == id);
         }
 
         public async Task<T> FindAsync(int id)
@@ -88,6 +72,11 @@ namespace LmsApi.Data.Repositories
         public void Add(T entity)
         {
             table.Add(entity);
+        }
+
+        public void AddRange(IEnumerable<T> entities)
+        {
+            table.AddRange(entities);
         }
 
         public void Delete(T entity)

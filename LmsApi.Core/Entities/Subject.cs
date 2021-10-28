@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LmsApi.Core.Entities
 {
+    // Literature subject
     public class Subject : BaseEntity
     {
         [Required]

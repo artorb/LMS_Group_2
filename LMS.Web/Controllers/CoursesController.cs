@@ -12,6 +12,7 @@ using Lms.Core.Repositories;
 using Lms.Web.Extensions;
 using System.Security.Claims;
 using Lms.Core.Models.ViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace Lms.Web.Controllers
 {
@@ -132,6 +133,7 @@ namespace Lms.Web.Controllers
                 {
                     _unitOfWork.CourseRepository.Update(course);
                     await _unitOfWork.CompleteAsync();
+           
                     TempData["ChangedCourse"] = $"The {course.Name} has been changed!";
                 }
                 catch (DbUpdateConcurrencyException)

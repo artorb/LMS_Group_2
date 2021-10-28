@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Lms.Core\Lms.Core.csproj" />
     <ProjectReference Include="..\Lms.Data\Lms.Data.csproj" />
+    <ProjectReference Include="..\LmsApi.Core\LmsApi.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

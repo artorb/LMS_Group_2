@@ -9,11 +9,11 @@
 @*@Html.ValidationMessage("CreateAuthorResponseError")*@
 
 <form asp-controller="Modules" asp-action="Create">
-
+    <p style="text-align:center" class="text-danger"><strong>@TempData["ModuleStartDateCreationError"]</strong></p>
+    <p style="text-align:center" class="text-danger"><strong>@TempData["ModuleEndDateCreationError"]</strong></p>
     <div class="form-group">
         <input type="submit" value="Create" class="btn btn-success" />
-        <a class="btn btn-primary" asp-controller="Courses" asp-action="Index">Back to courses list</a>
-        <button class="btn btn-primary" onclick='goBack()'>Back to the previous page</button>
+        <a class="btn btn-primary" asp-controller="Teachers" asp-action="IndexCourseForTeacher" asp-route-id="@ViewData["ModuleCourseId"]">Back to courses list</a>    
     </div>
 
 
@@ -24,46 +24,34 @@
                 <button type="button" class="btn" id="addRowBtn" data-authorscount="@index"><span class="text-success"><i class="fa fa-plus-circle"></i></span></button>
             </div>
 
+            <input asp-for="Modules[index].CourseId" value="@ViewData["ModuleCourseId"]" type="hidden" />
+
             <div class="form-group col-md-12">
                 <label asp-for="Modules[index].ModuleName" class="control-label"></label>
                 <input asp-for="Modules[index].ModuleName" class="form-control" />
-                @*<span asp-validation-for="Modules[index].ModuleName" class="text-danger"></span>*@
+                <span asp-validation-for="Modules[index].ModuleName" class="text-danger"></span>
             </div>
 
             <div class="form-group col-md-12">
                 <label asp-for="Modules[index].ModuleDescription" class="control-label"></label>
                 <input asp-for="Modules[index].ModuleDescription" class="form-control" />
-                @*<span asp-validation-for="Modules[index].ModuleDescription" class="text-danger"></span>*@
+                <span asp-validation-for="Modules[index].ModuleDescription" class="text-danger"></span>
             </div>
 
             <div class="form-group col-md-4">
                 <label asp-for="Modules[index].ModuleStartDate" class="control-label"></label>
-                <input asp-for="Modules[index].ModuleStartDate" class="form-control" />
-                @*<span asp-validation-for="Modules[index].ModuleStartDate" class="text-danger"></span>*@
+                <input asp-for="Modules[index].ModuleStartDate" class="form-control"/>
+                <span asp-validation-for="Modules[index].ModuleStartDate" class="text-danger"></span>
             </div>
             <div class="form-group col-md-4">
                 <label asp-for="Modules[index].ModuleEndDate" class="control-label"></label>
                 <input asp-for="Modules[index].ModuleEndDate" class="form-control" />
-                @*<span asp-validation-for="Modules[index].ModuleEndDate" class="text-danger"></span>*@
+                <span asp-validation-for="Modules[index].ModuleEndDate" class="text-danger"></span>
             </div>
-            @*<div>
-                @{
-                    await Html.RenderPartialAsync("../../Views/Activities/Create.cshtml");
-                }
-            </div>*@
+         
         </div>
     </div>
-
 </form>
-
-
-
-@*<partial-name ="LMS.Web/Views/Activities/Create.cshtml" for="" />*@
-
-
-@*<div class="form-group">
-    <button type="button" class="btn" id="addActivityRowBtn" data-authorscount="@index"><span class="text-success"><i class="fa fa-plus-circle"></i></span></button>
-</div>*@
 
 <div id="containerActivity"></div>
 

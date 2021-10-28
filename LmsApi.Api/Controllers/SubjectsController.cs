@@ -4,15 +4,13 @@ using LmsApi.Core.Entities;
 using LmsApi.Core.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace LmsApi.Api.Controllers
 {
-    [Route("api/literatures/{literatureId}/subjects")]
+    [Route("api/subjects")]
     [ApiController]
     public class SubjectsController : ControllerBase
     {
@@ -26,16 +24,17 @@ namespace LmsApi.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Subject>>> Get(int literatureId)
+        public async Task<ActionResult<IEnumerable<Subject>>> GetSubjectsToSelectListItem()
         {
             try
             {
-                var result = await unitOfWork.SubjectsRepo.GetAllAsync(filter: s => s.Literatures.FirstOrDefault().Id == literatureId);
-                return Ok(); // Need to add mapper
+                var subjects = await unitOfWork.SubjectsRepo.GetAllAsync();
+
+                return Ok(mapper.Map<IEnumerable<SelectListItemDto>>(subjects));
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Database Failure...");
             }
         }
     }

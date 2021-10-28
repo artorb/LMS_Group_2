@@ -53,7 +53,23 @@ namespace LmsApi.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Author");
+                    b.ToTable("Authors");
+                });
+
+            modelBuilder.Entity("LmsApi.Core.Entities.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("LmsApi.Core.Entities.Level", b =>
@@ -79,6 +95,9 @@ namespace LmsApi.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -95,13 +114,12 @@ namespace LmsApi.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Url")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("LevelId");
 
@@ -143,6 +161,12 @@ namespace LmsApi.Data.Migrations
 
             modelBuilder.Entity("LmsApi.Core.Entities.Literature", b =>
                 {
+                    b.HasOne("LmsApi.Core.Entities.Category", "Category")
+                        .WithMany("Literatures")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("LmsApi.Core.Entities.Level", "Level")
                         .WithMany("Literatures")
                         .HasForeignKey("LevelId")
@@ -155,9 +179,16 @@ namespace LmsApi.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Category");
+
                     b.Navigation("Level");
 
                     b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("LmsApi.Core.Entities.Category", b =>
+                {
+                    b.Navigation("Literatures");
                 });
 
             modelBuilder.Entity("LmsApi.Core.Entities.Level", b =>

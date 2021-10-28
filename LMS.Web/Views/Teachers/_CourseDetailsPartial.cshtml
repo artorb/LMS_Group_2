@@ -15,7 +15,7 @@
         <a class="btn btn-sm btn-success" asp-controller="Courses" asp-action="Edit" asp-route-id="@ViewData["CourseId"]">Edit</a>
         <a class="btn btn-sm btn-warning" asp-controller="Courses" asp-action="Delete" asp-route-id="@ViewData["CourseId"]">Delete</a>
     }
-    </div>
+</div>
 
 
 
@@ -24,7 +24,7 @@
     {
         @using (Html.BeginFormActivity("TeacherUploadFilesForCourse", "Upload", new { courseId = Model.Course }, FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
-            <div class="form-horizontal">
+            <div class="form-horizontal" id="uploadButtonForCourse">
 
                 <div class="form-group uploadButtonGroup">
                     <div class="uploadButtonContainer">

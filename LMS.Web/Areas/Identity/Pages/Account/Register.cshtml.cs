@@ -58,7 +58,7 @@ namespace Lms.Web.Areas.Identity.Pages.Account
             [Display(Name = "UserName")]
             public string Email { get; set; }
 
-            [Required]
+            
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
@@ -84,6 +84,9 @@ namespace Lms.Web.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            Input.Password = "12"; //Generic PassWord
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, Name = Input.Name };
