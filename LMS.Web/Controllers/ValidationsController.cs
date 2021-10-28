@@ -17,18 +17,40 @@ namespace Lms.Web.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        [AcceptVerbs("GET", "POST")]
-        public IActionResult ModuleStartTimeCheck(DateTime ModuleStartDate, int? CourseId)
+        public  IActionResult ModuleStartTimeCheck(List<DateTime> ModuleStartDate, List<int?> CourseId)
         {
-            var courseStartDate = _unitOfWork.CourseRepository.GetAsync((int)CourseId).Result.StartDate;
-            if (ModuleStartDate <= courseStartDate)
+            for (int i = 0; i < ModuleStartDate.Count; i++)
             {
-                return Json($"Start date cannot be earlier then the start date of the course!");
+               var courseStartDate = _unitOfWork.CourseRepository.GetAsync((int)CourseId[i]).Result;
+
+                if (ModuleStartDate[i] < courseStartDate.StartDate)
+                {
+                    return Json("Start date cannot be earlier then the start date of the course!");
+                }
+                else if (ModuleStartDate[i] > courseStartDate.EndDate)
+                {
+                    return Json("Start date cannot be later then the end date of the course!");
+                }
             }
-            else
+            return Json(true);
+        }
+
+        public IActionResult ModuleEndTimeCheck(List<DateTime> ModuleEndDate, List<int?> CourseId)
+        {
+            for (int i = 0; i < ModuleEndDate.Count; i++)
             {
-                return Json(true);
+                var courseStartDate = _unitOfWork.CourseRepository.GetAsync((int)CourseId[i]).Result;
+
+                if (ModuleEndDate[i] < courseStartDate.StartDate)
+                {
+                    return Json("End date cannot be earlier then the start date of the course!");
+                }
+                else if (ModuleEndDate[i] > courseStartDate.EndDate)
+                {
+                    return Json("End date cannot be later then the end date of the course!");
+                }
             }
+            return Json(true);
         }
     }
 }
