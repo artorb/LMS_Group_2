@@ -1,4 +1,5 @@
 ﻿using Lms.Core.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -6,18 +7,25 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Lms.Core.Repositories;
 
 namespace Lms.Web.Controllers
 {
+    [Authorize]
     public class LiteraturesController : Controller
     {
         private readonly IHttpClientFactory clientFactory;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public LiteraturesController(IHttpClientFactory httpClientFactory)
+        public LiteraturesController(IHttpClientFactory httpClientFactory, IUnitOfWork unitOfWork)
         {
             clientFactory = httpClientFactory;
+            _unitOfWork = unitOfWork;
         }
+
+
 
         public async Task<IActionResult> Filter(string searchQuery, int selectId)
         {
@@ -43,8 +51,18 @@ namespace Lms.Web.Controllers
             return View(nameof(Index), literatures);
         }
 
+
+
         public async Task<IActionResult> Index()
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId) != null;
+
+            if (UserLoggedIn == false)//Checks that the user is logged in as someone from the database.
+            {
+                return Redirect("~/Identity/Account/Login");
+            }
+
             IEnumerable<LiteratureViewModel> literatures = null;
 
             var client = clientFactory.CreateClient("BaseClient"); // The name is definied in Startup.cs

@@ -29,7 +29,7 @@ namespace Lms.Core.Models.ViewModels
         //[ModuleStartTimeCheck]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
-        [Remote(action: "ModuleStartTimeCheck", controller: "Validations", AdditionalFields = nameof(CourseId))]
+        //[Remote(action: "ModuleStartTimeCheck", controller: "Validations", AdditionalFields = nameof(CourseId))]
         public DateTime ModuleStartDate { get; set; }
 
 
