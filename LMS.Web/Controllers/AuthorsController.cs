@@ -1,6 +1,5 @@
 ﻿using Lms.Core.Models.ViewModels;
 using LmsApi.Core.Dtos;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -11,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace Lms.Web.Controllers
 {
-    [Authorize]
     public class AuthorsController : Controller
     {
         private readonly IHttpClientFactory clientFactory;

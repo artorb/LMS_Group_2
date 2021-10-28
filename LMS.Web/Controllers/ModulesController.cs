@@ -150,13 +150,13 @@ namespace Lms.Web.Controllers
             var res = new List<Module>();
             foreach (var item in viewModel.Modules)
             {
-                if (item.ModuleStartDate < course.StartDate || item.ModuleEndDate > course.EndDate)
+                if (item.ModuleStartDate <= course.StartDate || item.ModuleEndDate >= course.EndDate)
                 {
-                    if (item.ModuleStartDate < course.StartDate)
+                    if (item.ModuleStartDate <= course.StartDate)
                     {
                         TempData["ModuleStartDateCreationError"] = $"The module was not created. The Start Date you used was before the start of the course start date! Try again!";
                     }
-                    if (item.ModuleEndDate > course.EndDate)
+                    if (item.ModuleEndDate >= course.EndDate)
                     {
                         TempData["ModuleEndDateCreationError"] = "The module was not created. The End Date you used was later then the course end date! Try again!";
                     }

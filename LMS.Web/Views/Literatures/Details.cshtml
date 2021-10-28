@@ -93,13 +93,10 @@
     </dl>
 </div>
 <div>
-    @if (User.IsInRole("Teacher"))
-    {
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
-            <i class="fa fa-pencil" aria-hidden="true"></i> Edit
-        </a>
-    }
-        <a asp-action="Index" class="btn btn-secondary">
-            <i class="fa fa-home" aria-hidden="true"></i> Back to Library
-        </a>
-    </div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+        <i class="fa fa-pencil" aria-hidden="true"></i> Edit
+    </a> 
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fa fa-home" aria-hidden="true"></i> Back to Library
+    </a>
+</div>

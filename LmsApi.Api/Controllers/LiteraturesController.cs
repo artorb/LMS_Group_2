@@ -124,7 +124,7 @@ namespace LmsApi.Api.Controllers
             {
                 var existingLiterature = await unitOfWork.LiteraturesRepo.FindAsync(id);
                 if (existingLiterature == null) return NotFound($"Couldn't find the literature with id: {id}.");
-               // if (existingLiterature.Title == dto.Title) return BadRequest("Literature with the specified title already exists.");                
+                if (existingLiterature.Title == dto.Title) return BadRequest("Literature with the specified title already exists.");
 
                 
                 mapper.Map(dto, existingLiterature);
