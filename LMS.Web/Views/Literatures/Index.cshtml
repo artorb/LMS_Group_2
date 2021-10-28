@@ -46,7 +46,10 @@
                         @Html.DisplayNameFor(model => model.Level)
                     </th>
                     <th>
-                        <a asp-action="Create" class="btn btn-primary btn-sm rounded"><i class="fa fa-book" aria-hidden="true"></i> Create Literature</a>
+                        @if (User.IsInRole("Teacher"))
+                        {
+                            <a asp-action="Create" class="btn btn-primary btn-sm rounded"><i class="fa fa-book" aria-hidden="true"></i> Create Literature</a>
+                        }
                     </th>
                 </tr>
             </thead>
@@ -71,12 +74,17 @@
                                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm rounded-circle mt-1" title="Details">
                                     <i class="fa fa-question" aria-hidden="true"></i>
                                 </a>
+
+                                @if(User.IsInRole("Teacher")){
                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm rounded-circle mt-1" title="Edit">
                                     <i class="fa fa-pencil" aria-hidden="true"></i>
                                 </a>
                                 <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm rounded-circle mt-1" title="Delete">
                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                 </a>
+                                }
+
+
                             </div>
                         </td>
                     </tr>

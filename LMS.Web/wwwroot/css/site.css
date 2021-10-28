@@ -178,10 +178,14 @@ html {
 
 body {
     /* Margin bottom by footer height */
-    margin-bottom: 60px;
-       /*/ background-size: cover;
+    /*        margin-bottom: 60px;
+     background-size: cover;
         background-repeat: no-repeat;
-        background-image: url('/img/gray-abstract-wireframe-technology-background.jpg');*/
+        background-image: url('/img/gray-abstract-wireframe-technology-background.jpg');*/  
+    margin-bottom: 60px;
+/*    height: 100vh;
+    overflow-x: hidden;
+    color: #fff;*/
 }
 
 
@@ -263,7 +267,7 @@ label {
 }
 
 #activityDetailsTypeAndStatusForStudent {
-    margin-left: 25px
+ 
 }
 
 
@@ -302,7 +306,7 @@ label {
 }
 
 .dataTables_length > label {
-    color: #6f42c1;
+    color: black;
 }
 
 .dataTables_length > select > option {
@@ -314,7 +318,6 @@ label {
     margin-top: 20px;
     position: absolute;
     right: 0px
-
 }
 
 
@@ -353,3 +356,8 @@ label {
 .submitButton:hover {
     background: #1861ac;
 }
+
+#TeacherTitle{
+    text-align:center
+}
+

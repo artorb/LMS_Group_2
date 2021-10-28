@@ -4,7 +4,13 @@
     ViewData["Title"] = "Personnal";
 }
 
-<h1>Personnal</h1>
+
+<h1 id="TeacherTitle">Staff</h1>
+
+<div style="text-align:center">
+    <img src="~/img/download (3).jpg" alt="logo" />
+</div>
+
 
 <p style="text-align:center" class="text-success"><strong>@TempData["DeleteTeacher"]</strong></p>
 <table class="table">
@@ -38,15 +44,15 @@
                 @if (User.IsInRole("Teacher"))
                 {
                     <td>
-                        <a asp-controller="Teachers" asp-action="EditTeacher" asp-route-id="@item.Id">Edit</a> |
-                        @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+                        <a class="btn btn-sm btn-success" asp-controller="Teachers" asp-action="EditTeacher" asp-route-id="@item.Id">Edit</a>
+
                         @if (item.Id != User.FindFirst(ClaimTypes.NameIdentifier).Value)
                         {
-                            <a asp-controller="Teachers" asp-action="DeleteTeacher" asp-route-id="@item.Id">Delete</a>
+                            <a class="btn btn-sm btn-danger" asp-controller="Teachers" asp-action="DeleteTeacher" asp-route-id="@item.Id">Delete</a>
                         }
                         else
                         {
-                            <p>Logged in user, can not delete</p>
+                            <span>Logged in user, can not delete!</span>
                         }
                     </td>
                 }

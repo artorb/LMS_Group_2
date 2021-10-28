@@ -36,6 +36,7 @@ namespace Lms.Web.Controllers
         }
 
 
+
         private async Task<IEnumerable<SelectListItem>> GetAllActivityTypesAsync()
         {
             return await db.ActivityTypes.Select(act => new SelectListItem
@@ -44,6 +45,8 @@ namespace Lms.Web.Controllers
                 Value = act.Id.ToString(),
             }).ToListAsync();
         }
+
+
 
         private Activity _activity { get; set; }
 
@@ -72,6 +75,8 @@ namespace Lms.Web.Controllers
             return null;
         }
 
+
+
         private Module _module { get; set; }
 
         [HttpPost]
@@ -94,6 +99,8 @@ namespace Lms.Web.Controllers
             }
             return null;
         }
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -145,6 +152,8 @@ namespace Lms.Web.Controllers
             return View(indexVM);
         }
 
+
+
         private static List<string> GetCurrentModules(Course course)
         {
             var activeModule = course.Modules
@@ -172,11 +181,7 @@ namespace Lms.Web.Controllers
         public async Task<IActionResult> IndexCourseForTeacher(int id)
         {
             ViewData["CourseId"] = id;
-            // var model = new StudentsAndTeachersIndexViewModel()
-            // {
-            //     idFromCourse = id
-            // };
-            // return View(model);
+ 
             return View();
         }
 

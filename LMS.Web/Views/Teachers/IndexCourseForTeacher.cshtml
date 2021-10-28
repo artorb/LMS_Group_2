@@ -10,9 +10,12 @@
 
 @if (User.IsInRole("Teacher"))
 {
-    <h1>Welcome Teacher!</h1>
+    <h1 id="TeacherTitle">Welcome Teacher!</h1>
 }
-
+<div style="text-align:center">
+    <img src="~/img/download (3).jpg" alt="logo"/>
+</div>
+<br/>
 
 
 @* <a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Courses" asp-action="CourseDetails" asp-route-idFromCourse=@Model.idFromCourse *@
