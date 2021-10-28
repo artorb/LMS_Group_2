@@ -97,7 +97,7 @@ namespace Lms.Web.Controllers
                 _unitOfWork.CourseRepository.GetWithIncludesIdAsync((int)idFromCourse, m => m.Modules).Result;
 
 
-            var modulesToCourse = course.Modules;
+            var modulesToCourse = course.Modules.OrderBy(c=>c.StartDate);
 
             ViewData["ModuleCourseId"] = course.Id;
 
