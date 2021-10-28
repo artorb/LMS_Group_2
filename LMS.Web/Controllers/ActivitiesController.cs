@@ -13,6 +13,7 @@ using Lms.Data.Repositories;
 using Lms.Core.Repositories;
 using Lms.Web.Service;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace Lms.Web.Controllers
 {
@@ -106,22 +107,22 @@ namespace Lms.Web.Controllers
             var returnUrl = Url.Content("/Teachers/IndexCourseForTeacher/" + Id);
             var module = _unitOfWork.ModuleRepository.GetAsync(Id).Result;
             var res = new List<Activity>();
+
             foreach (var item in viewModel.Activities)
             {
-                if (item.ActivityStartDate <= module.StartDate || item.ActivityEndDate >= module.EndDate)
+                if (item.ActivityStartDate < module.StartDate || item.ActivityEndDate > module.EndDate)
                 {
-                    if (item.ActivityStartDate <= module.StartDate)
+                    if (item.ActivityStartDate < module.StartDate)
                     {
                         TempData["ActivityStartDateCreationError"] = $"The activity was not created. The Start Date you used was before the start of the module start date! Try again!";
                     }
 
-                    if (item.ActivityEndDate >= module.EndDate)
+                    if (item.ActivityEndDate > module.EndDate)
                     {
                         TempData["ActivityEndDateCreationError"] = "The activity was not created. The End Date you used was later then the module end date! Try again!";
                     }
                     return RedirectToAction("Create", Id);
-                }
-
+                }               
 
 
                 var temp = new Activity
@@ -138,12 +139,9 @@ namespace Lms.Web.Controllers
 
                 res.Add(temp);
                 _unitOfWork.ActivityRepository.Add(temp);
-                await _unitOfWork.CompleteAsync();
-
-                //return RedirectToAction("Index", "Teachers");
-            }
-            return LocalRedirect(returnUrl);
-            //return View();
+                await _unitOfWork.CompleteAsync();          
+            }   
+            return RedirectToAction("Index", "Teachers");
         }
 
 
@@ -201,12 +199,14 @@ namespace Lms.Web.Controllers
                 return NotFound();
             }
 
+
             if (ModelState.IsValid)
             {
                 try
-                {
+                {     
                     _unitOfWork.ActivityRepository.Update(activity);
                     await _unitOfWork.CompleteAsync();
+                    
                     TempData["ChangedActivity"] = $"The {activity.Name} has been changed!";
                 }
                 catch (DbUpdateConcurrencyException)
