@@ -24,7 +24,7 @@
     {
         @using (Html.BeginFormActivity("TeacherUploadFilesForCourse", "Upload", new { courseId = Model.Course }, FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
-            <div class="form-horizontal">
+            <div class="form-horizontal" id="uploadButtonForCourse">
 
                 <div class="form-group uploadButtonGroup">
                     <div class="uploadButtonContainer">

@@ -317,6 +317,7 @@ label {
 
 }
 
+
 .uploadButtonContainer {
     transform: translate(-50%, -50%);
 }
@@ -328,7 +329,6 @@ label {
     box-shadow: 3px 3px lightgrey;
     width: 200px;
     outline: none;
-
 }
 
 ::-webkit-file-upload-button {
