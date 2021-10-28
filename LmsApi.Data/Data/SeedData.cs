@@ -77,14 +77,14 @@ namespace LmsApi.Data.Data
             var random = new Random();
             return new List<Author>
             {
-                new Author { FirstName = "Tom", LastName = "Dykstra", Literatures = GetRandomListContent(literatures), BirthDate = DateTime.Today.Date.AddYears(random.Next(-100,0)) },
-                new Author { FirstName = "Wade", LastName = "Pickett", Literatures = GetRandomListContent(literatures), BirthDate = DateTime.Today.Date.AddYears(random.Next(-100,0))  },
-                new Author { FirstName = "Rick", LastName = "Anderson", Literatures = GetRandomListContent(literatures), BirthDate = DateTime.Today.Date.AddYears(random.Next(-100,0))  },
-                new Author { FirstName = "Kirk", LastName = "Larkin", Literatures = GetRandomListContent(literatures), BirthDate = DateTime.Today.Date.AddYears(random.Next(-100,0))  },
-                new Author { FirstName = "Steve", LastName = "Jobs", Literatures = GetRandomListContent(literatures), BirthDate = DateTime.Today.Date.AddYears(random.Next(-100,0))  },
-                new Author { FirstName = "Bill", LastName = "Gates", Literatures = GetRandomListContent(literatures), BirthDate = DateTime.Today.Date.AddYears(random.Next(-100,0))  },
-                new Author { FirstName = "Elon", LastName = "Musk", Literatures = GetRandomListContent(literatures), BirthDate = DateTime.Today.Date.AddYears(random.Next(-100,0))  },
-                new Author { FirstName = "Jeff", LastName = "Bezos", Literatures = GetRandomListContent(literatures), BirthDate = DateTime.Today.Date.AddYears(random.Next(-100,0))  }
+                new Author { FirstName = "Tom", LastName = "Dykstra", Literatures = GetRandomListContent(literatures), BirthDate = DateTime.Today.Date.AddYears(random.Next(-100,-20)) },
+                new Author { FirstName = "Wade", LastName = "Pickett", Literatures = GetRandomListContent(literatures), BirthDate = DateTime.Today.Date.AddYears(random.Next(-100,-20))  },
+                new Author { FirstName = "Rick", LastName = "Anderson", Literatures = GetRandomListContent(literatures), BirthDate = DateTime.Today.Date.AddYears(random.Next(-100,-20))  },
+                new Author { FirstName = "Kirk", LastName = "Larkin", Literatures = GetRandomListContent(literatures), BirthDate = DateTime.Today.Date.AddYears(random.Next(-100,-20))  },
+                new Author { FirstName = "Steve", LastName = "Jobs", Literatures = GetRandomListContent(literatures), BirthDate = DateTime.Today.Date.AddYears(random.Next(-100,-20))  },
+                new Author { FirstName = "Bill", LastName = "Gates", Literatures = GetRandomListContent(literatures), BirthDate = DateTime.Today.Date.AddYears(random.Next(-100,-20))  },
+                new Author { FirstName = "Elon", LastName = "Musk", Literatures = GetRandomListContent(literatures), BirthDate = DateTime.Today.Date.AddYears(random.Next(-100,-20))  },
+                new Author { FirstName = "Jeff", LastName = "Bezos", Literatures = GetRandomListContent(literatures), BirthDate = DateTime.Today.Date.AddYears(random.Next(-100,-20))  }
             };
         }
 
