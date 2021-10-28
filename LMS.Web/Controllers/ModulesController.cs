@@ -156,7 +156,6 @@ namespace Lms.Web.Controllers
                     {
                         TempData["ModuleStartDateCreationError"] = $"The module was not created. The Start Date you used was before the start of the course start date! Try again!";
                     }
-
                     if (item.ModuleEndDate >= course.EndDate)
                     {
                         TempData["ModuleEndDateCreationError"] = "The module was not created. The End Date you used was later then the course end date! Try again!";
