@@ -37,9 +37,10 @@ namespace Lms.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var schema = await WeekSchema();
+            var schema = await WeekSchema();           
             return View(schema);
         }
+
 
 
         public async Task<IActionResult> CourseStudentsDetails(int? idFromCourse)
@@ -61,8 +62,11 @@ namespace Lms.Web.Controllers
                               StudentName = user.Name,
                               Email = user.Email
                           }).ToList();
-            return PartialView("_CourseStudentsPartial", models);
+
+            return PartialView("_CourseStudentsPartial", models);         
         }
+
+
 
         // GET: Students/Details/5
         public async Task<IActionResult> Details(string? Id)
@@ -79,6 +83,8 @@ namespace Lms.Web.Controllers
             };
             return View("Details", model);
         }
+
+
 
         // GET: Students/Edit/5
         //string id==null
@@ -108,6 +114,7 @@ namespace Lms.Web.Controllers
         }
 
 
+
         // POST: Students/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -133,18 +140,14 @@ namespace Lms.Web.Controllers
                         TempData["ChangedParticipant"] = $"The {userInDatabase.Name} has been changed!";
                     }
 
-
                     userInDatabase.Email = applicationUsermodel.Email;
                     userInDatabase.NormalizedEmail = applicationUsermodel.Email.ToUpper();
                     userInDatabase.Name = applicationUsermodel.Name;
                     userInDatabase.UserName = applicationUsermodel.Name;
-                    userInDatabase.NormalizedUserName = applicationUsermodel.Name.ToUpper();
-  
+                    userInDatabase.NormalizedUserName = applicationUsermodel.Name.ToUpper();  
 
                     _unitOfWork.UserRepository.Update(userInDatabase);
                     await _unitOfWork.CompleteAsync();
-
-
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -161,6 +164,7 @@ namespace Lms.Web.Controllers
             }
             return View(applicationUsermodel);
         }
+
 
 
         private async Task<bool> ApplicationUserExists(string Id)
@@ -195,11 +199,8 @@ namespace Lms.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var userWillBeDeleted = await _unitOfWork.UserRepository.FirstOrDefaultAsync(id);
-
-            //if student uploaded something : problem with documents. ApplicationUserId should be NULL
+            var userWillBeDeleted = await _unitOfWork.UserRepository.FirstOrDefaultAsync(id);   
             var documentsForUserWillBeDeleted = _unitOfWork.DocumentRepository.GetAllAsync().Result.Where(u => u.ApplicationUserId == id);
-
 
             foreach (var item in documentsForUserWillBeDeleted)
             {
@@ -211,12 +212,7 @@ namespace Lms.Web.Controllers
             await _unitOfWork.CompleteAsync();
             return RedirectToAction("Index", "Teachers");
         }
-
-
-
-
-
-   
+          
 
 
         public async Task<List<DaySchemaViewModel>> WeekSchema()
@@ -231,6 +227,8 @@ namespace Lms.Web.Controllers
 
             return weekSchema;
         }
+
+
 
         private async Task<List<DaySchemaViewModel>> CreateWeeklySchema(ApplicationUser UserLoggedIn, IEnumerable<Activity> activities)
         {
@@ -273,6 +271,8 @@ namespace Lms.Web.Controllers
 
             return weekSchema;
         }
+
+
 
         private static void TestActivityToSchema(DateTime date, DaySchemaViewModel daySchema)
         {

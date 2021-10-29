@@ -51,10 +51,12 @@ namespace Lms.Web.Controllers
             else if (User.IsInRole("Student"))
             {
                 return RedirectToAction("Index", "Students");
+                //var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
+                //var courseId = UserLoggedIn.CourseId;
+                //return RedirectToAction("CourseDetails", "Courses", new { idFromCourse = courseId });
             }
             return Error();
         }
-
 
 
 

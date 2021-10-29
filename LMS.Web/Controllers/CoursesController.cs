@@ -39,6 +39,8 @@ namespace Lms.Web.Controllers
             return View(allCourses);
         }
 
+
+
         public async Task<IActionResult> CourseDetails(int? idFromCourse)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -61,7 +63,9 @@ namespace Lms.Web.Controllers
                 CourseEndDate = course.EndDate,
                 Documents = course.Documents
             };
+
             return PartialView("~/Views/Students/_CourseDetailsPartial.cshtml", model);
+            //return View("~/Views/Students/Index.cshtml", model);
         }
 
 

@@ -9,114 +9,7 @@ for details on configuring this project to bundle and minify static web assets. 
 }
 /********** end Literature **********/
 
-/*a.navbar-brand {
-    white-space: normal;
-    text-align: center;
-    word-break: break-all;
-    color: black;
-}*/
-/* Provide sufficient contrast against white background */
-/*a {*/
-/*color: #0366d6;*/
-/*color: black;
-}
 
-.btn-primary {*/
-/*    color: #fff;*/
-/*color: black;
-background-color: #1b6ec2;
-border-color: #1861ac;
-}
-
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {*/
-/*  color: #fff;*/
-/*color: black;
-background-color: #1b6ec2;
-border-color: #1861ac;
-}*/
-/* Sticky footer styles
--------------------------------------------------- */
-/*html {
-    font-size: 14px;
-    color: black;
-}
-
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-        color: black;
-    }
-}
-
-.border-top {
-    border-top: 1px solid #e5e5e5;
-    color: black;
-}
-
-.border-bottom {
-    border-bottom: 1px solid #e5e5e5;
-    color: black;
-}
-
-.box-shadow {
-    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-    color: black;
-}
-
-button.accept-policy {
-    font-size: 1rem;
-    line-height: inherit;
-}*/
-/* Sticky footer styles
--------------------------------------------------- */
-/*html {
-    position: relative;
-    min-height: 100%;
-    color: black;
-}
-
-body {*/
-/* Margin bottom by footer height */
-/*margin-bottom: 60px;*/
-/*    background-color: hsl(218, 41%, 15%);
-    background-image: radial-gradient(
-            650px circle at 0% 0%,
-            hsl(218, 41%, 35%) 15%,
-            hsl(218, 41%, 30%) 35%,
-            hsl(218, 41%, 20%) 75%,
-            hsl(218, 41%, 19%) 80%,
-            transparent 100%
-    ),
-    radial-gradient(
-            1250px circle at 100% 100%,
-            hsl(218, 41%, 45%) 15%,
-            hsl(218, 41%, 30%) 35%,
-            hsl(218, 41%, 20%) 75%,
-            hsl(218, 41%, 19%) 80%,
-            transparent 100%
-    );*/
-/*height: 100vh;
-overflow-x: hidden;*/
-/*    color: #fff;*/
-/*color:black;
-}
-
-.footer {
-position: fixed;
-bottom: 0px;*/
-/*position: absolute;*/
-/*bottom: 0;*/
-/*width: 100%;
-white-space: nowrap;
-line-height: 60px;*/ /* Vertically center the text there */
-/*}
-
-
-.bg-blurry {
-    color: black;
-    background: hsla(0, 0%, 100%, 0.15);
-    backdrop-filter: blur(30px);
-}*/
 a.navbar-brand {
     white-space: normal;
     text-align: center;
@@ -180,8 +73,8 @@ body {
     /* Margin bottom by footer height */
     /*        margin-bottom: 60px;
      background-size: cover;
-        background-repeat: no-repeat;
-        background-image: url('/img/gray-abstract-wireframe-technology-background.jpg');*/  
+     background-repeat: no-repeat;
+     background-image: url('/img/gray-abstract-wireframe-technology-background.jpg');*/  
     margin-bottom: 60px;
 /*    height: 100vh;
     overflow-x: hidden;
@@ -207,10 +100,29 @@ label {
         visibility: hidden;
     }
 }
-
+/******************************************/
 .card {
     max-width: fit-content;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
 }
+
+
+#StudentTitle {
+    text-align: center
+}
+
+#getCourseWithAjaxMain{
+
+}
+
+.moduleList {
+    /*    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;*/
+}
+
 
 .buttonsOnIndexPageForStudent:focus {
     color: lightsalmon;
@@ -266,10 +178,6 @@ label {
     margin-bottom: 10px;
 }
 
-#activityDetailsTypeAndStatusForStudent {
- 
-}
-
 
 /* Horizontal line */
 .collapsible-link::before {
@@ -312,6 +220,9 @@ label {
 .dataTables_length > select > option {
     color: #ffc107;
 }
+
+
+
 /*Submit button on the module page for the student*/
 .form-horizontal {
     margin-left: 200px;
@@ -357,7 +268,85 @@ label {
     background: #1861ac;
 }
 
+
+
+/*Course list and title on Teacher page */
 #TeacherTitle{
     text-align:center
+}
+
+#backgroundToCoursesOnTeacherPage {
+    background-color: #f2f2f2;
+}
+
+#responsiveTable > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
+        background-color: #e5e5e5;
+
+}
+
+#responsiveTable > tbody > tr:nth-child(even) > td,
+.table-striped > tbody > tr:nth-child(even) > th { 
+    background-color: #f2f2f2;
+}
+
+#courseTitleAndCreateButtonOnTeacherIndexPage {  
+    right: 0;
+    text-align: center;
+}
+
+#courseTitleAndCreateButtonOnTeacherIndexPage #courseTitleOnTeacherIndexPage, #createNewCourseButtonOnTeacherIndexPage {
+    display: inline-block;
+    }
+
+#courseTitleOnTeacherIndexPage {
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+
+#createNewCourseButtonOnTeacherIndexPage {
+    float: right;
+    right: 0;
+}
+
+.clear {
+    clear: both;
+}
+
+
+
+
+/*Participant page table with title*/
+#responsiveParticipantTable > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
+    background-color: #e5e5e5;
+}
+
+#responsiveParticipantTable > tbody > tr:nth-child(even) > td,
+.table-striped > tbody > tr:nth-child(even) > th { 
+    background-color: #f2f2f2;
+}
+
+#participantTitle {
+text-align:center
+}
+
+
+
+
+/*Personnel page table with title*/
+#responsivePersonnelTable > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
+    background-color: #e5e5e5;
+}
+
+#responsivePersonnelTable > tbody > tr:nth-child(even) > td,
+.table-striped > tbody > tr:nth-child(even) > th {
+    background-color: #f2f2f2;
+}
+
+#personnelTitle {
+    text-align: center
 }
 

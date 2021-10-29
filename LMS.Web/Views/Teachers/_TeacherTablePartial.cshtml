@@ -1,19 +1,35 @@
 ﻿@model IEnumerable<Lms.Core.Models.ViewModels.TeacherTableViewModel>
-
+@*<div class="bg-light rounded w-100 px-4 pt-2 mb-2">*@
+<div class="rounded w-100 px-4 pt-2 mb-2" id="backgroundToCoursesOnTeacherPage">
 <section class="mb-5">
     <div class="table-responsive bg-blurry shadow-4-strong rounded">
-        <table id="responsiveTable" class="table table-borderless table-hover align-middle mb-0 ">
+        @*<table id="responsiveTable" class="table table-borderless table-hover align-middle mb-0">*@
+        <table id="responsiveTable" class="table align-middle mb-0" data-classes="table table-hover table-borderless table-condensed" data-toggle="table" data-striped="true">
             <thead>
-                <br/>
-                <p style="text-align:center"class="text-success"><strong>@TempData["ChangedParticipant"]</strong></p>
-                <p style="text-align:center"class="text-success"><strong>@TempData["DeleteParticipant"]</strong></p>
-                <p style="text-align:center"class="text-success"><strong>@TempData["ChangedCourse"]</strong></p>
-                <p style="text-align:center"class="text-success"><strong>@TempData["DeleteCourse"]</strong></p>
-                <p style="text-align:center"class="text-success"><strong>@TempData["ChangedModule"]</strong></p>
-                <p style="text-align:center"class="text-success"><strong>@TempData["DeleteModule"]</strong></p>
-                <p style="text-align:center"class="text-success"><strong>@TempData["ChangedActivity"]</strong></p>
-                <p style="text-align:center"class="text-success"><strong>@TempData["DeleteActivity"]</strong></p>
-             
+
+                <div class="container" id="courseTitleAndCreateButtonOnTeacherIndexPage">
+
+                    <div id="courseTitleOnTeacherIndexPage">
+                        <h3><strong>Courses</strong></h3>
+                    </div>
+
+                    <div id="createNewCourseButtonOnTeacherIndexPage">
+                        <a class="btn btn-success" asp-controller="Courses" asp-action="Create">Add new course and module</a>
+                        @*<th> <a class="btn btn-success" asp-controller="Courses" asp-action="Create">Add new course and module</a></th>*@
+                    </div>
+                    <div class="clear"></div>
+
+                </div>
+
+                <p style="text-align:center" class="text-success"><strong>@TempData["ChangedParticipant"]</strong></p>
+                <p style="text-align:center" class="text-success"><strong>@TempData["DeleteParticipant"]</strong></p>
+                <p style="text-align:center" class="text-success"><strong>@TempData["ChangedCourse"]</strong></p>
+                <p style="text-align:center" class="text-success"><strong>@TempData["DeleteCourse"]</strong></p>
+                <p style="text-align:center" class="text-success"><strong>@TempData["ChangedModule"]</strong></p>
+                <p style="text-align:center" class="text-success"><strong>@TempData["DeleteModule"]</strong></p>
+                <p style="text-align:center" class="text-success"><strong>@TempData["ChangedActivity"]</strong></p>
+                <p style="text-align:center" class="text-success"><strong>@TempData["DeleteActivity"]</strong></p>
+
 
                 <tr>
                     <th>
@@ -28,28 +44,29 @@
                     <th>
                         @Html.DisplayNameFor(model => model.NumberOfParticipants)
                     </th>
-         
+
                 </tr>
             </thead>
             <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        <a asp-controller="Teachers" asp-action="IndexCourseForTeacher" asp-route-id=@item.Course.Id> @Html.DisplayFor(modelItem => item.Course.Name) </a>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ActiveModuleName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NextModuleName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NumberOfParticipants)
-                    </td>
-                </tr>
-            }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Teachers" asp-action="IndexCourseForTeacher" asp-route-id=@item.Course.Id> @Html.DisplayFor(modelItem => item.Course.Name) </a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ActiveModuleName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NextModuleName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NumberOfParticipants)
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
 </section>
+    </div>
