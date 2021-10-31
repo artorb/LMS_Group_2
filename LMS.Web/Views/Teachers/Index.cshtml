@@ -1,5 +1,4 @@
 ﻿@model Lms.Core.Models.ViewModels.TeacherIndexViewModel
-@* @model IEnumerable<Lms.Core.Models.ViewModels.TeacherTableViewModel> *@
 
 @{
     ViewData["Title"] = "Index";
@@ -13,23 +12,7 @@
     <img src="~/img/download (3).jpg" alt="logo" />
 </div>
 
-
-<!--<div id="courseTitleAndCreateButtonOnTeacherIndexPage" class="container">   
-
-    <div id="courseTitleOnTeacherIndexPage">
-        <h3><strong>Courses</strong></h3>
-    </div>
-
-    <div id="createNewCourseButtonOnTeacherIndexPage">
-        <a class="btn btn-success" asp-controller="Courses" asp-action="Create">Add new course and module</a>-->
-        @*<th> <a class="btn btn-success" asp-controller="Courses" asp-action="Create">Add new course and module</a></th>*@
-    <!--</div>
-    <div class="clear"></div>
-
-</div>-->
 <br/>
-
-
 
     <!-- Modal -->
     <div class="modal fade" id="updateCourse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -49,8 +32,7 @@
                                     <div class="col-lg-8 grid-margin stretch-card">
                                         <div class="card">
                                             <div class="card-body">
-                                                <hr>
-                                                @* @await Html.PartialAsync("CreateCourse", Model.ElementAt(0).Course) *@
+                                                <hr>                                               
                                                 @{
                                                     await Html.RenderPartialAsync("CreateCourse", Model.CourseToCreate);
                                                 }

@@ -1,4 +1,4 @@
-﻿@model Lms.Core.Models.ViewModels.StudentCourseViewModel
+﻿@*@model Lms.Core.Models.ViewModels.StudentCourseViewModel
 @using Lms.Web.Extensions
 
 <br />
@@ -14,20 +14,25 @@
         <div> @Html.DisplayFor(model => model.CourseEndDate) </div>
     </div>
 
-
     <div class="card border-0">
         <div> <strong> @Html.DisplayNameFor(model => model.CourseDescription) </strong> </div>
         <div> @Html.DisplayFor(model => model.CourseDescription) </div>
     </div>
 
 
-    <div class="card border-0">
-        <div> <strong> @Html.DisplayNameFor(model => model.Documents) </strong> </div>
+    <div class="card border-0">       
         <table class="table">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Documents)</th>
+                </tr>
+            </thead>
             <tbody>
                 @foreach (var item in Model.Documents.Where(a => a.ActivityId == null && a.ModuleId == null && a.CourseId != null))
                 {
-                    <tr> @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null) </tr>
+                <tr>
+                    <td> @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null) </td>              
+                </tr>
                 }
             </tbody>
         </table>
@@ -72,4 +77,4 @@
         <a class="btn btn-sm btn-success" asp-controller="Courses" asp-action="Edit" asp-route-id="@ViewData["CourseId"]">Edit</a>
         <a class="btn btn-sm btn-danger" asp-controller="Courses" asp-action="Delete" asp-route-id="@ViewData["CourseId"]">Delete</a>
     }
-</div>
+</div>*@

@@ -39,11 +39,11 @@ namespace Lms.Core.Models.ViewModels
         public DateTime ActivityEndDate { get; set; }
 
 
-        [Required(ErrorMessage = "Please enter end date!")]
+   
         [Display(Name = "Activity Deadline")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
-        public DateTime ActivityDeadline { get; set; }
+        public DateTime? ActivityDeadline { get; set; }
 
 
         [Required(ErrorMessage = "Please enter the type!")]

@@ -13,10 +13,10 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Lms.Core.Models.ViewModels;
-using Lms.Core.Repositories;
-using Lms.Data.Data;
+//using Lms.Core.Repositories;
+//using Lms.Data.Data;
 using Lms.Web.Service;
-using Microsoft.AspNetCore.Mvc;
+//using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +28,7 @@ namespace Lms.Web.Controllers
         private readonly LmsDbContext _context;
         private readonly IActivityService _activityService;
 
+
         public StudentsController(LmsDbContext context, IUnitOfWork unitOfWork, IActivityService activityService)
         {
             _unitOfWork = unitOfWork;
@@ -37,14 +38,17 @@ namespace Lms.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var schema = await WeekSchema();           
-            return View(schema);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var schema = await WeekSchema();       
+            return PartialView("WeekSchema",schema);
         }
 
 
 
         public async Task<IActionResult> CourseStudentsDetails(int? idFromCourse)
         {
+         
+
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
             var courseId = UserLoggedIn.CourseId;

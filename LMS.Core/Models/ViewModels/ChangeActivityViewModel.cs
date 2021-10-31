@@ -25,8 +25,7 @@ namespace Lms.Core.Models.ViewModels
 
 
         [Required(ErrorMessage = "Please enter start date!")]
-        [Display(Name = "Start date")]
-        [AcitivtyStartTimeCheck]
+        [Display(Name = "Start date")]    
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         public DateTime StartDate { get; set; }

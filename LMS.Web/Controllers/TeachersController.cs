@@ -66,8 +66,7 @@ namespace Lms.Web.Controllers
                     ActivityType = new ActivityType
                     {
                         TypeName = "Laboratory"
-                    }
-                    //ActivityType = (ActivityType)await GetAllActivityTypesAsync()
+                    }                  
                 };
                 _activity = activity;
                 return activity;
@@ -129,7 +128,7 @@ namespace Lms.Web.Controllers
         public async Task<IActionResult> Index()
         {
 
-            var courses = await _unitOfWork.CourseRepository.GetAllWithIncludesAsync(m => m.Modules, m => m.Users);
+            var courses = await _unitOfWork.CourseRepository.GetAllWithIncludesAsync(m => m.Modules, m => m.Users);       
 
             var teacherTable = courses.Select(course => new TeacherTableViewModel
             {
@@ -151,11 +150,12 @@ namespace Lms.Web.Controllers
             // return View(viewModels);
             return View(indexVM);
         }
-
-
+    
+      
 
         private static List<string> GetCurrentModules(Course course)
         {
+
             var activeModule = course.Modules
                 .FirstOrDefault(m => m.StartDate < DateTime.Today && m.EndDate >= DateTime.Today);
             Module nextModule = new();
@@ -300,16 +300,7 @@ namespace Lms.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteTeacherConfirmed(string id)
         {
-            var userWillBeDeleted = await _unitOfWork.UserRepository.FirstOrDefaultAsync(id);
-
-            //if student uploaded something : problem with documents. ApplicationUserId should be NULL
-            //var documentsForUserWillBeDeleted = _unitOfWork.DocumentRepository.GetAllAsync().Result.Where(u=>u.ApplicationUserId == id);
-
-
-            //foreach (var item in documentsForUserWillBeDeleted)
-            //{
-            //    item.ApplicationUserId = null;
-            //}
+            var userWillBeDeleted = await _unitOfWork.UserRepository.FirstOrDefaultAsync(id);  
 
             TempData["DeleteTeacher"] = $"The {userWillBeDeleted.Name} has been deleted!";
             _unitOfWork.UserRepository.Remove(userWillBeDeleted);

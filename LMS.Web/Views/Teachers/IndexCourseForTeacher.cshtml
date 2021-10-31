@@ -1,5 +1,5 @@
 ﻿@* @model Lms.Core.Models.ViewModels.StudentsAndTeachersIndexViewModel *@
-@{
+<!--@{
     ViewData["Title"] = "Index";
 }
 
@@ -17,8 +17,6 @@
 </div>
 <br/>
 
-
-@* <a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Courses" asp-action="CourseDetails" asp-route-idFromCourse=@Model.idFromCourse *@
 <a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Courses" asp-action="CourseDetails" asp-route-idFromCourse=@ViewData["CourseId"]
    data-ajax="true"
    data-ajax-method="GET"
@@ -46,4 +44,4 @@
 
 <div id="getCourseWithAjax"></div>
 
-<br />
+<br />-->

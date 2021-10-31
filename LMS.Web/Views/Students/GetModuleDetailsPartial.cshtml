@@ -6,13 +6,6 @@
 <h4 id="StudentModuleViewTitle"> @Html.DisplayFor(model => model.ModuleName) </h4>
 
 <hr />
-@if (User.IsInRole("Teacher"))
-{
-    <th> <a class="btn btn-sm btn-success float-right" asp-controller="Activities" asp-action="Create" asp-route-Id="@Model.Id">Add new activity</a></th>
-    <br />
-    <br />
-}
-
 
 <section class="container">
     <section class="row">
@@ -110,7 +103,13 @@
 </div>
 <br />
 
-
+@if (User.IsInRole("Teacher"))
+{
+    <th> <a class="btn btn-sm btn-success float-right" asp-controller="Activities" asp-action="Create" asp-route-Id="@Model.Id">Add new activity</a></th>
+    <br />
+    <br />
+}
+<br />
 
 <div class="moduleDetailsForStudent">
     <table class="table">
@@ -119,8 +118,7 @@
                 <th> @Html.DisplayNameFor(model => model.Activities) </th>
                 <th> @Html.DisplayNameFor(model => model.ModuleStartDate) </th>
                 <th> @Html.DisplayNameFor(model => model.ModuleEndDate) </th>
-
-
+                <th> </th>
                 <th> </th>
             </tr>
         </thead>

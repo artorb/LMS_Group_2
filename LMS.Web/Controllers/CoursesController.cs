@@ -18,11 +18,12 @@ namespace Lms.Web.Controllers
 {
     public class CoursesController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;     
+        private readonly IUnitOfWork _unitOfWork;
+  
 
-        public CoursesController(IUnitOfWork unitOfWork)
+    public CoursesController(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;      
+            _unitOfWork = unitOfWork;         
         }
 
         // GET: Courses
@@ -43,6 +44,7 @@ namespace Lms.Web.Controllers
 
         public async Task<IActionResult> CourseDetails(int? idFromCourse)
         {
+          
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
             var courseId = UserLoggedIn.CourseId;
@@ -62,10 +64,8 @@ namespace Lms.Web.Controllers
                 CourseStartDate = course.StartDate,
                 CourseEndDate = course.EndDate,
                 Documents = course.Documents
-            };
-
-            return PartialView("~/Views/Students/_CourseDetailsPartial.cshtml", model);
-            //return View("~/Views/Students/Index.cshtml", model);
+            };        
+            return View("~/Views/Students/Index.cshtml", model);
         }
 
 

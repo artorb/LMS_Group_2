@@ -122,8 +122,9 @@ namespace Lms.Web.Controllers
                         TempData["ActivityEndDateCreationError"] = "The activity was not created. The End Date you used was later then the module end date! Try again!";
                     }
                     return RedirectToAction("Create", Id);
-                }               
+                }
 
+           
 
                 var temp = new Activity
                 {
@@ -137,9 +138,16 @@ namespace Lms.Web.Controllers
                     Module = item.Module
                 };
 
+                if (item.ActivityTypeId == 3 && item.ActivityDeadline == null) {
+                    TempData["ActivityTypeError"] = "The activity was not created. The deadline is required for assignment! Try again!";
+                    return RedirectToAction("Index", "Teachers");
+                }
+                else { 
+
                 res.Add(temp);
                 _unitOfWork.ActivityRepository.Add(temp);
-                await _unitOfWork.CompleteAsync();          
+                await _unitOfWork.CompleteAsync();
+                }
             }   
             return RedirectToAction("Index", "Teachers");
         }
@@ -181,9 +189,7 @@ namespace Lms.Web.Controllers
             if (activity == null)
             {
                 return NotFound();
-            }
-
-            // return View(activity);
+            }        
             return View("Change", model);
         }
 
@@ -198,7 +204,6 @@ namespace Lms.Web.Controllers
             {
                 return NotFound();
             }
-
 
             if (ModelState.IsValid)
             {

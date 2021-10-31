@@ -71,7 +71,7 @@
             <div>
                 @if (Model.ActivityTypes.TypeName == "Assignment")
                 {
-                    <div>     <strong> @Html.DisplayNameFor(model => model.ActivityDeadline) </strong>    </div>
+                    <div> <strong> @Html.DisplayNameFor(model => model.ActivityDeadline) </strong>    </div>
                     <div> @Html.DisplayFor(model => model.ActivityDeadline) </div>
                 }
             </div>
@@ -128,6 +128,7 @@
                             <tr> <th>Uploaded assignment:</th>  </tr>
                         </thead>
                         <tbody>
+                            @{int d = 0;}
                             @foreach (var item in Model.Documents)
                             {
                                 @if (item.ApplicationUserId != null)
@@ -146,11 +147,15 @@
 
                                 @if (item.Activity.ActivityType.TypeName != "Assignment")
                                 {
-                                    <tr> <td> No assignment is required for this activity. </td> </tr>
-                                }
+                                    @if (d < 1)
+                                    {
+                                        <tr>  <td> <span>  No assignment is required for this activity.</span>   </td>    </tr>
+                                        d++;
+                                    }
 
+                                }
                             }
-                        </tbody>
+                            </tbody>
 
                     </table>
                 </div>

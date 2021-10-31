@@ -3,10 +3,11 @@
 <br/>
 
 
-<div class="card-deck moduleList">
-    <div class="card border-0 moduleList">
+<div class="card-deck" id="getmoduleListPartialPage">
+    <div class="card border-0 col-auto mb-3" style="max-width: 14rem;">
 
-        <strong>  @Html.DisplayNameFor(model => model.Name) </strong>
+        <strong> List of modules </strong>
+      
 
         @foreach (var item in Model)
         {
@@ -25,9 +26,9 @@
             <a class="btn btn-success" asp-controller="Modules" asp-action="Create" asp-route-id="@ViewData["ModuleCourseId"]">Add new module</a>
         }
 
-        </div>
+    </div>
 
-    <div class="card border-0">
+    <div class="card border-0 col-auto mb-3" style="max-width: 80rem;">
         <div id="getModuleDetailOrActivityDetailsWithAjax"></div>           
     </div>
 </div>
