@@ -33,8 +33,7 @@ namespace Lms.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<LmsDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<ApplicationUser>(options =>
@@ -90,17 +89,12 @@ namespace Lms.Web
             app.UseAuthentication();
             app.UseAuthorization();
       
-                app.UseEndpoints(endpoints =>
+            app.UseEndpoints(endpoints =>
             {
-
-
-
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
-
-                
+                endpoints.MapRazorPages();                
             });
 
            

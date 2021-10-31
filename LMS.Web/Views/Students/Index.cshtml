@@ -51,7 +51,7 @@
 
                         <div class="form-group">
                             <div class="col-md-offset-2 col-md-10 text-success">
-                                @ViewBag.UploadStatus
+                                @*@ViewBag.UploadStatus*@
                             </div>
                         </div>
 
@@ -110,11 +110,11 @@
         @if (User.IsInRole("Student"))
         {
             <div id="mySchema">  </div>
-
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
             <script>
                 $(document).ready(function () { getSchema(); })
             </script>
+
         }
         <br />
 
@@ -160,11 +160,13 @@
 
 
 
-    <div id="moduleListWithModuleDetails">   
-            <div id="getCourseWithAjax"></div>      
+    <div id="moduleListWithModuleDetails">
+        <div id="getCourseWithAjax"></div>
     </div>
 
-        <div class="clear">
-        </div>
+    <div class="clear">
+    </div>
 
 </div>
+
+

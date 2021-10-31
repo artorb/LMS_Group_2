@@ -90,8 +90,7 @@ namespace Lms.Web.Controllers
                     Description = moduleModel.ModuleDescription,
                     StartDate = moduleModel.ModuleStartDate,
                     EndDate = moduleModel.ModuleEndDate,
-                    Activities = new List<Activity> { _activity }
-                    //Activities = new List<Activity>()
+                    Activities = new List<Activity> { _activity }                  
                 };
                 _module = module;
                 return module;
@@ -116,7 +115,6 @@ namespace Lms.Web.Controllers
                     Modules = new List<Module> { _module }
                 };
 
-
                 _unitOfWork.CourseRepository.Add(course);
                 await _unitOfWork.CompleteAsync();
             }
@@ -127,7 +125,6 @@ namespace Lms.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-
             var courses = await _unitOfWork.CourseRepository.GetAllWithIncludesAsync(m => m.Modules, m => m.Users);       
 
             var teacherTable = courses.Select(course => new TeacherTableViewModel
@@ -146,8 +143,7 @@ namespace Lms.Web.Controllers
                 CourseToCreate = new TeacherCreateCourseViewModel(),
                 TeacherTables = teacherTable
             };
-
-            // return View(viewModels);
+ 
             return View(indexVM);
         }
     
@@ -155,14 +151,11 @@ namespace Lms.Web.Controllers
 
         private static List<string> GetCurrentModules(Course course)
         {
-
-            var activeModule = course.Modules
-                .FirstOrDefault(m => m.StartDate < DateTime.Today && m.EndDate >= DateTime.Today);
+            var activeModule = course.Modules.FirstOrDefault(m => m.StartDate < DateTime.Today && m.EndDate >= DateTime.Today);
             Module nextModule = new();
             if (activeModule != null)
             {
-                nextModule = course.Modules
-                    .FirstOrDefault(m => m.StartDate.Date >= activeModule.EndDate.Date);
+                nextModule = course.Modules.FirstOrDefault(m => m.StartDate.Date >= activeModule.EndDate.Date);
             }
             else
             {
@@ -178,6 +171,7 @@ namespace Lms.Web.Controllers
         }
 
 
+
         public async Task<IActionResult> IndexCourseForTeacher(int id)
         {
             ViewData["CourseId"] = id;
@@ -185,11 +179,15 @@ namespace Lms.Web.Controllers
             return View();
         }
 
+
+
         public PartialViewResult GetSomeData()
         {
             ViewBag.Message = "Example Data from Server"; //Using ViewBag Just for example, use ViewModel Instead
             return PartialView("~/Views/Teachers/CreateCourse.cshtml");
         }
+
+
 
         // GET: Students/EditTeacher/5
         [HttpGet]
@@ -217,6 +215,8 @@ namespace Lms.Web.Controllers
             return View(model);
         }
 
+
+
         // POST: Students/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -234,13 +234,11 @@ namespace Lms.Web.Controllers
             {
                 try
                 {
-
                     userInDatabase.Email = applicationUsermodel.Email;
                     userInDatabase.NormalizedEmail = applicationUsermodel.Email.ToUpper();
                     userInDatabase.Name = applicationUsermodel.Name;
                     userInDatabase.UserName = applicationUsermodel.Name;
                     userInDatabase.NormalizedUserName = applicationUsermodel.Name.ToUpper();
-
 
                     _unitOfWork.UserRepository.Update(userInDatabase);
                     await _unitOfWork.CompleteAsync();
@@ -261,15 +259,18 @@ namespace Lms.Web.Controllers
             return View(applicationUsermodel);
         }
 
+
+
         private async Task<bool> ApplicationUserExists(string Id)
         {
             return await _unitOfWork.UserRepository.AnyAsync(Id);
         }
 
+
+
         // GET: Teachers/DeleteTeacher/5
         public async Task<IActionResult> DeleteTeacher(string id)
         {
-
             if (id == null)
             {
                 return NotFound();

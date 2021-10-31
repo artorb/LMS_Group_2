@@ -34,8 +34,7 @@ namespace Lms.Web.Controllers
 
             var activityTest = _unitOfWork.ActivityRepository.GetAllWithIncludesAsync(x => x.ActivityType).Result;
 
-            var moduleTest = _unitOfWork.ModuleRepository.GetAllWithIncludesAsync(
-                x => x.Activities, x => x.Course).Result;
+            var moduleTest = _unitOfWork.ModuleRepository.GetAllWithIncludesAsync(x => x.Activities, x => x.Course).Result;
 
             return View(allCourses);
         }
@@ -43,10 +42,10 @@ namespace Lms.Web.Controllers
 
 
         public async Task<IActionResult> CourseDetails(int? idFromCourse)
-        {
-          
+        {            
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
+            var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);        
+
             var courseId = UserLoggedIn.CourseId;
 
             var course = (idFromCourse == null)
