@@ -206,3 +206,21 @@ $(document).ready(function () {
 function goBack() {
     window.history.back();
 }
+
+function getSchema() {
+
+    $.ajax({
+        url: '/Students/Index',
+        datatype: "json",
+        type: "post",
+        contenttype: 'application/json; charset=utf-8',
+        async: true,
+        success: function (data) {
+            $("#mySchema").html(data);
+        },
+        error: function (xhr) {
+            alert('error');
+        }
+    });
+
+}

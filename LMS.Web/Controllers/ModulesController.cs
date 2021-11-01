@@ -146,7 +146,7 @@ namespace Lms.Web.Controllers
         public async Task<IActionResult> Create(ModuleListViewModel viewModel, int id)
         {
             var course = _unitOfWork.CourseRepository.GetAsync(id).Result;
-            var returnUrl = Url.Content("/Teachers/IndexCourseForTeacher/" + id);
+         
             var res = new List<Module>();
             foreach (var item in viewModel.Modules)
             {
@@ -176,14 +176,11 @@ namespace Lms.Web.Controllers
                 res.Add(temp);
                 _unitOfWork.ModuleRepository.Add(temp);
                 await _unitOfWork.CompleteAsync();
-                var idForActivity = temp.Id;
-
-                //return RedirectToAction("Create", "Activities", new { @id = idForActivity });
+                var idForActivity = temp.Id;           
             }
-            return LocalRedirect(returnUrl);
-            //return RedirectToAction("Index", "Teachers");
-            //return View();
+            return RedirectToAction("Index", "Teachers");
         }
+
 
 
         // GET: Modules/Edit/5

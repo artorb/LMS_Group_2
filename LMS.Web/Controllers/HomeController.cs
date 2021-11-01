@@ -14,7 +14,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 
 
-
 namespace Lms.Web.Controllers
 {
     //[Authorize]
@@ -48,13 +47,17 @@ namespace Lms.Web.Controllers
             {
                 return RedirectToAction("Index", "Teachers");
             }
+
             else if (User.IsInRole("Student"))
-            {
-                return RedirectToAction("Index", "Students");
+            {           
+                var UserLoggedIn = await _unitOfWork.UserRepository.FirstOrDefaultAsync(userId);
+                var courseId = UserLoggedIn.CourseId;
+                if (courseId != null)
+                    return RedirectToAction("CourseDetails", "Courses", new { idFromCourse = courseId });
+                else return NotFound();
             }
             return Error();
         }
-
 
 
 

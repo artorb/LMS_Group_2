@@ -1,55 +1,72 @@
 ﻿@model IEnumerable<Lms.Core.Models.ViewModels.TeacherTableViewModel>
 
-<section class="mb-5">
-    <div class="table-responsive bg-blurry shadow-4-strong rounded">
-        <table id="responsiveTable" class="table table-borderless table-hover align-middle mb-0 ">
-            <thead>
-                <br/>
-                <p style="text-align:center"class="text-success"><strong>@TempData["ChangedParticipant"]</strong></p>
-                <p style="text-align:center"class="text-success"><strong>@TempData["DeleteParticipant"]</strong></p>
-                <p style="text-align:center"class="text-success"><strong>@TempData["ChangedCourse"]</strong></p>
-                <p style="text-align:center"class="text-success"><strong>@TempData["DeleteCourse"]</strong></p>
-                <p style="text-align:center"class="text-success"><strong>@TempData["ChangedModule"]</strong></p>
-                <p style="text-align:center"class="text-success"><strong>@TempData["DeleteModule"]</strong></p>
-                <p style="text-align:center"class="text-success"><strong>@TempData["ChangedActivity"]</strong></p>
-                <p style="text-align:center"class="text-success"><strong>@TempData["DeleteActivity"]</strong></p>
-             
+<a class="btn btn-success" asp-controller="Courses" asp-action="Create" style="float:right" >Add new course and module</a>
 
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Course.Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ActiveModuleName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.NextModuleName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.NumberOfParticipants)
-                    </th>
-         
-                </tr>
-            </thead>
-            <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        <a asp-controller="Teachers" asp-action="IndexCourseForTeacher" asp-route-id=@item.Course.Id> @Html.DisplayFor(modelItem => item.Course.Name) </a>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ActiveModuleName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NextModuleName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NumberOfParticipants)
-                    </td>
-                </tr>
-            }
-            </tbody>
-        </table>
-    </div>
-</section>
+
+<div class="rounded w-100 px-4 pt-2 mb-2" id="backgroundToCoursesOnTeacherPage">
+    <section class="mb-5">
+        <div class="table-responsive bg-blurry shadow-4-strong rounded">
+        
+            <table id="responsiveTable" class="table align-middle mb-0" data-classes="table table-hover table-borderless table-condensed" data-toggle="table" data-striped="true">
+                <thead>
+
+                    <div class="container" id="courseTitleAndCreateButtonOnTeacherIndexPage">
+
+                        <div id="courseTitleOnTeacherIndexPage">
+                            <h3><strong>Courses</strong></h3>
+                            <br />
+                        </div>
+                        <div class="clear"></div>
+                        <br />
+                    </div>
+
+                    <p style="text-align:center" class="text-success"><strong>@TempData["ChangedParticipant"]</strong></p>
+                    <p style="text-align:center" class="text-success"><strong>@TempData["DeleteParticipant"]</strong></p>
+                    <p style="text-align:center" class="text-success"><strong>@TempData["ChangedCourse"]</strong></p>
+                    <p style="text-align:center" class="text-success"><strong>@TempData["DeleteCourse"]</strong></p>
+                    <p style="text-align:center" class="text-success"><strong>@TempData["ChangedModule"]</strong></p>
+                    <p style="text-align:center" class="text-success"><strong>@TempData["DeleteModule"]</strong></p>
+                    <p style="text-align:center" class="text-success"><strong>@TempData["ChangedActivity"]</strong></p>
+                    <p style="text-align:center" class="text-success"><strong>@TempData["DeleteActivity"]</strong></p>
+                    <p style="text-align:center" class="text-success"><strong>@TempData["ActivityTypeError"]</strong></p>           
+
+
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Course.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ActiveModuleName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NextModuleName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NumberOfParticipants)
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>                             
+                                <a asp-controller="Courses" asp-action="CourseDetails" asp-route-idFromCourse=@item.Course.Id> @Html.DisplayFor(modelItem => item.Course.Name) </a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ActiveModuleName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NextModuleName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NumberOfParticipants)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>

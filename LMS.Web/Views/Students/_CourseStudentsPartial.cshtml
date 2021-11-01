@@ -1,12 +1,13 @@
 ﻿@model IEnumerable<Lms.Core.Models.ViewModels.StudentCommonCourseViewModel>
 
 <br />
-<h4>Participants</h4>
 
-<section class="container">
+    <h3 id="participantTitle"><strong>Participants</strong></h3>
+
+   <section class="container">
     <section class="row">
+        <table id="responsiveParticipantTable" class="table table-hover table-borderless table-condensed" data-striped="true">
 
-        <table class="table table-hover">
             <thead>
                 <tr>
                     <th> @Html.DisplayNameFor(model => model.StudentName)         </th>
@@ -17,16 +18,18 @@
                 @{int i = 1;}
                 @foreach (var item in Model)
                 {
-                <tr>
-                    <td><span>@i. </span>  @Html.DisplayFor(modelItem => item.StudentName)  </td>
-                    <td> @Html.DisplayFor(modelItem => item.Email)               </td>
-                    @if (User.IsInRole("Teacher"))
-                    {
-                        <td> <a class="btn btn-sm btn-success" asp-controller="Students" asp-action="Edit" asp-route-Id = "@item.Id">Edit</a></td>
-                        <td> <a class="btn btn-sm btn-danger" asp-controller="Students" asp-action="Delete" asp-route-Id="@item.Id">Delete</a></td>
-                       
-                    }
-                </tr>
+                    <tr>
+                        <td><span>@i. </span>  @Html.DisplayFor(modelItem => item.StudentName)  </td>
+                        <td> @Html.DisplayFor(modelItem => item.Email)               </td>
+                        @if (User.IsInRole("Teacher"))
+                        {
+                            <td> 
+                             <a class="btn btn-sm btn-success" asp-controller="Students" asp-action="Edit" asp-route-Id="@item.Id">Edit</a>
+                             <a class="btn btn-sm btn-danger" asp-controller="Students" asp-action="Delete" asp-route-Id="@item.Id">Delete</a>
+                            </td>
+
+                        }
+                    </tr>
                     {
                         i++;
                     }

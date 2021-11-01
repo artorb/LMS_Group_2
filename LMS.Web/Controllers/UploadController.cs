@@ -89,7 +89,8 @@ namespace Lms.Web.Controllers
                         }
                     }
                 }
-                return RedirectToAction("Index", "Students");
+                //return RedirectToAction("Index", "Students");
+                return RedirectToAction("CourseDetails", "Courses", new { idFromCourse = userLoggedIn.Course.Id });
             }
             
             //teacher upload into course / into module / into activity
@@ -148,8 +149,9 @@ namespace Lms.Web.Controllers
                     await _context.SaveChangesAsync();        
                             }
                 return RedirectToAction("Index", "Teachers");
-            }  
-            return RedirectToAction("Index", "Students");
+            }
+            //return RedirectToAction("Index", "Students");
+            return NotFound();
         }
 
 

@@ -1,54 +1,172 @@
-﻿@{
+﻿@model Lms.Core.Models.ViewModels.StudentCourseViewModel
+@using Lms.Web.Extensions
+
+@{
     ViewData["Title"] = "Index";
 }
 
-<h1>Welcome Student!</h1>
-<br />
-<div style="text-align:center">
-    <img src="~/img/download (3).jpg" alt="logo" />
+<div class="container" id="courseIndexPage">
+
+    <div id="courseDetails">
+        <br />
+        <h4>@Html.DisplayFor(model => model.CourseName)</h4>
+        <hr />
+
+
+        <div>
+            <div> <strong> @Html.DisplayNameFor(model => model.CourseStartDate) </strong> </div>
+            <div> @Html.DisplayFor(model => model.CourseStartDate) </div>
+            <div><strong> @Html.DisplayNameFor(model => model.CourseEndDate) </strong></div>
+            <div> @Html.DisplayFor(model => model.CourseEndDate) </div>
+        </div>
+        <br />
+
+        <div>
+            <div> <strong> @Html.DisplayNameFor(model => model.CourseDescription) </strong> </div>
+            <div> @Html.DisplayFor(model => model.CourseDescription) </div>
+        </div>
+        <br />
+
+
+
+
+        <div>
+            @if (User.IsInRole("Teacher"))
+            {
+                @using (Html.BeginFormActivity("TeacherUploadFilesForCourse", "Upload", new { courseId = Model.Id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="form-horizontal" id="uploadButtonForCourse">
+
+                        <div class="form-group uploadButtonGroup">
+                            <div class="uploadButtonContainer">
+                                <input type="file" class="upload-box" multiple name="files" id="Files" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Upload" class="btn btn-sm btn-primary submitButton" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10 text-success">
+                                @*@ViewBag.UploadStatus*@
+                            </div>
+                        </div>
+
+                    </div>
+                }
+                <br />
+                <br />
+                <br />
+                <br />
+            }
+        </div>
+
+
+
+        <div>
+            <div style="float:none"> <strong> @Html.DisplayNameFor(model => model.Documents) </strong> </div>
+            <table class="table">
+                <tbody>
+                    @foreach (var item in Model.Documents.Where(a => a.ActivityId == null && a.ModuleId == null && a.CourseId != null))
+                    {
+                        <tr><td> @Html.ActionLink(item.Name, "DownloadFile", "Download", new { filePath = item.HashName }, null) </td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="delete">
+            @if (User.IsInRole("Teacher"))
+            {
+                <a class="btn btn-sm btn-success" asp-controller="Courses" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                <a class="btn btn-sm btn-danger" asp-controller="Courses" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+            }
+        </div>
+
+    </div>
+
+
+    <div id="moduleDetails">
+        @if (User.IsInRole("Student"))
+        {
+            <h1 id="StudentTitle">Welcome Student!</h1>
+        }
+
+        @if (User.IsInRole("Teacher"))
+        {
+            <h1 id="StudentTitle">Welcome Teacher!</h1>
+        }
+
+    <div id="onlyButtonsOnIndexPage">
+
+        <img src="~/img/download (3).jpg" alt="logo" />
+        <br />
+        <br />
+
+        @if (User.IsInRole("Student"))
+        {
+            <div id="mySchema">  </div>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+            <script>
+                $(document).ready(function () { getSchema(); })
+            </script>
+
+        }
+        <br />
+
+        @if (User.IsInRole("Student"))
+        {
+            <a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Students" asp-action="CourseStudentsDetails"
+               data-ajax="true"
+               data-ajax-method="GET"
+               data-ajax-update="#getCourseWithAjax"
+               data-ajax-mode="replace">
+                Participants
+            </a>
+
+
+            <a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Modules" asp-action="ModuleList"
+               data-ajax="true"
+               data-ajax-method="GET"
+               data-ajax-update="#getCourseWithAjax"
+               data-ajax-mode="replace">Module information</a>
+        }
+
+        @if (User.IsInRole("Teacher"))
+        {
+            <a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Students" asp-action="CourseStudentsDetails" asp-route-idFromCourse=@ViewData["CourseId"]
+               data-ajax="true"
+               data-ajax-method="GET"
+               data-ajax-update="#getCourseWithAjax"
+               data-ajax-mode="replace">
+                Participants
+            </a>
+
+
+            <a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Modules" asp-action="ModuleList" asp-route-idFromCourse=@ViewData["CourseId"]
+               data-ajax="true"
+               data-ajax-method="GET"
+               data-ajax-update="#getCourseWithAjax"
+               data-ajax-mode="replace">Module information</a>
+        }
+    </div>
+
+
+    </div>
+
+
+
+    <div id="moduleListWithModuleDetails">
+        <div id="getCourseWithAjax"></div>
+    </div>
+
+    <div class="clear">
+    </div>
+
 </div>
-<br />
-<br />
-<div>
-    @{
-        await Html.RenderPartialAsync("WeekSchema");
-    }
-</div>
-
-<br />
-<br />
-
-
-
-<a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Courses" asp-action="CourseDetails"
-   data-ajax="true"
-   data-ajax-method="GET"
-   data-ajax-update="#getCourseWithAjax"
-   data-ajax-mode="replace">
-    Course information
-</a>
-
-
-<a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Students" asp-action="CourseStudentsDetails"
-   data-ajax="true"
-   data-ajax-method="GET"
-   data-ajax-update="#getCourseWithAjax"
-   data-ajax-mode="replace">
-    Participants
-</a>
-
-
-<a class="btn btn-sm btn-primary buttonsOnIndexPageForStudent" asp-controller="Modules" asp-action="ModuleList"
-   data-ajax="true"
-   data-ajax-method="GET"
-   data-ajax-update="#getCourseWithAjax"
-   data-ajax-mode="replace">Module information</a>
-
-
-@*<a class="btn btn-sm btn-primary" asp-action="Index">Participants</a>*@
-
-<div id="getCourseWithAjax"></div>
-
-<br />
 
 
